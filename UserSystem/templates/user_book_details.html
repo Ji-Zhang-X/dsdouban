@@ -1,0 +1,69 @@
+{% extends 'user_layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
+            <a class="btn btn-primary" href="/dsdouban/book/list/">
+                <span aria-hidden="true"></span>
+                返回
+            </a>
+            <a class="btn btn-primary" href="/dsdouban/book/{{obj.book_id}}/add_comment/">
+                <span aria-hidden="true"></span>
+                添加评论
+            </a>
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>书名</th>
+                    <th>出版日期</th>
+                    <th>普通价格</th>
+                    <th>会员价格</th>
+                    <th>score</th>
+                    <th>版本</th>
+                    <th>出版社</th>
+                    <th>类别</th>
+                    <th>作者</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th>{{ obj.title }}</th>
+                    <td>{{ obj.publish_date|date:"Y-m-d" }}</td>
+                    <td>{{ obj.price_standard }}</td>
+                    <td>{{ obj.price_vip }}</td>
+                    <td>{{ obj.score }}</td>
+                    <td>{{ obj.edition }}</td>
+                    <td>{{ obj.press }}</td>
+                    <td>{{ obj.class_field }}</td>
+                    <td>
+                        {% for author in obj.authors.all %}
+                            {{ author.name }};
+                        {%endfor%}
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+            <h3>简介</h3>
+            <h4>
+                {{obj.introduction}}
+            </h4>
+            <h3>评论</h3>
+            <h4>
+            {% for cmt in comments %}
+                <div>
+                    {{cmt.user.name}}  {{cmt.submission_time }}:
+                {{ cmt.comment }}
+                </div>
+            {%endfor%}
+            </h4> 
+
+        </div>
+
+    </div>
+{% endblock %}

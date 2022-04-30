@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <style>
+
+        .account {
+            width: 400px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            box-shadow: 5px 5px 20px #aaa;
+
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 100px;
+            padding: 20px 40px;
+        }
+
+        .account h2 {
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <p style='font-size:30px'>{{title}}即将跳转...</p>
+    <meta http-equiv="refresh" content="3;url={{skiplink}}" >
+{% comment %} 
+    <p>{{title}}还有<span id="sp">5</span>秒跳转...</p>
+    <script>
+        onload=function () {
+            setInterval(go,1000)
+        };
+        var x=4;
+        function go() {
+    
+            if (x>=0){
+                document.getElementById("sp").innerText=x;
+            }else {
+                location.href={{skiplink}};
+            }
+            x--;
+        }
+    </script> {% endcomment %}
+</body>
+</html>
+
+    
+    

@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+        <style>
+            .account {
+                width: 400px;
+                border: 1px solid #dddddd;
+                border-radius: 5px;
+                box-shadow: 5px 5px 20px #aaa;
+    
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 100px;
+                padding: 20px 40px;
+            }
+    
+            .account h2 {
+                margin-top: 10px;
+                text-align: center;
+            }
+        </style>
+    </head>
+<body>
+    <center>
+    <div class='account'>
+    <div class="btn-group-vertical" role="group" aria-label="...">
+        <button onclick="window.location.href='/dsdouban/register/'" style='font-size:30px' type="button" class="btn btn-primary">用户注册</button>
+        <button onclick="window.location.href='/dsdouban/login/'" style='font-size:30px' type="button" class="btn btn-primary">用户登录</button>
+        <button onclick="window.location.href='/manager/login/'" style='font-size:30px' type="button" class="btn btn-primary">管理员登录</button>
+    </div>
+</div>
+    </center>
+</body>
+</html>

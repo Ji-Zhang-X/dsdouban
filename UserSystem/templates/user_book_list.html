@@ -1,0 +1,79 @@
+{% extends 'user_layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px" class="clearfix">
+
+            <div style="float: right;width: 300px;">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search for..."
+                               value="{{ search_data }}">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
+                      </span>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                书籍列表
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>书名</th>
+                    {% comment %} <th>出版日期</th> {% endcomment %}
+                    <th>普通价格</th>
+                    <th>会员价格</th>
+                    <th>score</th>
+                    {% comment %} <th>版本</th> {% endcomment %}
+                    <th>出版社</th>
+                    <th>类别</th>
+                    <th>简介</th>
+                    <th>作者</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <th>{{ obj.title }}</th>
+                        {% comment %} <td>{{ obj.publish_date|date:"Y-m-d" }}</td> {% endcomment %}
+                        <td>{{ obj.price_standard }}</td>
+                        <td>{{ obj.price_vip }}</td>
+                        <td>{{ obj.score }}</td>
+                        {% comment %} <td>{{ obj.edition }}</td> {% endcomment %}
+                        <td>{{ obj.press }}</td>
+                        <td>{{ obj.class_field }}</td>
+                        <td>{{ obj.introduction }}</td>
+                        <td>
+                            {% for author in obj.authors.all %}
+                                {{ author.name }};
+                            {%endfor%}
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/dsdouban/book/{{obj.book_id}}/details/">查看详情</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="clearfix">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
+
+        </div>
+
+    </div>
+{% endblock %}
