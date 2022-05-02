@@ -117,7 +117,7 @@ def register(request):
     form = UserModelForm(data=request.POST)
     if form.is_valid():
         form.save()
-        return HttpResponse('注册成功！')
+        return render(request, 'register_success.html')
 
     return render(request, 'register.html', {'form': form, "title": title})
 
