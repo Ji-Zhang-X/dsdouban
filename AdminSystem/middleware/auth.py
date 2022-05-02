@@ -13,7 +13,8 @@ class AuthMiddleware(MiddlewareMixin):
                                  "/dsdouban/",
                                  "/dsdouban/login/",
                                  "/dsdouban/warning/",
-                                 "/dsdouban/logout/"]:
+                                 "/dsdouban/logout/",
+                                 "/"]:
             return
 
         # 1.读取当前访问的用户的session信息，如果登录过，按照用户是user还是admin分类讨论。

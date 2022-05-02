@@ -13,9 +13,9 @@ class Book(models.Model):
     book_id = models.BigIntegerField(primary_key=True)
     title = models.CharField(max_length=45)
     publish_date = models.DateTimeField(blank=True, null=True)
-    price_standard = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)      
+    price_standard = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="标准价格")      
     price_vip = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    score = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
+    score = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, verbose_name="评分")
     edition = models.CharField(max_length=45, blank=True, null=True)
     storage = models.IntegerField(blank=True, null=True)
     class_field = models.ForeignKey('BookClass', models.DO_NOTHING, db_column='class_id', blank=True, null=True)  # Field renamed because it was a Python reserved word.
@@ -42,7 +42,7 @@ class BookClass(models.Model):
 
 
 class Press(models.Model):
-    press_id = models.BigAutoField(primary_key=True)
+    press_id = models.BigAutoField(primary_key=True, verbose_name="出版社id")
     name = models.CharField(max_length=45)
     contact = models.CharField(max_length=45, blank=True, null=True)
     address = models.CharField(max_length=60, blank=True, null=True)

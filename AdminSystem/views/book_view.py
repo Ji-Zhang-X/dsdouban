@@ -5,8 +5,25 @@ from AdminSystem.utils.pagination import Pagination
 
 def book_list(request):
     # 书籍列表
-    search_data = request.GET.get('q', "")
+    # 搜索涵盖的字段范围
     search_field = ["press__name__contains", "introduction__contains"]
+    # 可供用来排序的选项
+    sort_field = [models.Book._meta.get_field('score'), 
+                  models.Book._meta.get_field('price_standard'), 
+                  models.Book._meta.get_field('press_id')]
+    
+    search_data = request.GET.get('q', "")
+    sort_option = request.GET.get('orderby')
+    sort_rule = request.GET.get('order')
+    orders = []
+    if sort_option and sort_rule:
+        if sort_rule == "asc":
+            orders.append(sort_option)
+        if sort_rule == "desc":
+            orders.append('-' + sort_option)
+    if not orders:
+        orders = ['book_id']
+        
     data_dict = {}
     queryset = None
     if search_data:
@@ -14,15 +31,20 @@ def book_list(request):
             data_dict = {}
             data_dict[search_key] = search_data
             if not queryset:
-                queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
+                queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
             else:
-                queryset.union(models.Book.objects.filter(**data_dict).order_by("press_id"))
+                queryset.union(models.Book.objects.filter(**data_dict).order_by(*orders))
     else:
-        queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
+        queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
     page_object = Pagination(request, queryset)
 
+    if sort_option:
+        sort_option = models.Book._meta.get_field(sort_option)
     context = {
         "search_data": search_data,
+        "sort_field": sort_field,
+        "sort_option": sort_option,
+        "sort_rule": sort_rule,
 
         "queryset": page_object.page_queryset,  # 分完页的数据
         "page_string": page_object.html()  # 页码

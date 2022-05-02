@@ -8,11 +8,26 @@
                 新建书籍
             </a>
 
-            <div style="float: right;width: 300px;">
+            <div style="float: right;width: 500px;">
                 <form method="get">
                     <div class="input-group">
                         <input type="text" name="q" class="form-control" placeholder="Search for..."
                                value="{{ search_data }}">
+
+                        <label for="orderby" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">Order by</label>
+                        <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+                            <option value="" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
+                            {% for field in sort_field %}
+                            <option value="{{field.name}}" {% if field.name == orderby %}selected=""{% endif %}>{{field.verbose_name}}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="order" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">In</label>
+                        <select name="order" id="order" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+                            <option value="" {% if not order %}selected=""{% endif %}>{{ sort_rule }}</option>
+                            <option value="asc" {% if order == "asc" %}selected=""{% endif %}>ASC</option>
+                            <option value="desc" {% if order == "desc" %}selected=""{% endif %}>DESC</option>
+                        </select>
                         <span class="input-group-btn">
                         <button class="btn btn-default" type="submit">
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -21,6 +36,8 @@
                     </div>
                 </form>
             </div>
+
+
 
         </div>
         <div class="panel panel-default">
