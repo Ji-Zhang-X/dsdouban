@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册成功</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <style>
+        .info{
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 100px;
+            padding: 20px 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class=info>
+        <h1>  注册成功！正在跳转..</h1>
+    </div>
+
+    <script type="text/javascript">
+        setInterval(returnLogin, 1500);
+        function returnLogin()
+        {
+            window.location.href='/dsdouban/'
+        }
+    </script>
+</body>
+</html>
