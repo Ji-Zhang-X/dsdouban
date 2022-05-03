@@ -123,5 +123,9 @@ def register(request):
 
 
 def begin(request):
-    """初始界面"""
+    """登录界面"""
     return render(request, 'begin.html')
+
+def home(request):
+    """主界面"""
+    return render(request, 'home.html')

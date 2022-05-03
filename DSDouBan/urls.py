@@ -22,5 +22,5 @@ urlpatterns = [
     # 管理员界面
     path('manager/', include('AdminSystem.urls')),
     path('dsdouban/', include('UserSystem.urls')),
-    path('', account.begin),
+    path('', account.home),
 ]

@@ -3,7 +3,7 @@ from django.urls import path, include
 
 urlpatterns = [
     # 用户登录与注册
-    path('', account.begin),
+    path('', account.home),
     path('register/', account.register),
     path('login/', account.login),
     path('logout/', account.logout),
