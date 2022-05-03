@@ -53,7 +53,7 @@ def login(request):
         # session可以保存7天
         request.session.set_expiry(60 * 60 * 24 * 7)
 
-        return redirect("/dsdouban/book/list/")
+        return redirect("/")
 
     return render(request, 'user_login.html', {'form': form})
 
@@ -79,7 +79,7 @@ def logout(request):
 
     request.session.clear()
 
-    return redirect('/dsdouban/')
+    return redirect('/dsdouban/login/')
 
 class UserModelForm(BootStrapModelForm):
     confirm_password = forms.CharField(

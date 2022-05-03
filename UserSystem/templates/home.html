@@ -47,64 +47,45 @@
             padding-bottom: 0px;
             line-height: 25px;
         }
+
+        .subhead{
+            height: 125px; 
+            background-color: #FFEECE;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
-<div class="navbar navbar-default">
-    <div class="container-fluid" style="background-color: #B39B6F;" >
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid" style="background-color: #6D572D;" >
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
             </button>
-            <a class="navbar-brand" href="#" >DSDouban</a>
+            <a class="navbar-brand" href="/" >DSDouban</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <!-- <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">广西</a></li>
-                <li><a href="#">上海</a></li>
-                <li><a href="#">神州</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">四川</a></li>
-                        <li><a href="#">上海</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
-            </ul> -->
-            <!-- <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
-                </div>
-                <button type="submit" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></button>
-            </form> -->
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" style="color:#D5D5D5">登录</a></li>
-                <li><a href="#" style="color:#D5D5D5">注册</a></li>
-                <!-- <li>
-                    <a data-toggle="modal" data-target="#myModal">对话框</a>
-                </li> -->
+                {%  if request.session.info.name == NULL %}
+                <li><a href="/dsdouban/login" style="color:#D5D5D5">登录</a></li>
+                <li><a href="/dsdouban/register" style="color:#D5D5D5">注册</a></li>
+                {%  else %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" style="color:#D5D5D5">Dropdown <span class="caret"></span></a>
+                       aria-expanded="false" style="color:#D5D5D5">{{request.session.info.name}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
+                        <li><a href="#">个人资料</a></li>
+                        <li><a href="#">我的订单</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                        <li><a href="/dsdouban/logout/">注销</a></li>
                     </ul>
                 </li>
+                {% endif %}
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -112,12 +93,43 @@
 
 
 
+<div class='subhead'>
+        <div class="col-xs-2 col-md-offset-1">
+            <div>
+                <img src="{% static "img\logo2.png" %}"
+                data-holder-rendered="true" style="width: 250px; margin-top: 15px; margin-bottom: 15px;">
+            </div>
+        </div>
 
+        <div class="col-xs-6 ">
+            <div style="margin-bottom: 10px; margin-top: 20px; margin-left: 20px;" >
+                <div style="width: 450px;">
+                    <form method="get">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Search for..."
+                                   value="{{ search_data }}">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                          </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div style="height:1px; width:100%; background:#251E0F; overflow:hidden;"></div>
+
+
+        <div class="col-xs-2 col-md-offset--1">
+
+        </div>
+</div>
 
 
 
 <div class="container-fluid clearfix">
-    <div class="col-sm-9">
+    <div class="col-sm-8 col-md-offset-1">
         <div class="media">
             <div class="media-left">
                 <a href="#">
@@ -208,7 +220,7 @@
         </ul>
 
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-2 col-md-offset--1">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-fire" aria-hidden="true" style="color:#f0ad4e;font-size: 18px"></i>
