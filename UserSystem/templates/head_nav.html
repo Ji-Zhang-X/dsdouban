@@ -1,0 +1,59 @@
+<div class="navbar navbar-default navbar-fixed-top" style="border-radius: 0;
+border: 1px;
+margin-top: 0;
+min-height: 10px;
+margin-bottom: 20px;">
+
+    <div class="container-fluid" style="background-color: #6D572D; height: 25px;" >
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="margin-top: 2.5px;
+                    padding: 0px 0px !important;">
+            </button>
+            <a class="navbar-brand" href="/" style="color:#D5D5D5;font-size: 5px;
+            padding: 0 15px;
+            height: 10px;
+            line-height: 25px;">DSDouban</a>
+        </div>
+
+
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="margin-top: 2.5px;
+                padding: 0px 0px !important;">
+            </button>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="font-size: 5px;">
+                {%  if request.session.info.name == NULL %}
+                <li><a href="/dsdouban/login" style="color:#D5D5D5; padding-top: 0px;
+                    padding-bottom: 0px;
+                    line-height: 25px;">登录</a></li>
+                <li><a href="/dsdouban/register" style="color:#D5D5D5; padding-top: 0px;
+                    padding-bottom: 0px;
+                    line-height: 25px;">注册</a></li>
+                {%  else %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" style="padding-top: 0px;
+                    padding-bottom: 0px;
+                    line-height: 25px; color:#D5D5D5;"
+                       aria-expanded="false">{{request.session.info.name}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" style="padding-top: 0px;
+                            padding-bottom: 0px;
+                            line-height: 25px;">个人资料</a></li>
+                        <li><a href="#" style="padding-top: 0px;
+                            padding-bottom: 0px;
+                            line-height: 25px;">我的订单</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/dsdouban/logout/" style="padding-top: 0px;
+                            padding-bottom: 0px;
+                            line-height: 25px;">注销</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</div>
