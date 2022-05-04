@@ -1,4 +1,4 @@
-from .views import admin_view, book_view, account, user_view
+from .views import admin_view, book_view, account, user_view, order_view
 from django.urls import path, include
 
 urlpatterns = [
@@ -9,6 +9,9 @@ urlpatterns = [
     path('book/<int:nid>/edit/',book_view.book_edit),
     path('book/<int:nid>/delete/',book_view.book_delete),
     path('book/<int:nid>/details/',book_view.book_details),
+
+    # 订单的管理
+    path('order/list/', order_view.order_list),
 
     # 评论的管理
     path('comment/<int:nid>/<int:book_id>/delete/',book_view.comment_delete),

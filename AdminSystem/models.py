@@ -101,12 +101,15 @@ class Logistics(models.Model):
     class Meta:
         managed = False
         db_table = 'logistics'
+    
+    def __str__(self):
+        return self.logistics_name
 
 
 class Order(models.Model):
     order_id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey('User', models.DO_NOTHING)
-    submission_time = models.TimeField(blank=True, null=True)
+    submission_time = models.DateTimeField(blank=True, null=True)
     status = models.CharField(max_length=20, blank=True, null=True)
     logistics = models.ForeignKey(Logistics, models.DO_NOTHING, blank=True, null=True)
 
@@ -144,6 +147,9 @@ class User(models.Model):
     class Meta:
         managed = False
         db_table = 'user'
+
+    def __str__(self):
+        return self.name
 
 # class AdminsystemAdmin(models.Model):
 #     id = models.BigAutoField(primary_key=True)

@@ -194,7 +194,7 @@ DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `order_id` bigint NOT NULL AUTO_INCREMENT,
   `user_id` bigint NOT NULL,
-  `submission_time` time DEFAULT NULL,
+  `submission_time` DATETIME DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `logistics_id` int DEFAULT NULL,
   PRIMARY KEY (`order_id`),

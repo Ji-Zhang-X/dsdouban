@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px" class="clearfix">
+            <!-- <a class="btn btn-success" href="/manager/book/add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建书籍
+            </a> -->
+
+            <div style="float: right;width: 500px;">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search for..."
+                               value="{{ search_data }}">
+
+                        <!-- <label for="orderby" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">Order by</label> -->
+                        <!-- <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+                            <option value="" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
+                            {% for field in sort_field %}
+                            <option value="{{field.name}}" {% if field.name == orderby %}selected=""{% endif %}>{{field.verbose_name}}</option>
+                            {% endfor %}
+                        </select> -->
+
+                        <!-- <label for="order" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">In</label>
+                        <select name="order" id="order" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+                            <option value="" {% if not order %}selected=""{% endif %}>{{ sort_rule }}</option>
+                            <option value="asc" {% if order == "asc" %}selected=""{% endif %}>ASC</option>
+                            <option value="desc" {% if order == "desc" %}selected=""{% endif %}>DESC</option>
+                        </select> -->
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
+                      </span>
+                    </div>
+                </form>
+            </div>
+
+
+
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                订单信息列表
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>订单id</th>
+                    <!-- {% comment %} <th>出版日期</th> {% endcomment %} -->
+                    <th>用户名</th>
+                    <th>提交时间</th>
+                    <th>订单状态</th>
+                    <th>物流id</th>
+                    <!-- {% comment %} <th>版本</th> {% endcomment %}
+                    <th>出版社</th>
+                    <th>类别</th>
+                    <th>简介</th>
+                    <th>作者</th> -->
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <th>{{ obj.order_id }}</th>
+                        <!-- {% comment %} <td>{{ obj.publish_date|date:"Y-m-d" }}</td> {% endcomment %} -->
+                        <td>{{ obj.user }}</td>
+                        <td>{{ obj.submission_time|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ obj.status }}</td>
+                        <td>{{ obj.logistics }}</td>
+
+                        <!-- <td>
+                            <a class="btn btn-primary btn-xs" href="/manager/book/{{obj.book_id}}/edit/">编辑</a>
+                            <a class="btn btn-primary btn-xs" href="/manager/book/{{obj.book_id}}/details/">查看详情</a>
+                            <a class="btn btn-danger btn-xs" href="/manager/book/{{obj.book_id}}/delete/">删除</a>
+                        </td> -->
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="clearfix">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
+
+        </div>
+
+    </div>
+{% endblock %}
