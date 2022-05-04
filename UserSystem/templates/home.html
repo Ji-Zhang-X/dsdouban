@@ -7,45 +7,10 @@
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins//font-awesome-4.7.0/css/font-awesome.css' %}">
     <style>
-        .navbar {
-            border-radius: 0;
-            border: 1px;
-            margin-top: 0;
-            min-height: 10px;
-            margin-bottom: 20px;
-        }
 
         .more .more-item {
             display: inline-block;
             margin-right: 20px;
-        }
-
-        .navbar-right{
-            font-size: 5px;
-        }
-
-        .navbar-default .navbar-brand{
-            color:#D5D5D5;
-        }
-
-        .navbar-brand {
-            font-size: 5px;
-            padding: 0 15px;
-            height: 10px;
-            line-height: 25px;
-        }
-
-        .navbar-toggle {
-        /* (80px - button height 34px) / 2 = 23px */
-        margin-top: 2.5px;
-        padding: 0px 0px !important;
-        }
-
-        .navbar-nav > li > a {
-            /* (80px - line-height of 27px) / 2 = 26.5px */
-            padding-top: 0px;
-            padding-bottom: 0px;
-            line-height: 25px;
         }
 
         .subhead{
@@ -58,39 +23,8 @@
 </head>
 <body>
 
-<div class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid" style="background-color: #6D572D;" >
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            </button>
-            <a class="navbar-brand" href="/" >DSDouban</a>
-        </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                {%  if request.session.info.name == NULL %}
-                <li><a href="/dsdouban/login" style="color:#D5D5D5">登录</a></li>
-                <li><a href="/dsdouban/register" style="color:#D5D5D5">注册</a></li>
-                {%  else %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" style="color:#D5D5D5">{{request.session.info.name}} <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">个人资料</a></li>
-                        <li><a href="#">我的订单</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="/dsdouban/logout/">注销</a></li>
-                    </ul>
-                </li>
-                {% endif %}
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</div>
-
+{% include "head_nav.html"%}    
 
 
 <div class='subhead'>
