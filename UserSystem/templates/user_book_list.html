@@ -1,24 +1,28 @@
-{% extends 'user_layout.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <style>
+        .navbar {
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
 
-{% block content %}
+
+
+
+
+{% include "head_nav.html"%}    
+{% include "head_sub.html"%}   
+
     <div class="container">
-        <div style="margin-bottom: 10px" class="clearfix">
-
-            <div style="float: right;width: 300px;">
-                <form method="get">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search for..."
-                               value="{{ search_data }}">
-                        <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        </button>
-                      </span>
-                    </div>
-                </form>
-            </div>
-
-        </div>
+        
+        
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">
@@ -76,4 +80,9 @@
         </div>
 
     </div>
-{% endblock %}
+
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@ from ..utils.code import check_code
 from AdminSystem import models
 from ..utils.bootstrap import BootStrapForm, BootStrapModelForm
 from ..utils.encrypt import md5
+from UserSystem.views import book_view
 
 class LoginForm(BootStrapForm):
     name = forms.CharField(
@@ -128,4 +129,7 @@ def begin(request):
 
 def home(request):
     """主界面"""
-    return render(request, 'home.html')
+    search_data = request.GET.get('q', "")
+    if search_data == '':
+        return render(request, 'home.html')
+    return book_view.book_list(request)
