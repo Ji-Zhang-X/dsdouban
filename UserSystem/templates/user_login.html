@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>豆丝豆瓣·用户登录</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
     <style>
         .account {
@@ -25,6 +25,10 @@
     </style>
 </head>
 <body>
+
+{% include "head_nav.html"%}   
+
+
 <div class="account">
     <h2>用户登录</h2>
     <form method="post" novalidate>
@@ -54,6 +58,17 @@
         <input type="submit" value="登 录" class="btn btn-primary">
     </form>
 </div>
+
+
+<div class="container" style="margin-top: 50px;">
+        <div class="row">
+            <div class="terms text-center">
+                <a href='/manager/login/'> 管理员登录</a>
+            </div>
+        </div>
+    </div>
+
+
 
 </body>
 </html>

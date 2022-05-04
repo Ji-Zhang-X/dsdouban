@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>用户注册</title>
+    <title>豆丝豆瓣·用户注册</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
     <style>
         .account {
@@ -25,6 +25,10 @@
     </style>
 </head>
 <body>
+
+        {% include "head_nav.html"%}   
+
+
 <div class="account">
     <h2>{{ title }}</h2>
     <form method="post" novalidate>
