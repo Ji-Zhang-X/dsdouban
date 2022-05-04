@@ -11,9 +11,11 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+注意需将本地mysql root用户的密码改为如上密码
 ```
 ## 导入Dump20220424.sql
 ```
+mysql -u root -p
 source your/path/to/Dump20220424.sql
 ```
 
