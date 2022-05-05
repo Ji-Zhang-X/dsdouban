@@ -20,5 +20,8 @@ urlpatterns = [
     path('order/<int:nid>/edit_unsubmitted_order_list/', user_order.edit_unsubmitted_order_list),
     path('order/<int:nid>/submitted_orders/', user_order.show_submitted_orders),
     
+    # 这里用于测试
+    path('test',book_view.test),
+
 
 ]
