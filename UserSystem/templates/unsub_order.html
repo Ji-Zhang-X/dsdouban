@@ -1,0 +1,43 @@
+{% extends 'user_layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
+            <a class="btn btn-primary" href="/dsdouban/order/{{order.order_id}}/edit_unsubmitted_order/">
+                <span aria-hidden="true"></span>
+                修改物流
+            </a>
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>用户</th>
+                    <th>物流</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th>{{ order.user }}</th>
+                    <td>{{ order.logistics }}</td>
+                </tr>
+
+                </tbody>
+            </table>
+            <h3>订单列表</h3>
+            <h4>
+            {% for book_order in order_list %}
+                <div>
+                    {{book_order.book.title}}  {{book_order.book.price_standard }}:
+                {{ book_order.number }}
+                </div>
+            {%endfor%}
+            </h4>
+
+        </div>
+
+    </div>
+{% endblock %}

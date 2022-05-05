@@ -222,10 +222,12 @@ DROP TABLE IF EXISTS `order_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_list` (
+  `order_list_id` bigint NOT NULL AUTO_INCREMENT,
   `order_id` bigint NOT NULL,
   `book_id` bigint NOT NULL,
   `number` int NOT NULL,
-  PRIMARY KEY (`order_id`,`book_id`),
+  PRIMARY KEY (`order_list_id`),
+  KEY (`order_id`,`book_id`),
   KEY `book_id_idx` (`book_id`),
   CONSTRAINT `book_id1` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`),
   CONSTRAINT `order_id` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`)

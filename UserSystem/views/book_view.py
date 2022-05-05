@@ -80,3 +80,4 @@ def add_comment(request, nid):
         return redirect('/dsdouban/book/'+str(nid)+'/details/')
     
     return render(request, 'change.html', {'form': form, "title": title})
+

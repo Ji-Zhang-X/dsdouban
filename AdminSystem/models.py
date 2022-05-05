@@ -1,5 +1,7 @@
 from django.db import models
 
+from AdminSystem.views.order_view import order_list
+
 
 class Admin(models.Model):
     """ 管理员 """
@@ -119,7 +121,8 @@ class Order(models.Model):
 
 
 class OrderList(models.Model):
-    order = models.OneToOneField(Order, models.DO_NOTHING, primary_key=True)
+    order_list_id = models.BigAutoField(primary_key=True)
+    order = models.OneToOneField(Order, models.DO_NOTHING)
     book = models.ForeignKey(Book, models.DO_NOTHING)
     number = models.IntegerField()
 
@@ -127,13 +130,6 @@ class OrderList(models.Model):
         managed = False
         db_table = 'order_list'
         unique_together = (('order', 'book'),)
-    telephone = models.CharField(max_length=15, blank=True, null=True)
-    e_mail = models.CharField(max_length=45, blank=True, null=True)
-    address = models.CharField(max_length=45, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'user'
 
 class User(models.Model):
     user_id = models.BigAutoField(primary_key=True)
