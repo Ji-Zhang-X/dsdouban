@@ -12,6 +12,8 @@ urlpatterns = [
 
     # 订单的管理
     path('order/list/', order_view.order_list),
+    path('order/<int:nid>/details/', order_view.order_details),
+    path('order/<int:nid>/delete/', order_view.order_delete),
 
     # 评论的管理
     path('comment/<int:nid>/<int:book_id>/delete/',book_view.comment_delete),

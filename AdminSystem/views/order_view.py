@@ -46,3 +46,16 @@ def order_list(request):
         "page_string": page_object.html()  # 页码
     }
     return render(request, 'order_list.html', context)
+
+def order_details(request, nid):
+    order = models.Order.objects.filter(order_id=nid).first()
+    order_list = models.OrderList.objects.filter(order_id=nid)
+    context = {
+        "order": order,
+        "order_list": order_list
+    }
+    return render(request, 'order_details.html', context)
+
+def order_delete(request, nid):
+    models.Order.objects.filter(order_id=nid).delete()
+    return redirect('/manager/order/list/')

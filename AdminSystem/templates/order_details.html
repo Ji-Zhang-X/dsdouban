@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
+            <a class="btn btn-primary" href="/manager/order/list">
+                <span aria-hidden="true"></span>
+                编辑
+            </a>
+        </div>
+        <h3>订单信息</h3>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>用户</th>
+                    <th>提交时间</th>
+                    <th>状态</th>
+                    <th>物流</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>{{ order.user }}</th>
+                    <td>{{ order.submission_time|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.logistics }}</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <h3>订单列表</h3>
+        <div class="panel panel-default">
+            
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>书籍id</th>
+                    <th>书名</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for book_order in order_list %}
+                    <tr>
+                        <td>{{ book_order.book_id }}</td>
+                        <td>{{ book_order.book.title }}</td>
+                        <td>{{ book_order.book.price_standard }}</td>
+                        <td>{{ book_order.number }}</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+                
+            </table> 
+            <h4>
+            
+            </h4>
+        </div>
+        
+    </div>
+{% endblock %}

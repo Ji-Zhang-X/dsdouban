@@ -57,6 +57,7 @@
                     <th>提交时间</th>
                     <th>订单状态</th>
                     <th>物流id</th>
+                    <th>操作</th>
                     <!-- {% comment %} <th>版本</th> {% endcomment %}
                     <th>出版社</th>
                     <th>类别</th>
@@ -73,7 +74,10 @@
                         <td>{{ obj.submission_time|date:"Y-m-d H:i:s" }}</td>
                         <td>{{ obj.status }}</td>
                         <td>{{ obj.logistics }}</td>
-
+                        <td>
+                            <a class="btn btn-danger btn-xs" href="/manager/order/{{obj.order_id}}/details/">查看详情</a>
+                            <a class="btn btn-danger btn-xs" href="/manager/order/{{obj.order_id}}/delete/">删除</a>
+                        </td>
                         <!-- <td>
                             <a class="btn btn-primary btn-xs" href="/manager/book/{{obj.book_id}}/edit/">编辑</a>
                             <a class="btn btn-primary btn-xs" href="/manager/book/{{obj.book_id}}/details/">查看详情</a>

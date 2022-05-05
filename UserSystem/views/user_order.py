@@ -16,7 +16,7 @@ def show_unsubmitted_order(request):
     filter_dict["submission_time"] = None
     unsubmitted_order = models.Order.objects.filter(**filter_dict).first()
     if unsubmitted_order is None:
-        unsubmitted_order = models.Order(user = nid, submission_time = None)
+        unsubmitted_order = models.Order(user_id = nid, submission_time = None)
         unsubmitted_order.save()
     unsubmitted_order_list = models.OrderList.objects.filter(order_id=unsubmitted_order.order_id)
     print(unsubmitted_order_list)
