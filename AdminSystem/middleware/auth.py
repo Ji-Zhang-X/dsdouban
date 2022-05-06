@@ -27,11 +27,11 @@ class AuthMiddleware(MiddlewareMixin):
                     return
                 else:
                     title = "您无管理员权限。"
-                    skiplink = "/dsdouban/book/list/"
+                    skiplink = "/"
                     print(skiplink)
                     return render(request, 'warning.html', {"title": title, "skiplink": skiplink})
 
         # 2.没有登录过，重新回到登录页面
         title = "您未登录。"
-        skiplink = "/dsdouban/"
+        skiplink = "/dsdouban/login/"
         return render(request, 'warning.html', {"title": title, "skiplink": skiplink})

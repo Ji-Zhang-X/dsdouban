@@ -1,12 +1,130 @@
-{% extends 'user_layout.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>豆丝豆瓣·搜索结果</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <style>
+        .navbar {
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
 
-{% block content %}
+
+
+
+
+{% include "head_nav.html"%}    
+{% include "head_sub.html"%}   
+
+
+<div class="clearfix">
+        <div class="col-md-8 col-md-offset-1" style="margin-bottom: 50px;">
+            <!-- main part starts here -->
+            <div class="clearfix">
+
+            <div>
+                <h2 style="margin-left: 15px; float: left;">
+                    {{obj.title}}
+                </h2>
+                <div style="float: right;margin-top: 30px;">
+                        <a onclick="javascript:history.back(-1);">
+                            [返回]
+                        </a>
+                </div>
+            </div>
+
+
+            <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
+
+                <div class="col-md-2">
+                    <img src="\static\img_book\{{obj.book_id}}.jpg"
+                    data-holder-rendered="true" style="width: 200px; margin-top: 15px; margin-bottom: 15px;" >
+                </div>
+                <div class="col-md-9 col-md-offset-1" style="font-size:15px; margin-top: 10px;">
+                    <div> 评分: {{ obj.score }} </div>
+
+                    <script type="text/javascript">
+                            var has_trans = 0;
+                    </script>
+                    <div> 作者: {% for author in obj.authors.all %}
+                                {%if author.is_translator == 0%}
+                                {{ author.name }};
+                                {% else %}
+                                <script type="text/javascript">
+                                    var has_trans = 1;
+                                </script>
+                                {% endif %}
+                            {%endfor%}</div>
+                        {% for author in obj.authors.all%}
+                        {%endfor%}
+                        <div id='trans_{{obj.book_id}}' style="display: none;"> 译者: {% for author in obj.authors.all %}
+                                {%if author.is_translator == 1%}
+                                {{ author.name }};
+                                {% endif %}
+                            {%endfor%}</div>
+                        <script type="text/javascript">
+                            if(has_trans==1){
+                                document.getElementById("trans_{{obj.book_id}}").style.display='block';
+                            }
+                        </script>
+                        <div> 出版社: {{ obj.press }}</div>
+                        <div> 出版日期: {{ obj.publish_date|date:"Y-m-d" }}</div>
+                        <div> 分类: {{ obj.class_field }}</div>
+                        <div> 标价: {{ obj.price_standard }}</div>
+                        <div> 会员价: {{obj.price_vip}}</div>
+                        {%if obj.edition != NULL %}
+                        <div> 版本号: {{ obj.edition }}</div>
+                        {%endif%}
+                        <div> ISBN: {{obj.book_id}} </div>
+                        </div>
+
+            </div>
+
+                <h3 style="margin-top: 30px;">
+                    内容简介
+                </h3>
+                <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
+
+                <p style="margin-left: 40px; margin-right: 40px;"> {{obj.introduction|linebreaksbr}} </p>
+
+            
+
+            <h3 style="margin-top: 30px;">
+                用户评论
+            </h3>
+            <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
+
+            <h4>
+            {% for cmt in comments %}
+                <div>
+                    <span  style="font-size: 15px;">
+                            {{cmt.user.name}}
+                    </span>
+                    <span style="color:rgb(124, 124, 124); font-size: 10px;">
+                            {{cmt.submission_time }}
+                    </span>
+                </div>
+                <div>
+                  {{ cmt.comment }}
+                </div>
+            {%endfor%}
+            </h4>
+             
+            <!-- main part ends here  -->
+            </div>
+
+            </div>
+        </div>
+</div>
+
+
+
     <div class="container">
-        <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
-            <a class="btn btn-primary" href="/dsdouban/book/list/">
-                <span aria-hidden="true"></span>
-                返回
-            </a>
+        <div style="display:inline-block;margin-bottom: 10px" class="clearfix">    
             <a class="btn btn-primary" href="/dsdouban/book/{{obj.book_id}}/add_comment/">
                 <span aria-hidden="true"></span>
                 添加评论
@@ -16,58 +134,16 @@
                 添加到我的订单
             </a>
         </div>
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
 
-            <!-- Table -->
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>书名</th>
-                    <th>出版日期</th>
-                    <th>普通价格</th>
-                    <th>会员价格</th>
-                    <th>score</th>
-                    <th>版本</th>
-                    <th>出版社</th>
-                    <th>类别</th>
-                    <th>作者</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <th>{{ obj.title }}</th>
-                    <td>{{ obj.publish_date|date:"Y-m-d" }}</td>
-                    <td>{{ obj.price_standard }}</td>
-                    <td>{{ obj.price_vip }}</td>
-                    <td>{{ obj.score }}</td>
-                    <td>{{ obj.edition }}</td>
-                    <td>{{ obj.press }}</td>
-                    <td>{{ obj.class_field }}</td>
-                    <td>
-                        {% for author in obj.authors.all %}
-                            {{ author.name }};
-                        {%endfor%}
-                    </td>
-                </tr>
 
-                </tbody>
-            </table>
-            <h3>简介</h3>
-            <h4>
-                {{obj.introduction}}
-            </h4>
-            <h3>评论</h3>
-            <h4>
-            {% for cmt in comments %}
-                <div>
-                    {{cmt.user.name}}  {{cmt.submission_time }}:
-                {{ cmt.comment }}
-                </div>
-            {%endfor%}
-            </h4> 
 
-        </div>
+
 
     </div>
-{% endblock %}
+
+
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

@@ -26,6 +26,8 @@
 		<h3>  搜索结果 </h3>
 		<div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
 <ul class="search-results">
+
+    {% if queryset%}
 	{% for obj in queryset %}
 	<li class="result clearfix">
 		<div class="col-md-2">
@@ -89,6 +91,14 @@
 			</ul>
         </div>
     </div>
+
+    {%else%}
+
+    <h3> 没有找到，试试别的关键词？</h3>
+
+
+    {%endif%}
+
 
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
