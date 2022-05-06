@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'AdminSystem.apps.AdminsystemConfig',
-    'UserSystem.apps.UsersystemConfig'
+    'UserSystem.apps.UsersystemConfig',
+    'UserSystem.templatetags',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +59,8 @@ ROOT_URLCONF = 'DSDouBan.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'UserSystem/' ,'templates')],
+        'DIRS': [os.path.join(BASE_DIR,'UserSystem/' ,'templates'),
+                 os.path.join(BASE_DIR,'DSDouBan/' ,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

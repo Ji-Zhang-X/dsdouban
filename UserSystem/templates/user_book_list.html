@@ -38,10 +38,32 @@
 		<a href="/dsdouban/book/{{obj.book_id}}/details/">
 		<h3>{{ obj.title }}</h3>
 		</a>
-		<div> 评分: {{ obj.score }} </div>
+        <div> 评分: {{ obj.score }} </div>
+
+        <script type="text/javascript">
+            var has_trans = 0;
+        </script>
 		<div> 作者: {% for author in obj.authors.all %}
-				{{ author.name }};
-			{%endfor%}</div>
+                {%if author.is_translator == 0%}
+                {{ author.name }};
+                {% else %}
+                <script type="text/javascript">
+                    var has_trans = 1;
+                </script>
+                {% endif %}
+            {%endfor%}</div>
+        {% for author in obj.authors.all%}
+        {%endfor%}
+        <div id='trans_{{obj.book_id}}' style="display: none;"> 译者: {% for author in obj.authors.all %}
+                {%if author.is_translator == 1%}
+                {{ author.name }};
+                {% endif %}
+            {%endfor%}</div>
+        <script type="text/javascript">
+            if(has_trans==1){
+                document.getElementById("trans_{{obj.book_id}}").style.display='block';
+            }
+        </script>
 		<div> 出版社: {{ obj.press }}</div>
 		<div> 出版日期: {{ obj.publish_date|date:"Y-m-d" }}</div>
 		<div> 分类: {{ obj.class_field }}</div>
