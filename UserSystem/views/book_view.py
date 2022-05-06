@@ -9,7 +9,7 @@ from AdminSystem import models
 def book_list(request):
     # 书籍列表
     search_data = request.GET.get('q', "")
-    search_field = ["press__name__contains", "introduction__contains"]
+    search_field = ["title__contains", "press__name__contains", "introduction__contains"]
     data_dict = {}
     queryset = None
     if search_data:
