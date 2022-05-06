@@ -28,16 +28,44 @@
                 </tbody>
             </table>
             <h3>订单列表</h3>
-            <h4>
-            {% for book_order in order_list %}
-                <div>
-                    {{book_order.book.title}}  {{book_order.book.price_standard }}:
-                {{ book_order.number }}
-                </div>
-            {%endfor%}
-            </h4>
+            <div class="panel panel-default">
+            
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>书籍id</th>
+                        <th>书名</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>修改</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for book_order in order_list %}
+                        <tr>
+                            <td>{{ book_order.book_id }}</td>
+                            <td>{{ book_order.book.title }}</td>
+                            <td>{{ book_order.book.price_standard }}</td>
+                            <td>{{ book_order.number }}</td>
+                            <td>
+                                <a class="btn btn-primary" href="/dsdouban/order/{{book_order.order_list_id}}/edit_unsubmitted_order_list/">
+                                    <span aria-hidden="true"></span>
+                                    编辑
+                                </a>
+                                <a class="btn btn-primary" href="/dsdouban/order/{{book_order.order_list_id}}/delete_unsubmitted_order_list/">
+                                    <span aria-hidden="true"></span>
+                                    删除
+                                </a>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                    
+                </table> 
+                <h4>
 
+                </h4>
+            </div>
+            
         </div>
-
-    </div>
 {% endblock %}

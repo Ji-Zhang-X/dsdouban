@@ -19,7 +19,9 @@ def book_list(request):
             if not queryset:
                 queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
             else:
-                queryset.union(models.Book.objects.filter(**data_dict).order_by("press_id"))
+
+                queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by("press_id"))
+
     else:
         queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
     page_object = Pagination(request, queryset)
@@ -80,3 +82,29 @@ def add_comment(request, nid):
         return redirect('/dsdouban/book/'+str(nid)+'/details/')
     
     return render(request, 'change.html', {'form': form, "title": title})
+
+def test(request):
+    # 书籍列表
+    search_data = request.GET.get('q', "")
+    search_field = ["title__contains", "press__name__contains", "introduction__contains"]
+    data_dict = {}
+    queryset = None
+    if search_data:
+        for search_key in search_field:
+            data_dict = {}
+            data_dict[search_key] = search_data
+            if queryset is None:
+                queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
+            else:
+                queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by("press_id"))
+    else:
+        queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
+    page_object = Pagination(request, queryset)
+
+    context = {
+        "search_data": search_data,
+
+        "queryset": page_object.page_queryset,  # 分完页的数据
+        "page_string": page_object.html()  # 页码
+    }
+    return render(request, 'test.html', context)
