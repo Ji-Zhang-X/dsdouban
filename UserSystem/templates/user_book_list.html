@@ -20,17 +20,74 @@
 {% include "head_nav.html"%}    
 {% include "head_sub.html"%}   
 
+<div class="clearfix">
+<div class="col-md-8 col-md-offset-1">
+
+		<h3>  搜索结果 </h3>
+		<div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
+<ul class="search-results">
+	{% for obj in queryset %}
+	<li class="result clearfix">
+		<div class="col-md-2">
+		<a href="/dsdouban/book/{{obj.book_id}}/details/" style="text-decoration: none;">
+		<img src="\static\img_book\{{obj.book_id}}.jpg"
+		data-holder-rendered="true" style="width: 100px; margin-top: 15px; margin-bottom: 15px;" >
+		</a>
+		</div>
+		<div class="col-md-9 col-md-offset-1" >
+		<a href="/dsdouban/book/{{obj.book_id}}/details/">
+		<h3>{{ obj.title }}</h3>
+		</a>
+		<div> 评分: {{ obj.score }} </div>
+		<div> 作者: {% for author in obj.authors.all %}
+				{{ author.name }};
+			{%endfor%}</div>
+		<div> 出版社: {{ obj.press }}</div>
+		<div> 出版日期: {{ obj.publish_date|date:"Y-m-d" }}</div>
+		<div> 分类: {{ obj.class_field }}</div>
+		<div> 标价: {{ obj.price_standard }}</div>
+		<div> 会员价: {{obj.price_vip}}</div>
+		{%if obj.edition != NULL %}
+		<div> 版本号: {{ obj.edition }}</div>
+		{%endif%}
+		<div>{{ obj.introduction }}</div>
+		</div>
+		{% endfor %}
+
+
+	</li>
+</ul>
+</div>
+</div>
+
+    <div class="container">
+        <div class="clearfix">
+            <ul class="pagination">
+                {{ page_string }}
+			</ul>
+        </div>
+    </div>
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
+
+
+<!-- 
+
+    过去的版本
+
+
     <div class="container">
         
 
         <div class="panel panel-default">
-            <!-- Default panel contents -->
             <div class="panel-heading">
                 <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                 书籍列表
             </div>
 
-            <!-- Table -->
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -68,7 +125,6 @@
                         </td>
                     </tr>
                 {% endfor %}
-
                 </tbody>
             </table>
         </div>
@@ -76,13 +132,7 @@
             <ul class="pagination">
                 {{ page_string }}
             </ul>
-
         </div>
-
     </div>
-
-
-<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
 </body>
-</html>
+</html> -->
