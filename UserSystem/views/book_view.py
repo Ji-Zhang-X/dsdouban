@@ -19,7 +19,9 @@ def book_list(request):
             if not queryset:
                 queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
             else:
-                queryset.union(models.Book.objects.filter(**data_dict).order_by("press_id"))
+
+                queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by("press_id"))
+
     else:
         queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
     page_object = Pagination(request, queryset)
@@ -84,17 +86,17 @@ def add_comment(request, nid):
 def test(request):
     # 书籍列表
     search_data = request.GET.get('q', "")
-    search_field = ["press__name__contains", "introduction__contains"]
+    search_field = ["title__contains", "press__name__contains", "introduction__contains"]
     data_dict = {}
     queryset = None
     if search_data:
         for search_key in search_field:
             data_dict = {}
             data_dict[search_key] = search_data
-            if not queryset:
+            if queryset is None:
                 queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
             else:
-                queryset.union(models.Book.objects.filter(**data_dict).order_by("press_id"))
+                queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by("press_id"))
     else:
         queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
     page_object = Pagination(request, queryset)

@@ -17,11 +17,14 @@ urlpatterns = [
     # 这里nid是user_id
     path('order/unsubmitted_order/', user_order.show_unsubmitted_order),
     path('order/<int:nid>/edit_unsubmitted_order/', user_order.edit_unsubmitted_order),
-    path('order/<int:nid>/edit_unsubmitted_order_list/', user_order.edit_unsubmitted_order_list),
     path('order/<int:nid>/submitted_orders/', user_order.show_submitted_orders),
+
+    # 这里nid是order_list_id
+    path('order/<int:nid>/edit_unsubmitted_order_list/', user_order.edit_unsubmitted_order_list),
+    path('order/<int:nid>/delete_unsubmitted_order_list/', user_order.delete_unsubmitted_order_list),
     
     # 这里用于测试
-    path('test',book_view.test),
+    path('test/',book_view.test),
 
 
 ]
