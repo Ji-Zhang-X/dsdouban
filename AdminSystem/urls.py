@@ -15,6 +15,9 @@ urlpatterns = [
     path('order/<int:nid>/details/', order_view.order_details),
     path('order/<int:nid>/delete/', order_view.order_delete),
 
+    path('orderlist/<int:nid>/delete/', order_view.order_list_delete),
+    path('orderlist/<int:nid>/edit/', order_view.edit_order_list),
+
     # 评论的管理
     path('comment/<int:nid>/<int:book_id>/delete/',book_view.comment_delete),
     

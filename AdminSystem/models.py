@@ -1,7 +1,5 @@
 from django.db import models
 
-from AdminSystem.views.order_view import order_list
-
 
 class Admin(models.Model):
     """ 管理员 """
@@ -114,6 +112,9 @@ class Order(models.Model):
     submission_time = models.DateTimeField(blank=True, null=True)
     status = models.CharField(max_length=20, blank=True, null=True)
     logistics = models.ForeignKey(Logistics, models.DO_NOTHING, blank=True, null=True)
+    telephone = models.CharField(max_length=15, blank=True, null=True)
+    address = models.CharField(max_length=45, blank=True, null=True)
+    name = models.CharField(max_length=40)
 
     class Meta:
         managed = False

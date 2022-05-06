@@ -31,6 +31,20 @@
                 </tr>
 
                 </tbody>
+            </table> 
+        </div>
+        <div class="panel panel-default">
+            <table class="table table-bordered">
+                <thead>
+                    <th>收件人</th>
+                    <th>收件人电话</th>
+                    <th>地址</th>
+                </thead>
+                <tbody>
+                    <th>{{ order.name }}</th>
+                    <th>{{ order.telephone }}</th>
+                    <th>{{ order.address }}</th>
+                </tbody>
             </table>
         </div>
         <h3>订单列表</h3>
@@ -43,6 +57,7 @@
                     <th>书名</th>
                     <th>单价</th>
                     <th>数量</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -52,14 +67,17 @@
                         <td>{{ book_order.book.title }}</td>
                         <td>{{ book_order.book.price_standard }}</td>
                         <td>{{ book_order.number }}</td>
+                        <td>
+                            <a class="btn btn-danger btn-xs" href="/manager/orderlist/{{book_order.order_list_id}}/edit/">编辑</a>
+                            <a class="btn btn-danger btn-xs" href="/manager/orderlist/{{book_order.order_list_id}}/delete/">删除</a>
+                        </td>
                     </tr>
                     {%endfor%}
                 </tbody>
                 
             </table> 
-            <h4>
             
-            </h4>
+            <h3>总计 {{ sum }}</h3>
         </div>
         
     </div>
