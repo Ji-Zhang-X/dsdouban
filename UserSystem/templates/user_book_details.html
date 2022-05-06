@@ -34,6 +34,10 @@
                         <a onclick="javascript:history.back(-1);">
                             [返回]
                         </a>
+
+                        <a href="/dsdouban/book/{{obj.book_id}}/add_book_to_unsubmitted_order_list/">
+                                [添加到购物车]
+                        </a>
                 </div>
             </div>
 
@@ -97,7 +101,7 @@
                 用户评论
             </h3>
             <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
-
+            {%if comments%}
             <h4>
             {% for cmt in comments %}
                 <div>
@@ -114,6 +118,35 @@
             {%endfor%}
             </h4>
              
+            {%else%}
+            <h4>
+                还没有评论呢！
+            </h4>
+            {%endif%}
+
+            <button  class="btn btn-primary" onclick= "start_comment()" id='comment_button'>发表评论</button>
+
+            <div style="display: none;" id='comment_block'>
+            <h3 style="margin-top: 100px;"> 发表短评</h3>
+            <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
+
+            <div class="panel-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+    
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label>{{ field.label }}</label>
+                                {{ field }}
+                                <span style="color: red;">{{ field.errors.0 }}</span>
+                            </div>
+                        {% endfor %}
+    
+                        <button type="submit" class="btn btn-primary">提 交</button>
+                    </form>
+            </div>
+            <div>
+
             <!-- main part ends here  -->
             </div>
 
@@ -122,28 +155,19 @@
 </div>
 
 
+</div>
 
-    <div class="container">
-        <div style="display:inline-block;margin-bottom: 10px" class="clearfix">    
-            <a class="btn btn-primary" href="/dsdouban/book/{{obj.book_id}}/add_comment/">
-                <span aria-hidden="true"></span>
-                添加评论
-            </a>
-            <a class="btn btn-primary" href="/dsdouban/book/{{obj.book_id}}/add_book_to_unsubmitted_order_list/">
-                <span aria-hidden="true"></span>
-                添加到我的订单
-            </a>
-        </div>
-
-
-
-
-
-    </div>
-
-
+    
 
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    function start_comment(){
+        document.getElementById("comment_block").style.display='block';
+        document.getElementById("comment_button").style.display='none';
+        window.scrollTo(0, document.documentElement.scrollHeight-document.documentElement.clientHeight);
+    }
+</script>
 </body>
 </html>
