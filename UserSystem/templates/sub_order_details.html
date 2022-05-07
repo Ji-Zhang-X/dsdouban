@@ -1,7 +1,25 @@
-{% extends 'user_layout.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>豆丝豆瓣·搜索结果</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <style>
+        .navbar {
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
 
-{% block content %}
-    <div class="container">
+
+
+
+
+{% include "head_nav.html"%}    
+
+    <div class="container" style="margin-top: 50px; min-height: calc(100vh - 70px)">
         {% if order.status == '已付款' %}
         <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
             <a class="btn btn-primary" href="/dsdouban/order/{{order.order_id}}/edit_order/">
@@ -74,5 +92,11 @@
                 </h4>
             </div>
             
+            
         </div>
-{% endblock %}
+
+
+        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
