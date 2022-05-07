@@ -5,7 +5,7 @@
         <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
             <a class="btn btn-primary" href="/dsdouban/order/{{order.order_id}}/edit_unsubmitted_order/">
                 <span aria-hidden="true"></span>
-                修改物流
+                修改订单信息
             </a>
         </div>
         <div class="panel panel-default">
@@ -27,6 +27,20 @@
 
                 </tbody>
             </table>
+            <div class="panel panel-default">
+                <table class="table table-bordered">
+                    <thead>
+                        <th>收件人</th>
+                        <th>收件人电话</th>
+                        <th>地址</th>
+                    </thead>
+                    <tbody>
+                        <th>{{ order.name }}</th>
+                        <th>{{ order.telephone }}</th>
+                        <th>{{ order.address }}</th>
+                    </tbody>
+                </table>
+            </div>
             <h3>订单列表</h3>
             <div class="panel panel-default">
             
@@ -62,8 +76,14 @@
                     </tbody>
                     
                 </table> 
+                <a class="btn btn-primary" href="/dsdouban/order/submit_unsubmitted_order/">
+                    <span aria-hidden="true"></span>
+                    提交订单
+                </a>
                 <h4>
-
+                    {%if warning_info%}
+                    {{warning_info}}
+                    {%endif%}
                 </h4>
             </div>
             

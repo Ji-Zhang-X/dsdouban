@@ -4,13 +4,9 @@ from django import forms
 from django.utils import timezone
 from django.shortcuts import render, redirect, HttpResponse
 from AdminSystem.utils.pagination import Pagination
-
 from AdminSystem import models
 
-def show_unsubmitted_order(request):
-    '''显示用户未提交的order信息,如果没有,就新建一个'''
-    title = "显示用户未提交订单信息"
-    info_dict = request.session.get("info")
+def get_context_for_unsub_order(info_dict, warning=None):
     nid = info_dict["id"]
     filter_dict = {}
     filter_dict["user_id"] = nid
@@ -18,17 +14,45 @@ def show_unsubmitted_order(request):
     unsubmitted_order = models.Order.objects.filter(**filter_dict).first()
     # 如果该用户没有未提交的订单，就创建一个
     if unsubmitted_order is None:
-        unsubmitted_order = models.Order(user_id = nid, submission_time = None)
+        current_user = models.Order.objects.filter(user_id=nid).first()
+        unsubmitted_order = models.Order(user_id = nid, submission_time = None, telephone = current_user.telephone, address=current_user.address, name=current_user.name)
         unsubmitted_order.save()
     unsubmitted_order_list = models.OrderList.objects.filter(order_id=unsubmitted_order.order_id)
-    return render(request, 'unsub_order.html', {"order": unsubmitted_order,"order_list":unsubmitted_order_list})
+    context = {
+        "order": unsubmitted_order,
+        "order_list": unsubmitted_order_list,
+        "warning_info":None,
+    }
+    return context
 
-            
+def show_unsubmitted_order(request):
+    '''显示用户未提交的order信息,如果没有,就新建一个'''
+    title = "显示用户未提交订单信息"
+    info_dict = request.session.get("info")
+    context = get_context_for_unsub_order(info_dict)
+    return render(request, 'unsub_order.html', context)
+
+
+def submit_unsubmitted_order(request):
+    '''提交订单,把订单状态改为已提交,检验各字段不能为空'''
+    info_dict = request.session.get("info")
+    context = get_context_for_unsub_order(info_dict)
+    unsubmitted_order = context["order"]
+    unsubmitted_order_list = context["order_list"]
+    if (len(unsubmitted_order_list) != 0) and (unsubmitted_order.telephone is not None) and (unsubmitted_order.address is not None) and (unsubmitted_order.name is not None):
+        unsubmitted_order.submission_time = timezone.now()
+        unsubmitted_order.status = "已付款"
+        unsubmitted_order.save()
+        return redirect('/dsdouban/order/submitted_orders/')
+    else:
+        context["warning_info"] = "订单信息不完整，请确保收件人信息完整！"
+        return render(request, 'unsub_order.html', context)
+
 class OrderModelForm(forms.ModelForm):
     class Meta:
         model = models.Order
         # fields = "__all__"
-        fields = ['logistics']
+        fields = ['logistics', 'telephone', 'address', 'name']
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,8 +67,8 @@ def edit_unsubmitted_order(request, nid):
     # nid 是订单号
     row_object = models.Order.objects.filter(order_id=nid).first()
     
-    ''' 修改物流'''
-    title = "修改订单物流"
+    ''' 修改订单'''
+    title = "修改订单信息"
     if request.method == "GET":
         form = OrderModelForm()
         return render(request, 'change.html', {'form': form, "title": title})
@@ -122,4 +146,57 @@ def add_book_to_unsubmitted_order_list(request, nid):
 
 def show_submitted_orders(request):
     '''查看用户已提交的订单'''
+    search_field = ['submission_time__contains']    # Search by order_id or username
+    # 获取用户id
+    info_dict = request.session.get("info")
+    user_nid = info_dict["id"]
+    search_data = request.GET.get('q', "")
+
+    # 按order id 降序排列
+    orders = []
+    if not orders:
+        orders = ['-order_id']
+
+    data_dict = {"user_id":user_nid}
+    queryset = None
+    if search_data:
+        for search_key in search_field:
+            if search_key == 'order_id':
+                data_dict = {"user_id":user_nid}
+                if search_data.isnumeric(): # In order_id search, we should make sure that input is number
+                    data_dict[search_key] = eval(search_data)
+            else:
+                data_dict = {"user_id":user_nid}
+                data_dict[search_key] = search_data
+            if not queryset:
+                queryset = models.Order.objects.filter(**data_dict).exclude(submission_time = None).order_by(*orders)
+            else:
+                queryset = queryset.union(models.Order.objects.filter(**data_dict).exclude(submission_time=None).order_by(*orders))
+    else:
+        queryset = models.Order.objects.filter(**data_dict).exclude(submission_time=None).order_by(*orders)
+    page_object = Pagination(request, queryset)
+
+    context = {
+        "search_data": search_data,
+
+        "queryset": page_object.page_queryset,  # 分完页的数据
+        "page_string": page_object.html()  # 页码
+    }
+    return render(request, 'user_order_list.html', context)
+
+def show_submitted_order_details(request, nid):
+    '''展示已提交的订单细节,nid为order_id,几乎与show_unsubmitted_order一样'''
     pass
+
+def cancel_submitted_order(request, nid):
+    '''取消已提交的订单,改status为已取消,返回一个,即将退款的页面,可以直接用httpresponse'''
+    '''nid为order_id'''
+    pass
+
+def finish_submitted_order(request, nid):
+    '''确认收货,完成订单,改status为已完成'''
+    '''nid为order_id'''
+
+def edit_submitted_order(request, nid):
+    '''编辑已提交的订单,但不能编辑已完成和取消的订单,只可以编辑收货人,电话和收货地址'''
+    '''nid为order_id'''
