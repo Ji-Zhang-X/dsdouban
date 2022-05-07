@@ -63,8 +63,39 @@ def order_details(request, nid):
     return render(request, 'order_details.html', context)
 
 def order_delete(request, nid):
+    models.OrderList.objects.filter(order_id=nid).delete()
     models.Order.objects.filter(order_id=nid).delete()
     return redirect('/manager/order/list/')
+
+class OrderModelForm(forms.ModelForm):
+    class Meta:
+        model = models.Order
+        # fields = "__all__"
+        fields = ['logistics', 'telephone', 'address', 'name']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 循环ModelForm中的所有字段，给每个字段的插件设置
+        for name, field in self.fields.items():
+            field.widget.attrs = {
+                "class": "form-control",
+                "placeholder": field.label
+            }
+
+def edit_order(request, nid):
+    # nid 是订单号
+    row_object = models.Order.objects.filter(order_id=nid).first()
+    
+    ''' 修改订单'''
+    title = "修改订单信息"
+    if request.method == "GET":
+        form = OrderModelForm()
+        return render(request, 'change.html', {'form': form, "title": title})
+    
+    form = OrderModelForm(data=request.POST, instance=row_object)
+    if form.is_valid():
+        form.save()
+        return redirect('/manager/order/' + str(row_object.order_id) + '/details/')
 
 
 class OrderListModelForm(forms.ModelForm):

@@ -1,0 +1,78 @@
+{% extends 'user_layout.html' %}
+
+{% block content %}
+    <div class="container">
+        {% if order.status == '已付款' %}
+        <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
+            <a class="btn btn-primary" href="/dsdouban/order/{{order.order_id}}/edit_order/">
+                <span aria-hidden="true"></span>
+                修改订单信息
+            </a>
+        </div>
+        {%endif%}
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>用户</th>
+                    <th>物流</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th>{{ order.user }}</th>
+                    <td>{{ order.logistics }}</td>
+                </tr>
+
+                </tbody>
+            </table>
+            <div class="panel panel-default">
+                <table class="table table-bordered">
+                    <thead>
+                        <th>收件人</th>
+                        <th>收件人电话</th>
+                        <th>地址</th>
+                    </thead>
+                    <tbody>
+                        <th>{{ order.name }}</th>
+                        <th>{{ order.telephone }}</th>
+                        <th>{{ order.address }}</th>
+                    </tbody>
+                </table>
+            </div>
+            <h3>订单列表</h3>
+            <div class="panel panel-default">
+            
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>书籍id</th>
+                        <th>书名</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for book_order in order_list %}
+                        <tr>
+                            <td>{{ book_order.book_id }}</td>
+                            <td>{{ book_order.book.title }}</td>
+                            <td>{{ book_order.book.price_standard }}</td>
+                            <td>{{ book_order.number }}</td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                    
+                </table> 
+                <h4>
+                    {%if warning_info%}
+                    {{warning_info}}
+                    {%endif%}
+                </h4>
+            </div>
+            
+        </div>
+{% endblock %}

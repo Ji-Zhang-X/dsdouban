@@ -195,7 +195,7 @@ CREATE TABLE `order` (
   `order_id` bigint NOT NULL AUTO_INCREMENT,
   `user_id` bigint NOT NULL,
   `submission_time` DATETIME DEFAULT NULL,
-  `status` varchar(20) DEFAULT NULL,
+  `status` varchar(20) NOT NULL DEFAULT '未提交',
   `logistics_id` int DEFAULT NULL,
   `telephone` varchar(15) DEFAULT NULL,
   `address` varchar(45) DEFAULT NULL,

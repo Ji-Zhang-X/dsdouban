@@ -1,4 +1,5 @@
 import copy
+from pyexpat import model
 from tokenize import Number
 from django import forms
 from django.utils import timezone
@@ -184,19 +185,49 @@ def show_submitted_orders(request):
     }
     return render(request, 'user_order_list.html', context)
 
+
 def show_submitted_order_details(request, nid):
     '''展示已提交的订单细节,nid为order_id,几乎与show_unsubmitted_order一样'''
-    pass
+    order = models.Order.objects.filter(order_id=nid).first()
+    order_list = models.OrderList.objects.filter(order_id=order.order_id)
+    context = {
+        "order": order,
+        "order_list": order_list,
+        "warning_info": None,
+    }
+    return render(request, 'sub_order_details.html', context)
 
 def cancel_submitted_order(request, nid):
     '''取消已提交的订单,改status为已取消,返回一个,即将退款的页面,可以直接用httpresponse'''
     '''nid为order_id'''
-    pass
+    row_object = models.Order.objects.filter(order_id=nid).first()
+    row_object.status = "已取消"
+    row_object.save()
+    return redirect('/dsdouban/order/submitted_orders/')
 
 def finish_submitted_order(request, nid):
     '''确认收货,完成订单,改status为已完成'''
     '''nid为order_id'''
+    row_object = models.Order.objects.filter(order_id=nid).first()
+    row_object.status = "已完成"
+    row_object.save()
+    return redirect('/dsdouban/order/submitted_orders/')
 
 def edit_submitted_order(request, nid):
     '''编辑已提交的订单,但不能编辑已完成和取消的订单,只可以编辑收货人,电话和收货地址'''
     '''nid为order_id'''
+    # nid 是订单号
+    row_object = models.Order.objects.filter(order_id=nid).first()
+    
+    ''' 修改订单'''
+    title = "修改订单信息"
+    if request.method == "GET":
+        form = OrderModelForm()
+        return render(request, 'change.html', {'form': form, "title": title})
+    
+    form = OrderModelForm(data=request.POST, instance=row_object)
+    if form.is_valid():
+        form.save()
+        return redirect('/dsdouban/order/' + str(row_object.order_id) + '/detail_order/')
+    
+    return render(request, 'change.html', {'form': form, "title": title})

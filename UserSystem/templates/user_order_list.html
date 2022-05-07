@@ -70,9 +70,10 @@
                         <td>{{ obj.logistics }}</td>
                         <td>
                             <a class="btn btn-danger btn-xs" href="/dsdouban/order/{{obj.order_id}}/detail_order/">查看详情</a>
-                            <a class="btn btn-danger btn-xs" href="/dsdouban/order/{{obj.order_id}}/edit_order/">修改订单</a>
+                            {% if obj.status == "已付款" %}
                             <a class="btn btn-danger btn-xs" href="/dsdouban/order/{{obj.order_id}}/finish_order/">确认收货</a>
                             <a class="btn btn-danger btn-xs" href="/dsdouban/order/{{obj.order_id}}/cancel_order/">取消订单</a>
+                            {%endif%}
                         </td>
                     </tr>
                 {% endfor %}
