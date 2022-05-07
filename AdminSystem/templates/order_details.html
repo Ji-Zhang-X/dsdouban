@@ -3,10 +3,12 @@
 {% block content %}
     <div class="container">
         <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
+            {% if order.status == "已付款" %}
             <a class="btn btn-primary" href="/manager/order/{{order.order_id}}/edit">
                 <span aria-hidden="true"></span>
                 编辑订单信息
             </a>
+            {%endif%}
         </div>
         <h3>订单信息</h3>
         <div class="panel panel-default">
@@ -57,7 +59,9 @@
                     <th>书名</th>
                     <th>单价</th>
                     <th>数量</th>
+                    {% if order.status == "已付款" %}
                     <th>操作</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -67,10 +71,12 @@
                         <td>{{ book_order.book.title }}</td>
                         <td>{{ book_order.book.price_standard }}</td>
                         <td>{{ book_order.number }}</td>
+                        {% if order.status == "已付款" %}
                         <td>
                             <a class="btn btn-danger btn-xs" href="/manager/orderlist/{{book_order.order_list_id}}/edit/">编辑</a>
                             <a class="btn btn-danger btn-xs" href="/manager/orderlist/{{book_order.order_list_id}}/delete/">删除</a>
                         </td>
+                        {% endif %}
                     </tr>
                     {%endfor%}
                 </tbody>
