@@ -40,11 +40,15 @@ def submit_unsubmitted_order(request):
     context = get_context_for_unsub_order(info_dict)
     unsubmitted_order = context["order"]
     unsubmitted_order_list = context["order_list"]
-    if (len(unsubmitted_order_list) != 0) and (unsubmitted_order.telephone is not None) and (unsubmitted_order.address is not None) and (unsubmitted_order.name is not None):
-        unsubmitted_order.submission_time = timezone.now()
-        unsubmitted_order.status = "已付款"
-        unsubmitted_order.save()
-        return redirect('/dsdouban/order/submitted_orders/')
+    if  (unsubmitted_order.telephone is not None) and (unsubmitted_order.address is not None) and (unsubmitted_order.name is not None):
+        if  len(unsubmitted_order_list) != 0 :
+            unsubmitted_order.submission_time = timezone.now()
+            unsubmitted_order.status = "已付款"
+            unsubmitted_order.save()
+            return redirect('/dsdouban/order/submitted_orders/')
+        else:
+            context["warning_info"] = "购物车还没有东西！"
+            return render(request, 'unsub_order.html', context)
     else:
         context["warning_info"] = "订单信息不完整，请确保收件人信息完整！"
         return render(request, 'unsub_order.html', context)
@@ -72,14 +76,14 @@ def edit_unsubmitted_order(request, nid):
     title = "修改订单信息"
     if request.method == "GET":
         form = OrderModelForm()
-        return render(request, 'change.html', {'form': form, "title": title})
+        return render(request, 'unsub_order_change.html', {'form': form, "title": title})
     
     form = OrderModelForm(data=request.POST, instance=row_object)
     if form.is_valid():
         form.save()
         return redirect('/dsdouban/order/unsubmitted_order/')
     
-    return render(request, 'change.html', {'form': form, "title": title})
+    return render(request, 'unsub_order_change.html', {'form': form, "title": title})
 
 class OrderListModelForm(forms.ModelForm):
     class Meta:
@@ -99,19 +103,20 @@ class OrderListModelForm(forms.ModelForm):
 def edit_unsubmitted_order_list(request, nid):
     # nid 是order_list号
     row_object = models.OrderList.objects.filter(order_list_id=nid).first()
+    book_object = models.Book.objects.filter(book_id=row_object.book_id).first()
     
     ''' 修改订单列表书籍数目'''
     title = "修改订单列表书籍数目"
     if request.method == "GET":
         form = OrderListModelForm()
-        return render(request, 'change.html', {'form': form, "title": title})
+        return render(request, 'unsub_order_list_change.html', {'form': form, "title": title, "order":row_object,"book":book_object})
     
     form = OrderListModelForm(data=request.POST, instance=row_object)
     if form.is_valid():
         form.save()
         return redirect('/dsdouban/order/unsubmitted_order/')
     
-    return render(request, 'change.html', {'form': form, "title": title})
+    return render(request, 'unsub_order_list_change.html', {'form': form, "title": title, "order":row_object,"book":book_object})
 
 def delete_unsubmitted_order_list(request, nid):
     # 删除订单列表中的某本书籍

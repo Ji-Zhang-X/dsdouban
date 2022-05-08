@@ -82,8 +82,8 @@
         }
 
         .cart_item_image {
-            width: 100px;
-            height: 100px;
+            width: 133px;
+            height: 133px;
             float: left
         }
 
@@ -220,9 +220,63 @@
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
                     <div class="cart_container">
+
+                        <div class="cart_items">
+                            <ul class="cart_list">
+                            <li class="cart_item clearfix">
+                                    <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between" style="width:calc(100%)">
+                                        <div style="float: left;">
+                                            <div style="margin-left: 7.53%;">
+                                                <div class="cart_item_text" style="width: 300px;font-size:40px;">{{ order.user }}</div>
+                                            </div>
+                                        </div>
+                                        <div style="float: right; margin-right: 0;">
+                                            <div class="cart_item_number cart_info_col">
+                                                <div class="cart_item_title">收件人</div>
+                                                <div class="cart_item_text">{{ order.name }}</div>
+                                            </div>
+                                            <div class="cart_item_number cart_info_col">
+                                                <div class="cart_item_title">收件人电话</div>
+                                                <div class="cart_item_text">{{ order.telephone }}</div>
+                                            </div>
+                                            <div class="cart_item_number cart_info_col">
+                                                <div class="cart_item_title">地址</div>
+                                                <div class="cart_item_text">{{ order.address }}</div>
+                                            </div>
+                                            <div class="cart_item_number cart_info_col">
+                                                    <div class="cart_item_title">物流方式</div>
+                                                    <div class="cart_item_text">{{ order.logistics }}</div>
+                                                </div>
+                                                
+                                                
+                                            <div class="cart_item_number cart_info_col">
+                                                    <a href = '/dsdouban/order/{{order.order_id}}/edit_unsubmitted_order/'>
+                                                        <div class="cart_item_title">
+                                                            <div class="cart_item_title" style="margin-left: 7.53%;min-width:80px;">[修改信息]</div>
+                                                        </div>
+                                                        </a>
+                                            </div>
+                                                
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+
+
                         <div class="cart_title">购物车</div>
                         <div class="cart_items">
                             <ul class="cart_list">
+
+
+                                
+
+
+
+                               
+
+
 
 
                                 {% for book_order in order_list %}
@@ -250,6 +304,20 @@
                                                 <div class="cart_item_title">单价</div>
                                                 <div class="cart_item_text">{{ book_order.book.price_standard }}</div>
                                             </div>
+                                            <div class="cart_item_number cart_info_col" style="margin-bottom: 0px;">
+                                                    <a href = '/dsdouban/order/{{book_order.order_list_id}}/edit_unsubmitted_order_list/'>
+                                                        <div class="cart_item_title">
+                                                            <div class="cart_item_title" style="margin-left: 7.53%;min-width:80px;">[修改数量]</div>
+                                                        </div>
+                                                        </a>
+                                            </div>
+                                            <div class="cart_item_number cart_info_col" >
+                                                    <a href = '/dsdouban/order/{{book_order.order_list_id}}/delete_unsubmitted_order_list/'>
+                                                        <div class="cart_item_title" style="margin-top: 0px;">
+                                                            <div class="cart_item_title" style="margin-left: 7.53%;min-width:50px;margin-top: 5px;">[删除]</div>
+                                                        </div>
+                                                        </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>
@@ -265,9 +333,19 @@
                                 <div class="order_total_amount" id='Total'>0</div>
                             </div>
                         </div>
-                        <div class="cart_buttons"> <button type="button" class="button cart_button_clear">Continue
-                                Shopping</button>
-                                
+
+                        
+                                {%if warning_info%}
+                            <h4 style="color: red;">
+                                {{warning_info}}
+                            </h4>
+                                {%endif%}
+                            
+                        <div class="cart_buttons"> 
+
+                                <a  href="/">
+                                <button type="button" class="button cart_button_clear">返回首页</button>
+                                </a>
                                 <a  href="/dsdouban/order/submit_unsubmitted_order/">
                                 <button type="button" class="button cart_button_checkout">提交订单</button> 
                                 </a>
@@ -282,95 +360,6 @@
     </div>
 </div>
 
-
-
-
-
-
-
-    <div class="container" style="margin-top: 50px;">
-        <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
-            <a class="btn btn-primary" href="/dsdouban/order/{{order.order_id}}/edit_unsubmitted_order/">
-                <span aria-hidden="true"></span>
-                修改订单信息
-            </a>
-        </div>
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-
-            <!-- Table -->
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>用户</th>
-                    <th>物流</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <th>{{ order.user }}</th>
-                    <td>{{ order.logistics }}</td>
-                </tr>
-
-                </tbody>
-            </table>
-            <div class="panel panel-default">
-                <table class="table table-bordered">
-                    <thead>
-                        <th>收件人</th>
-                        <th>收件人电话</th>
-                        <th>地址</th>
-                    </thead>
-                    <tbody>
-                        <th>{{ order.name }}</th>
-                        <th>{{ order.telephone }}</th>
-                        <th>{{ order.address }}</th>
-                    </tbody>
-                </table>
-            </div>
-            <h3>订单列表</h3>
-            <div class="panel panel-default">
-            
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>书籍id</th>
-                        <th>书名</th>
-                        <th>单价</th>
-                        <th>数量</th>
-                        <th>修改</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for book_order in order_list %}
-                        <tr>
-                            <td>{{ book_order.book_id }}</td>
-                            <td>{{ book_order.book.title }}</td>
-                            <td>{{ book_order.book.price_standard }}</td>
-                            <td>{{ book_order.number }}</td>
-                            <td>
-                                <a class="btn btn-primary" href="/dsdouban/order/{{book_order.order_list_id}}/edit_unsubmitted_order_list/">
-                                    <span aria-hidden="true"></span>
-                                    编辑
-                                </a>
-                                <a class="btn btn-primary" href="/dsdouban/order/{{book_order.order_list_id}}/delete_unsubmitted_order_list/">
-                                    <span aria-hidden="true"></span>
-                                    删除
-                                </a>
-                            </td>
-                        </tr>
-                        {%endfor%}
-                    </tbody>
-                    
-                </table> 
-                <h4>
-                    {%if warning_info%}
-                    {{warning_info}}
-                    {%endif%}
-                </h4>
-            </div>
-            
-        </div>
 
 
 
