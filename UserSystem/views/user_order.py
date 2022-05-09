@@ -182,13 +182,21 @@ def show_submitted_orders(request):
                 queryset = queryset.union(models.Order.objects.filter(**data_dict).exclude(submission_time=None).order_by(*orders))
     else:
         queryset = models.Order.objects.filter(**data_dict).exclude(submission_time=None).order_by(*orders)
+
+    queryset_dict = {}
+
+    for order_item in queryset:
+        queryset_dict[order_item.order_id] = models.OrderList.objects.filter(order_id=order_item.order_id)
+
     page_object = Pagination(request, queryset)
+
+    
 
     context = {
         "search_data": search_data,
-
         "queryset": page_object.page_queryset,  # 分完页的数据
-        "page_string": page_object.html()  # 页码
+        "page_string": page_object.html(),  # 页码
+        "detail": queryset_dict
     }
     return render(request, 'user_order_list.html', context)
 
