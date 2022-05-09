@@ -167,6 +167,8 @@ def edit_user_details(request):
     form = UserModelForm(data=request.POST, instance=current_user)
     if form.is_valid():
         form.save()
+        request.session["info"]["name"] = request.POST.get("name")
+        request.session.set_expiry(60 * 60 * 24 * 7)
         return redirect('/dsdouban/user_details/')
     
     return render(request, 'user_details_change.html', {'form': form, "title": title})
