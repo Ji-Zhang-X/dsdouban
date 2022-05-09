@@ -25,6 +25,8 @@ def order_list(request):
                 data_dict = {}
                 if search_data.isnumeric(): # In order_id search, we should make sure that input is number
                     data_dict[search_key] = eval(search_data)
+                else:
+                    continue
             else:
                 data_dict = {}
                 data_dict[search_key] = search_data
