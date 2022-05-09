@@ -137,7 +137,7 @@ def add_book_to_unsubmitted_order_list(request, nid):
     unsubmitted_order = models.Order.objects.filter(**filter_dict).first()
     # 如果该用户没有未提交的订单，就创建一个
     if unsubmitted_order is None:
-        unsubmitted_order = models.Order(user_id = nid, submission_time = None)
+        unsubmitted_order = models.Order(user_id = user_nid, submission_time = None)
         unsubmitted_order.save()
     # 查询该书籍是否在订单列表中
     book_order_list_item = models.OrderList.objects.filter(order_id=unsubmitted_order.order_id, book_id = nid).first()

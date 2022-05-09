@@ -5,7 +5,7 @@ from AdminSystem.utils.pagination import Pagination
 
 
 def order_list(request):
-    search_field = ['order_id', 'user__name__contains']    # Search by order_id or username
+    search_field = ['order_id', 'user__name__contains', 'name__contains']    # Search by order_id or username
     
     sort_field = []
 
