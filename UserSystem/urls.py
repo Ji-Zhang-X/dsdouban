@@ -7,12 +7,16 @@ urlpatterns = [
     path('register/', account.register),
     path('login/', account.login),
     path('logout/', account.logout),
+    path('user_details/', account.user_details),
+    path('edit_user_details/', account.edit_user_details),
     
+    # 图书的查看
     # 这里nid是book_id
     path('book/list/', book_view.book_list),
     path('book/<int:nid>/details/',book_view.book_details),
     path('book/<int:nid>/add_book_to_unsubmitted_order_list/',user_order.add_book_to_unsubmitted_order_list),
     
+    # 订单的管理
     # 这里nid是user_id
     path('order/unsubmitted_order/', user_order.show_unsubmitted_order),
     path('order/submitted_orders/', user_order.show_submitted_orders),

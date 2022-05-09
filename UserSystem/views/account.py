@@ -133,3 +133,40 @@ def home(request):
     if search_data == '':
         return render(request, 'home.html')
     return book_view.book_list(request)
+
+def user_details(request):
+    """用户信息"""
+    info_dict = request.session.get("info")
+    current_user = models.User.objects.filter(user_id=info_dict['id']).first()
+    return render(request, 'user_details.html', {'user': current_user})
+
+class UserModelForm(forms.ModelForm):
+    class Meta:
+        model = models.User
+        # fields = "__all__"
+        fields = ['name', 'telephone', 'e_mail', 'address']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 循环ModelForm中的所有字段，给每个字段的插件设置
+        for name, field in self.fields.items():
+            field.widget.attrs = {
+                "class": "form-control",
+                "placeholder": field.label
+            }
+
+def edit_user_details(request):
+    """"""
+    info_dict = request.session.get("info")
+    current_user = models.User.objects.filter(user_id=info_dict['id']).first()
+    title = "修改个人信息"
+    if request.method == "GET":
+        form = UserModelForm()
+        return render(request, 'user_details_change.html', {'form': form, "title": title})
+    
+    form = UserModelForm(data=request.POST, instance=current_user)
+    if form.is_valid():
+        form.save()
+        return redirect('/dsdouban/user_details/')
+    
+    return render(request, 'user_details_change.html', {'form': form, "title": title})

@@ -15,7 +15,7 @@ def get_context_for_unsub_order(info_dict, warning=None):
     unsubmitted_order = models.Order.objects.filter(**filter_dict).first()
     # 如果该用户没有未提交的订单，就创建一个
     if unsubmitted_order is None:
-        current_user = models.Order.objects.filter(user_id=nid).first()
+        current_user = models.User.objects.filter(user_id=nid).first()
         unsubmitted_order = models.Order(user_id = nid, submission_time = None, telephone = current_user.telephone, address=current_user.address, name=current_user.name)
         unsubmitted_order.save()
     unsubmitted_order_list = models.OrderList.objects.filter(order_id=unsubmitted_order.order_id)

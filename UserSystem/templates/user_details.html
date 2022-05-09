@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>豆丝豆瓣·个人信息</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    <style>
+        .navbar {
+            border-radius: 0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+            text-shadow: rgba(0, 0, 0, .01) 0 0 1px
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            background: beige;
+            color: #000000
+        }
+
+        
+    </style>
+</head>
+<body>
+
+
+
+
+
+{% include "head_nav.html"%}    
+
+
+<div class="container">
+<div class="cart_section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-10 offset-lg-1">
+                    <div class="cart_container">
+
+                        <div class="cart_items">
+                            <ul class="cart_list">
+                            <li class="cart_item clearfix">
+                                    <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between" style="width:calc(100%)">
+                                        <div style="float: left;">
+                                            <div style="margin-left: 7.53%;">
+                                                <div class="cart_item_text" style="width: 300px;font-size:40px;">{{ user.name }}</div>
+                                            </div>
+                                        </div>
+                                        <div style="float: right; margin-right: 0;">
+                                            <div class="cart_item_number cart_info_col">
+                                                <div class="cart_item_title">vip信息</div>
+                                                {% if user.vip %}
+                                                <div class="cart_item_text">会员</div>
+                                                {% else %}
+                                                <div class="cart_item_text">非会员</div>
+                                                {%endif%}
+                                            </div>
+                                            <div class="cart_item_number cart_info_col">
+                                                <div class="cart_item_title">电话</div>
+                                                <div class="cart_item_text">{{ user.telephone }}</div>
+                                            </div>
+                                            <div class="cart_item_number cart_info_col">
+                                                <div class="cart_item_title">e-mail</div>
+                                                <div class="cart_item_text">{{ user.e_mail }}</div>
+                                            </div>
+                                            <div class="cart_item_number cart_info_col">
+                                                    <div class="cart_item_title">地址</div>
+                                                    <div class="cart_item_text">{{ user.address }}</div>
+                                            </div>
+                                                
+                                                
+                                            <div class="cart_item_number cart_info_col">
+                                                    <a href = '/dsdouban/edit_user_details/'>
+                                                        <div class="cart_item_title">
+                                                            <div class="cart_item_title" style="margin-left: 7.53%;min-width:80px;">[修改信息]</div>
+                                                        </div>
+                                                    </a>
+                                            </div>
+                                            <div class="cart_item_number cart_info_col">
+                                                <a href = '#'>
+                                                    <div class="cart_item_title">
+                                                        <div class="cart_item_title" style="margin-left: 7.53%;min-width:80px;">[修改密码]</div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                                
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>

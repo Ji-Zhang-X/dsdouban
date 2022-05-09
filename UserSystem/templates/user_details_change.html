@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>豆丝豆瓣·个人信息</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    <style>
+        .navbar {
+            border-radius: 0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+            text-shadow: rgba(0, 0, 0, .01) 0 0 1px
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            background: beige;
+            color: #000000
+        }
+
+    </style>
+</head>
+<body>
+
+
+
+
+
+{% include "head_nav.html"%}   
+
+    <div class="container" style="margin-top: 100px; width: 400px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> {{ title }} </h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="form-group" style="width: 200px; margin: auto;">
+                            <label style="margin-top: 10px;">
+                                {%if field.label == 'Name'%}
+                                用户名
+                                {%else%}
+                                    {%if field.label == 'Telephone'%}
+                                    电话
+                                    {%else%}
+                                        {%if field.label == 'E mail'%}
+                                        E-mail
+                                        {%else%}
+                                            {%if field.label == 'Address'%}
+                                            地址
+                                            {%endif%}
+                                        {%endif%}
+                                    {%endif%}
+                                {%endif%}
+                            </label>
+                            {{ field }}
+                            <span style="color: red;">{{ field.errors.0 }}</span>
+                        </div>
+                    {% endfor %}
+                    <div style=" width:100px;margin:auto; margin-top: 20px;">
+                        <button type="submit" class="btn btn-primary" >提 交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+    
+    </body>
+    </html>
