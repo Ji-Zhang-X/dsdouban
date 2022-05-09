@@ -140,7 +140,7 @@ def user_details(request):
     current_user = models.User.objects.filter(user_id=info_dict['id']).first()
     return render(request, 'user_details.html', {'user': current_user})
 
-class UserModelForm(forms.ModelForm):
+class UserDetailsModelForm(forms.ModelForm):
     class Meta:
         model = models.User
         # fields = "__all__"
@@ -161,10 +161,10 @@ def edit_user_details(request):
     current_user = models.User.objects.filter(user_id=info_dict['id']).first()
     title = "修改个人信息"
     if request.method == "GET":
-        form = UserModelForm()
+        form = UserDetailsModelForm()
         return render(request, 'user_details_change.html', {'form': form, "title": title})
     
-    form = UserModelForm(data=request.POST, instance=current_user)
+    form = UserDetailsModelForm(data=request.POST, instance=current_user)
     if form.is_valid():
         form.save()
         request.session["info"]["name"] = request.POST.get("name")

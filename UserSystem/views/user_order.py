@@ -152,7 +152,7 @@ def add_book_to_unsubmitted_order_list(request, nid):
 
 def show_submitted_orders(request):
     '''查看用户已提交的订单'''
-    search_field = ['order_id', 'user__name__contains']    # Search by order_id or username
+    search_field = ['order_id', 'user__name__contains', 'name__contains']    # Search by order_id or username
     # 获取用户id
     info_dict = request.session.get("info")
     user_nid = info_dict["id"]
