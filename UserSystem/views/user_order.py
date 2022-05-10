@@ -238,11 +238,11 @@ def edit_submitted_order(request, nid):
     title = "修改订单信息"
     if request.method == "GET":
         form = OrderModelForm()
-        return render(request, 'change.html', {'form': form, "title": title})
+        return render(request, 'sub_order_change.html', {'form': form, "title": title})
     
     form = OrderModelForm(data=request.POST, instance=row_object)
     if form.is_valid():
         form.save()
         return redirect('/dsdouban/order/' + str(row_object.order_id) + '/detail_order/')
     
-    return render(request, 'change.html', {'form': form, "title": title})
+    return render(request, 'sub_order_change.html', {'form': form, "title": title})
