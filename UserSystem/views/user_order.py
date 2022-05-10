@@ -74,16 +74,19 @@ def edit_unsubmitted_order(request, nid):
     
     ''' 修改订单'''
     title = "修改订单信息"
+    page_title = '豆丝豆瓣·购物车'
+    label2label = {'Name':'收件人姓名', 'Telephone':'收件人电话', 'Logistics': '物流方式', 'Address': "收件人地址"}
+
     if request.method == "GET":
         form = OrderModelForm()
-        return render(request, 'unsub_order_change.html', {'form': form, "title": title})
+        return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title, 'label2label':label2label})
     
     form = OrderModelForm(data=request.POST, instance=row_object)
     if form.is_valid():
         form.save()
         return redirect('/dsdouban/order/unsubmitted_order/')
     
-    return render(request, 'unsub_order_change.html', {'form': form, "title": title})
+    return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title, 'label2label':label2label})
 
 class OrderListModelForm(forms.ModelForm):
     class Meta:
@@ -236,13 +239,17 @@ def edit_submitted_order(request, nid):
     
     ''' 修改订单'''
     title = "修改订单信息"
+    page_title = '豆丝豆瓣·修改订单详情'
+
+    label2label = {'Name':'收件人姓名', 'Telephone':'收件人电话', 'Logistics': '物流方式', 'Address': "收件人地址"}
+
     if request.method == "GET":
         form = OrderModelForm()
-        return render(request, 'sub_order_change.html', {'form': form, "title": title})
+        return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title, 'label2label':label2label})
     
     form = OrderModelForm(data=request.POST, instance=row_object)
     if form.is_valid():
         form.save()
         return redirect('/dsdouban/order/' + str(row_object.order_id) + '/detail_order/')
     
-    return render(request, 'sub_order_change.html', {'form': form, "title": title})
+    return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title, 'label2label':label2label})

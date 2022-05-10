@@ -160,9 +160,12 @@ def edit_user_details(request):
     info_dict = request.session.get("info")
     current_user = models.User.objects.filter(user_id=info_dict['id']).first()
     title = "修改个人信息"
+    page_title = '豆丝豆瓣·修改个人信息'    
+    label2label = {'Name':'用户名', 'Telephone':'电话', 'E mail':'E-mail', 'Address':'地址'}
+
     if request.method == "GET":
         form = UserDetailsModelForm()
-        return render(request, 'user_details_change.html', {'form': form, "title": title})
+        return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title,'label2label':label2label})
     
     form = UserDetailsModelForm(data=request.POST, instance=current_user)
     if form.is_valid():
@@ -171,4 +174,4 @@ def edit_user_details(request):
         request.session.set_expiry(60 * 60 * 24 * 7)
         return redirect('/dsdouban/user_details/')
     
-    return render(request, 'user_details_change.html', {'form': form, "title": title})
+    return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title,'label2label':label2label})

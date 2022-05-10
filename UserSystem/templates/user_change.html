@@ -1,9 +1,10 @@
 {% load static %}
+{% load get_key %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>豆丝豆瓣·购物车</title>
+    <title>{{page_title}}</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/cart.css' %}">
     <style>
@@ -48,22 +49,8 @@
                     {% for field in form %}
                         <div class="form-group" style="width: 200px; margin: auto;">
                             <label style="margin-top: 10px;">
-                                {%if field.label == 'Logistics'%}
-                                物流方式
-                                {%else%}
-                                    {%if field.label == 'Telephone'%}
-                                    收件人电话
-                                    {%else%}
-                                        {%if field.label == 'Address'%}
-                                        收件人地址
-                                        {%else%}
-                                            {%if field.label == 'Name'%}
-                                            收件人姓名
-                                            {%endif%}
-                                        {%endif%}
-                                    {%endif%}
-                                {%endif%}
-                                </label>
+                                {{ label2label|get_dictionary_item:field.label }}
+                            </label>
                             {{ field }}
                             <span style="color: red;">{{ field.errors.0 }}</span>
                         </div>
