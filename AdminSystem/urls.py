@@ -1,4 +1,4 @@
-from .views import admin_view, book_view, account, user_view, order_view
+from .views import admin_view, book_view, account, user_view, order_view, author_view, press_view, logistics_view
 from django.urls import path, include
 
 urlpatterns = [
@@ -9,7 +9,26 @@ urlpatterns = [
     path('book/<int:nid>/edit/',book_view.book_edit),
     path('book/<int:nid>/delete/',book_view.book_delete),
     path('book/<int:nid>/details/',book_view.book_details),
-
+    
+    # # 作者的管理
+    path('author/list/', author_view.author_list),
+    path('author/add/', author_view.author_add),
+    path('author/<int:nid>/edit/',author_view.author_edit),
+    path('author/<int:nid>/delete/',author_view.author_delete),
+    
+    # 出版社的管理
+    path('press/list/', press_view.press_list),
+    path('press/add/', press_view.press_add),
+    path('press/<int:nid>/edit/',press_view.press_edit),
+    path('press/<int:nid>/delete/',press_view.press_delete),
+    
+    # # 物流的管理
+    # path('logistics/list/', logistics_view.logistics_list),
+    # path('logistics/add/', logistics_view.logistics_add),
+    # path('logistics/<int:nid>/edit/',logistics_view.logistics_edit),
+    # path('logistics/<int:nid>/delete/',logistics_view.logistics_delete),
+    # path('logistics/<int:nid>/details/',logistics_view.logistics_details),
+    
     # 订单的管理
     path('order/list/', order_view.order_list),
     path('order/<int:nid>/details/', order_view.order_details),

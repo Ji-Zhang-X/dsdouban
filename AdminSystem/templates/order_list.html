@@ -68,7 +68,7 @@
                 <tbody>
                 {% for obj in queryset %}
                     <tr>
-                        <th>{{ obj.order_id }}</th>
+                        <td>{{ obj.order_id }}</td>
                         <!-- {% comment %} <td>{{ obj.publish_date|date:"Y-m-d" }}</td> {% endcomment %} -->
                         <td>{{ obj.user }}</td>
                         <td>{{ obj.submission_time|date:"Y-m-d H:i:s" }}</td>

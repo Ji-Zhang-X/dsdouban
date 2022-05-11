@@ -38,7 +38,7 @@ class UserModelForm(BootStrapModelForm):
 class UserEditModelForm(BootStrapModelForm):
     class Meta:
         model = models.User
-        fields = ['name']
+        fields = ['name', 'is_vip']
 
 
 class UserResetModelForm(BootStrapModelForm):

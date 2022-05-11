@@ -59,7 +59,11 @@ class Press(models.Model):
 
 class Author(models.Model):
     author_id = models.BigAutoField(primary_key=True)
-    is_translator = models.IntegerField()
+    translator_choices = (
+        (0, "作者"),
+        (1, "译者"),
+    )
+    is_translator = models.IntegerField(default=0, choices=translator_choices)
     name = models.CharField(max_length=40)
     intro = models.CharField(max_length=800, blank=True, null=True)
 
@@ -136,7 +140,11 @@ class User(models.Model):
     user_id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=10)
     password = models.CharField(max_length=40)
-    is_vip = models.IntegerField(default=0)
+    vip_choices = (
+        (0, "普通用户"),
+        (1, "vip"),
+    )
+    is_vip = models.IntegerField(default=0, choices=vip_choices)
     telephone = models.CharField(max_length=15, blank=True, null=True)
     e_mail = models.CharField(max_length=45, blank=True, null=True)
     address = models.CharField(max_length=45, blank=True, null=True)
