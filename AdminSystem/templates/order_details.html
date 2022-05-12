@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
         <div style="display:inline-block;margin-bottom: 10px" class="clearfix">
-            {% if order.status == "已付款" %}
+            {% if order.status != "未提交" %}
             <a class="btn btn-primary" href="/manager/order/{{order.order_id}}/edit">
                 <span aria-hidden="true"></span>
                 编辑订单信息

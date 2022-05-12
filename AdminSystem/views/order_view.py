@@ -73,7 +73,7 @@ class OrderModelForm(forms.ModelForm):
     class Meta:
         model = models.Order
         # fields = "__all__"
-        fields = ['logistics', 'telephone', 'address', 'name']
+        fields = ['logistics', 'telephone', 'address', 'name', 'status']
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

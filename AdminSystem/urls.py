@@ -22,12 +22,11 @@ urlpatterns = [
     path('press/<int:nid>/edit/',press_view.press_edit),
     path('press/<int:nid>/delete/',press_view.press_delete),
     
-    # # 物流的管理
-    # path('logistics/list/', logistics_view.logistics_list),
-    # path('logistics/add/', logistics_view.logistics_add),
-    # path('logistics/<int:nid>/edit/',logistics_view.logistics_edit),
-    # path('logistics/<int:nid>/delete/',logistics_view.logistics_delete),
-    # path('logistics/<int:nid>/details/',logistics_view.logistics_details),
+    # 物流的管理
+    path('logistics/list/', logistics_view.logistics_list),
+    path('logistics/add/', logistics_view.logistics_add),
+    path('logistics/<int:nid>/edit/',logistics_view.logistics_edit),
+    path('logistics/<int:nid>/delete/',logistics_view.logistics_delete),
     
     # 订单的管理
     path('order/list/', order_view.order_list),
