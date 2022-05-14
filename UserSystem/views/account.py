@@ -131,7 +131,17 @@ def home(request):
     """主界面"""
     search_data = request.GET.get('q', "")
     if search_data == '':
-        return render(request, 'home.html')
+        topBooks = ['9787541151200','9787544269155','9787540786038','9787544722803']
+        row_object = {}
+        extract = {}
+        for i,bookID in enumerate(topBooks):
+            row_object[i] = models.Book.objects.filter(book_id=bookID).first()
+            extract[row_object[i].book_id] = row_object[i].introduction[0:100] + '...'
+        context = {
+            "row_object": row_object,
+            "extract": extract
+        }
+        return render(request, 'home.html',context)
     return book_view.book_list(request)
 
 def user_details(request):

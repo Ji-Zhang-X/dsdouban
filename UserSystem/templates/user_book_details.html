@@ -29,7 +29,7 @@
                     {{obj.title}}
                 </h2>
                 <div style="float: right;margin-top: 30px;">
-                        <a onclick="javascript:history.back(-1);">
+                        <a onclick="javascript:history.back(-1);" href="#">
                             [返回]
                         </a>
 
@@ -134,7 +134,7 @@
     
                         {% for field in form %}
                             <div class="form-group">
-                                <label>{{ field.label }}</label>
+                                <label>评论</label>
                                 {{ field }}
                                 <span style="color: red;">{{ field.errors.0 }}</span>
                             </div>
