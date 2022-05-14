@@ -16,7 +16,7 @@ def get_context_for_unsub_order(info_dict, warning=None):
     # 如果该用户没有未提交的订单，就创建一个
     if unsubmitted_order is None:
         current_user = models.User.objects.filter(user_id=nid).first()
-        unsubmitted_order = models.Order(user_id = nid, submission_time = None, telephone = current_user.telephone, address=current_user.address, name=current_user.name)
+        unsubmitted_order = models.Order(user_id = nid, submission_time = None, telephone = current_user.telephone, address=current_user.address, name=current_user.name, logistics_id='1')
         unsubmitted_order.save()
     unsubmitted_order_list = models.OrderList.objects.filter(order_id=unsubmitted_order.order_id)
     context = {
@@ -44,6 +44,7 @@ def submit_unsubmitted_order(request):
         if  len(unsubmitted_order_list) != 0 :
             unsubmitted_order.submission_time = timezone.now()
             unsubmitted_order.status = "已付款"
+            unsubmitted_order.is_vip = info_dict['vip']
             unsubmitted_order.save()
             return redirect('/dsdouban/order/submitted_orders/')
         else:
@@ -107,19 +108,20 @@ def edit_unsubmitted_order_list(request, nid):
     # nid 是order_list号
     row_object = models.OrderList.objects.filter(order_list_id=nid).first()
     book_object = models.Book.objects.filter(book_id=row_object.book_id).first()
-    
+    info_dict = request.session.get("info")
+    is_vip = info_dict['vip']
     ''' 修改订单列表书籍数目'''
     title = "修改订单列表书籍数目"
     if request.method == "GET":
         form = OrderListModelForm()
-        return render(request, 'unsub_order_list_change.html', {'form': form, "title": title, "order":row_object,"book":book_object})
+        return render(request, 'unsub_order_list_change.html', {'form': form, "title": title, "order":row_object,"book":book_object,"is_vip":is_vip})
     
     form = OrderListModelForm(data=request.POST, instance=row_object)
     if form.is_valid():
         form.save()
         return redirect('/dsdouban/order/unsubmitted_order/')
     
-    return render(request, 'unsub_order_list_change.html', {'form': form, "title": title, "order":row_object,"book":book_object})
+    return render(request, 'unsub_order_list_change.html', {'form': form, "title": title, "order":row_object,"book":book_object,"is_vip":is_vip})
 
 def delete_unsubmitted_order_list(request, nid):
     # 删除订单列表中的某本书籍
@@ -134,13 +136,14 @@ def add_book_to_unsubmitted_order_list(request, nid):
     title = "显示用户未提交订单信息"
     info_dict = request.session.get("info")
     user_nid = info_dict["id"]
+    user_info = models.User.objects.filter(user_id = user_nid).first()
     filter_dict = {}
     filter_dict["user_id"] = user_nid
     filter_dict["submission_time"] = None
     unsubmitted_order = models.Order.objects.filter(**filter_dict).first()
     # 如果该用户没有未提交的订单，就创建一个
     if unsubmitted_order is None:
-        unsubmitted_order = models.Order(user_id = user_nid, submission_time = None)
+        unsubmitted_order = models.Order(user_id = user_nid, submission_time = None, is_vip = info_dict['vip'], telephone = user_info.telephone, name = user_info.name, address = user_info.address, logistics_id = '1')
         unsubmitted_order.save()
     # 查询该书籍是否在订单列表中
     book_order_list_item = models.OrderList.objects.filter(order_id=unsubmitted_order.order_id, book_id = nid).first()

@@ -69,8 +69,13 @@
 
                             <div style="float: right;">
                                     <div class="cart_item_price cart_info_col">
+                                        {%if is_vip == 0%}
                                         <div class="cart_item_title">单价</div>
                                         <div class="cart_item_text">{{book.price_standard }}</div>
+                                        {%else%}
+                                        <div class="cart_item_title">会员价</div>
+                                        <div class="cart_item_text">{{book.price_vip}}</div>
+                                        {%endif%}
                                     </div>
                                 
 

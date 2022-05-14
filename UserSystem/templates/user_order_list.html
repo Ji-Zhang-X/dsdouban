@@ -95,7 +95,10 @@
                                                         物流方式:  {{ deal.logistics }} |
                                                                 </span>
                                                         <span>
-                                                        订单号: {{ deal.order_id }} 
+                                                        订单号: {{ deal.order_id }} |
+                                                        </span>
+                                                        <span>
+                                                        {{ deal.get_is_vip_display }} 
                                                         </span>
                                                     </div>
                                 
@@ -124,10 +127,16 @@
                                                         <div class="cart_item_title">数量</div>
                                                         <div class="cart_item_text" style="margin-top: 0px;">{{ item.number }}</div>
                                                     </div>
+                                                    
                                                     <div class="cart_item_price cart_info_col">
-                                                        <div class="cart_item_title">单价</div>
-                                                        <div class="cart_item_text" style="margin-top: 0px;">{{ item.book.price_standard }}</div>
-                                                    </div>
+                                                        {% if deal.is_vip == 0 %}
+                                                            <div class="cart_item_title">单价</div>
+                                                            <div class="cart_item_text" style="margin-top: 0px;">{{ item.book.price_standard }}</div>
+                                                        {%else%}
+                                                            <div class="cart_item_title">会员价</div>
+                                                            <div class="cart_item_text" style="margin-top: 0px;">{{ item.book.price_vip }}</div>
+                                                        {%endif%}
+                                                    </div>          
                                             </div>
                                             
                                             </div>

@@ -119,6 +119,11 @@ class Order(models.Model):
     telephone = models.CharField(max_length=15, blank=True, null=True)
     address = models.CharField(max_length=45, blank=True, null=True)
     name = models.CharField(max_length=40)
+    vip_choices = (
+        (0, "普通用户"),
+        (1, 'VIP'),
+    )
+    is_vip = models.IntegerField(default=0, choices=vip_choices)
 
     class Meta:
         managed = False
@@ -142,7 +147,7 @@ class User(models.Model):
     password = models.CharField(max_length=40)
     vip_choices = (
         (0, "普通用户"),
-        (1, "vip"),
+        (1, "VIP"),
     )
     is_vip = models.IntegerField(default=0, choices=vip_choices)
     telephone = models.CharField(max_length=15, blank=True, null=True)

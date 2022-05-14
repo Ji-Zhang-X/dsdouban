@@ -53,6 +53,9 @@
                                             <div style="margin-left: 7.53%;">
                                                 <div class="cart_item_text" style="width: 300px;font-size:40px;">{{ order.user }}</div>
                                             </div>
+                                            <div style="margin-left: 7.53%;margin-top: 30px;color: rgba(0, 0, 0, 0.5);">
+                                                {{order.user.get_is_vip_display}}
+                                            </div>
                                         </div>
                                         <div style="float: right; margin-right: 0;">
                                             <div class="cart_item_number cart_info_col">
@@ -125,8 +128,13 @@
                                                 <div class="cart_item_text">{{ book_order.number }}</div>
                                             </div>
                                             <div class="cart_item_price cart_info_col">
+                                                {% if order.user.is_vip == 0 %}
                                                 <div class="cart_item_title">单价</div>
                                                 <div class="cart_item_text">{{ book_order.book.price_standard }}</div>
+                                                {%else%}
+                                                <div class="cart_item_title">会员价</div>
+                                                <div class="cart_item_text">{{ book_order.book.price_vip }}</div>
+                                                {%endif%}
                                             </div>
                                             <div class="cart_item_number cart_info_col" style="margin-bottom: 0px;">
                                                     <a href = '/dsdouban/order/{{book_order.order_list_id}}/edit_unsubmitted_order_list/'>

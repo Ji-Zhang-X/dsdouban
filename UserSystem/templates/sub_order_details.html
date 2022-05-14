@@ -70,7 +70,7 @@
                                                     <div class="cart_item_text">{{ order.logistics }}</div>
                                                 </div>
                                                 
-                                                
+                                            {% if order.status == '已付款' %}
                                             <div class="cart_item_number cart_info_col">
                                                     <a href = '/dsdouban/order/{{order.order_id}}/edit_order/'>
                                                         <div class="cart_item_title">
@@ -78,7 +78,7 @@
                                                         </div>
                                                         </a>
                                             </div>
-                                                
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </li>
@@ -94,7 +94,7 @@
                                 {% for book_order in order_list %}
 
                                 <li class="cart_item clearfix">
-                                    <div class="cart_item_image" style="width: 100px; height: 100px;"><img src="\static\img_book\{{book_order.book_id}}.jpg" alt="">
+                                    <div class="cart_item_image" style="width: 90px; height: 90px;"><img src="\static\img_book\{{book_order.book_id}}.jpg" alt="">
                                     </div>
                                     <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
                                         <div style="float: left;">
@@ -113,9 +113,14 @@
                                                 <div class="cart_item_text">{{ book_order.number }}</div>
                                             </div>
                                             <div class="cart_item_price cart_info_col">
-                                                <div class="cart_item_title">单价</div>
-                                                <div class="cart_item_text">{{ book_order.book.price_standard }}</div>
-                                            </div>
+                                                    {% if order.is_vip == 0 %}
+                                                        <div class="cart_item_title">单价</div>
+                                                        <div class="cart_item_text" style="margin-top: 0px;">{{ book_order.book.price_standard }}</div>
+                                                    {%else%}
+                                                        <div class="cart_item_title">会员价</div>
+                                                        <div class="cart_item_text" style="margin-top: 0px;">{{ book_order.book.price_vip }}</div>
+                                                    {%endif%}
+                                                </div>    
                                         </div>
                                     </div>
                                 </li>
