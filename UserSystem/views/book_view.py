@@ -36,6 +36,7 @@ def book_list(request):
                 queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
             else:
                 queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by(*orders))
+        queryset = queryset.order_by(*orders)
     else:
         queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
     page_object = Pagination(request, queryset)

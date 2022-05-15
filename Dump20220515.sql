@@ -187,6 +187,35 @@ INSERT INTO `logistics` VALUES (1,'顺丰','19812341234'),(2,'圆通','186123443
 UNLOCK TABLES;
 
 --
+-- Table structure for table `mark`
+--
+
+DROP TABLE IF EXISTS `mark`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mark` (
+  `mark_id` bigint NOT NULL AUTO_INCREMENT,
+  `book_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  `marks` decimal(2,1) NOT NULL,
+  PRIMARY KEY (`mark_id`),
+  KEY `user_mark_idx` (`user_id`),
+  KEY `book_mark_idx` (`book_id`),
+  CONSTRAINT `book_mark` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`),
+  CONSTRAINT `user_mark` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mark`
+--
+
+LOCK TABLES `mark` WRITE;
+/*!40000 ALTER TABLE `mark` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mark` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `order`
 --
 
@@ -314,4 +343,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-14 21:54:55
+-- Dump completed on 2022-05-15 23:15:50
