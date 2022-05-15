@@ -1,10 +1,12 @@
 {% load static %}
+{% load get_key %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>豆丝豆瓣·搜索结果</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins//font-awesome-4.7.0/css/font-awesome.css' %}">
     <style>
         .navbar {
             border-radius: 0;
@@ -69,31 +71,45 @@ margin-bottom: 10px;">
 <ul class="search-results">
 
     
-    <label for="orderby" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">Order by</label>
-    <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
-        <option value="" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
+    <label for="orderby" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">排序方式</label>
+    <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+        <option value="{{ sort_option.name}}"  style="display: none;" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
+        <option value=""  style="display: none;"></option>
         {% for field in sort_field %}
         <option value="{{field.name}}" {% if field.name == orderby %}selected=""{% endif %}>{{field.verbose_name}}</option>
         {% endfor %}
     </select>
 
-    <label for="order" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">In</label>
-    <select name="order" id="order" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
-        <option value="" {% if not order %}selected=""{% endif %}>{{ sort_rule }}</option>
-        <option value="asc" {% if order == "asc" %}selected=""{% endif %}>ASC</option>
-        <option value="desc" {% if order == "desc" %}selected=""{% endif %}>DESC</option>
+    <label for="order" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">按照</label>
+    <select name="order" id="order" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+        <option value="{{ sort_rule }}"  style="display: none;"{% if not order %}selected=""{% endif %}>
+            {%if sort_rule == 'asc'%}
+            从低到高
+            {%else%}
+            {%if sort_rule == 'desc'%}
+            从高到低
+            {%endif%}
+            {%endif%}
+        </option>
+        <option value=""  style="display: none;"></option>
+        <option value="asc" {% if order == "asc" %}selected=""{% endif %}>从低到高</option>
+        <option value="desc" {% if order == "desc" %}selected=""{% endif %}>从高到低</option>
     </select>
 
-    <button class="btn btn-default" type="submit">
-        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+    <button class="btn btn-default" type="submit" style="padding:4px 10px; border:1px solid #d6d076 ;">
+        <i class="fa fa-sort-desc" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
     </button>
+
     </form>
 
+    <button class="btn btn-default" onclick=reset_sort() style="padding:4px 10px; border:1px solid #d6d076 ;">
+            <i class="fa fa-trash" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
+    </button>
 
 
     {% if queryset%}
 	{% for obj in queryset %}
-	<li class="result clearfix">
+	<li class="result clearfix" style="list-style: none;">
 		<div class="col-md-2">
 		<a href="/dsdouban/book/{{obj.book_id}}/details/" style="text-decoration: none;">
 		<img src="\static\img_book\{{obj.book_id}}.jpg"
@@ -131,14 +147,16 @@ margin-bottom: 10px;">
             }
         </script>
 		<div> 出版社: {{ obj.press }}</div>
-		<div> 出版日期: {{ obj.publish_date|date:"Y-m-d" }}</div>
-		<div> 分类: {{ obj.class_field }}</div>
+        <div> 出版日期: {{ obj.publish_date|date:"Y-m-d" }}</div>
+        {%if obj.class_field != NULL %}
+            <div> 分类: {{ obj.class_field }}</div>
+        {%endif%}
 		<div> 标价: {{ obj.price_standard }}</div>
 		<div> 会员价: {{obj.price_vip}}</div>
 		{%if obj.edition != NULL %}
-		<div> 版本号: {{ obj.edition }}</div>
-		{%endif%}
-		<div>{{ obj.introduction }}</div>
+		    <div> 版本号: {{ obj.edition }}</div>
+        {%endif%}
+		<div style="color: rgb(156, 156, 156);">{{ extract|get_dictionary_item:obj.book_id  }}</div>
 		</div>
 		{% endfor %}
 
@@ -166,6 +184,14 @@ margin-bottom: 10px;">
 
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    function reset_sort()
+    {
+        document.getElementById("orderby").options[1].selected=true;
+        document.getElementById("order").options[1].selected=true;
+    }
+</script>
 </body>
 </html>
 

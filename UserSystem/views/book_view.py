@@ -24,7 +24,7 @@ def book_list(request):
         if sort_rule == "desc":
             orders.append('-' + sort_option)
     if not orders:
-        orders = ['book_id']
+        orders = ['press_id']
    
     data_dict = {}
     queryset = None
@@ -33,13 +33,19 @@ def book_list(request):
             data_dict = {}
             data_dict[search_key] = search_data
             if not queryset:
-                queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
+                queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
             else:
-                queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by(*orders))
-        queryset = queryset.order_by(*orders)
+                queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by("press_id"))
+        if sort_option and sort_rule:
+            queryset = queryset.order_by(*orders)
     else:
-        queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
+        queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
     page_object = Pagination(request, queryset)
+
+    # 此处是缩减简介长度
+    extract = {}
+    for book in queryset:
+        extract[book.book_id] = book.introduction[0:140] + '...'
 
     if sort_option:
         sort_option = models.Book._meta.get_field(sort_option)
@@ -48,7 +54,7 @@ def book_list(request):
         "sort_field": sort_field,
         "sort_option": sort_option,
         "sort_rule": sort_rule,
-
+        "extract":extract,
         "queryset": page_object.page_queryset,  # 分完页的数据
         "page_string": page_object.html()  # 页码
     }

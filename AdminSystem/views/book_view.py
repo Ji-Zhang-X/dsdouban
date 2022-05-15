@@ -6,7 +6,7 @@ from AdminSystem.utils.pagination import Pagination
 def book_list(request):
     # 书籍列表
     # 搜索涵盖的字段范围
-    search_field = ["press__name__contains", "introduction__contains"]
+    search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains"]
     # 可供用来排序的选项
     sort_field = [models.Book._meta.get_field('score'), 
                   models.Book._meta.get_field('price_standard'), 
@@ -22,7 +22,7 @@ def book_list(request):
         if sort_rule == "desc":
             orders.append('-' + sort_option)
     if not orders:
-        orders = ['book_id']
+        orders = ['press_id']
         
     data_dict = {}
     queryset = None
@@ -31,10 +31,11 @@ def book_list(request):
             data_dict = {}
             data_dict[search_key] = search_data
             if not queryset:
-                queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
+                queryset = models.Book.objects.filter(**data_dict).order_by('press_id')
             else:
-                queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by(*orders))
-        queryset = queryset.order_by(*orders)
+                queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by('press_id'))
+        if sort_option and sort_rule:
+            queryset = queryset.order_by(*orders)
     else:
         queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
     page_object = Pagination(request, queryset)

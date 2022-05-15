@@ -19,7 +19,7 @@ class Book(models.Model):
     edition = models.CharField(max_length=45, blank=True, null=True)
     storage = models.IntegerField(blank=True, null=True)
     class_field = models.ForeignKey('BookClass', models.DO_NOTHING, db_column='class_id', blank=True, null=True)  # Field renamed because it was a Python reserved word.
-    press = models.ForeignKey('Press', models.DO_NOTHING, blank=True, null=True)
+    press = models.ForeignKey('Press', models.DO_NOTHING, blank=True, null=True, verbose_name="出版社编号")
     introduction = models.CharField(max_length=2000, blank=True, null=True)
     authors = models.ManyToManyField('Author', through='BookAuthor')
 

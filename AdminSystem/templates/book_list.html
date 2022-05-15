@@ -11,30 +11,41 @@
             <div style="float: right;width: 500px;">
                 <form method="get">
                     <div class="input-group">
+                        <div> 
                         <input type="text" name="q" class="form-control" placeholder="Search for..."
-                               value="{{ search_data }}">
+                               value="{{ search_data }}" style="width: 400px;">
 
+
+                               <button class="btn btn-default" type="submit">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>    
+                            </div>
+                            <div> 
                         <label for="orderby" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">Order by</label>
-                        <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
-                            <option value="" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
+                        <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:150px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+                            <option value="{{ sort_option.name }}" style="display: none;" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
+                            <option value=""  style="display: none;"></option>
                             {% for field in sort_field %}
                             <option value="{{field.name}}" {% if field.name == orderby %}selected=""{% endif %}>{{field.verbose_name}}</option>
                             {% endfor %}
                         </select>
 
                         <label for="order" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">In</label>
-                        <select name="order" id="order" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
-                            <option value="" {% if not order %}selected=""{% endif %}>{{ sort_rule }}</option>
-                            <option value="asc" {% if order == "asc" %}selected=""{% endif %}>ASC</option>
-                            <option value="desc" {% if order == "desc" %}selected=""{% endif %}>DESC</option>
+                        <select name="order" id="order" style="background:#fafdfe; height:28px; width:150px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+                            <option value="{{ sort_rule }}"  style="display: none;" {% if not order %}selected=""{% endif %}>{%if sort_rule == 'asc'%}从低到高{%else%}{%if sort_rule == 'desc'%}从高到低{%endif%}{%endif%}</option>
+                            <option value=""  style="display: none;"></option>
+                            <option value="asc" {% if order == "asc" %}selected=""{% endif %}>从低到高</option>
+                            <option value="desc" {% if order == "desc" %}selected=""{% endif %}>从高到低</option>
                         </select>
-                        <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        <button class="btn btn-default" onclick=reset_sort() style="padding:4px 10px; border:1px solid #9bc0dd ;">
+                                清空
                         </button>
-                      </span>
+                    </div> 
+                      
                     </div>
+                    
                 </form>
+                
             </div>
 
 
@@ -99,4 +110,12 @@
         </div>
 
     </div>
+
+    <script type="text/javascript">
+        function reset_sort()
+        {
+            document.getElementById("orderby").options[1].selected=true;
+            document.getElementById("order").options[1].selected=true;
+        }
+    </script>
 {% endblock %}
