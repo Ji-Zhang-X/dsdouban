@@ -18,7 +18,48 @@
 
 
 {% include "head_nav.html"%}    
-{% include "head_sub.html"%}   
+
+<!-- 此处是原head_sub.html 为了将form放在一起而做了小改动 -->
+<div class='subhead' style="height: 125px; 
+background-color: #FFEECE;
+margin-top: 25px;
+margin-bottom: 10px;">
+        <div class="col-xs-2 col-md-offset-1">
+            <div>
+                <img src="{% static "img\logo2.png" %}"
+                data-holder-rendered="true" style="width: 250px; margin-top: 15px; margin-bottom: 15px;">
+            </div>
+        </div>
+
+        <div class="col-xs-6 ">
+            <div style="margin-bottom: 10px; margin-top: 20px; margin-left: 20px;" >
+                <div style="width: 450px;">
+                    <form method="get" action="/">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="书名、作者、简介、ISBN"
+                                   value="{{ search_data }}">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                          </span>
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div style="height:1px; width:100%; background:#251E0F; overflow:hidden;"></div>
+
+
+        <div class="col-xs-2 col-md-offset--1">
+
+        </div>
+</div>
+
+
+
+
+
 
 <div class="clearfix">
 <div class="col-md-8 col-md-offset-1">
@@ -26,6 +67,29 @@
 		<h3>  搜索结果 </h3>
 		<div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
 <ul class="search-results">
+
+    
+    <label for="orderby" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">Order by</label>
+    <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+        <option value="" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
+        {% for field in sort_field %}
+        <option value="{{field.name}}" {% if field.name == orderby %}selected=""{% endif %}>{{field.verbose_name}}</option>
+        {% endfor %}
+    </select>
+
+    <label for="order" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">In</label>
+    <select name="order" id="order" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+        <option value="" {% if not order %}selected=""{% endif %}>{{ sort_rule }}</option>
+        <option value="asc" {% if order == "asc" %}selected=""{% endif %}>ASC</option>
+        <option value="desc" {% if order == "desc" %}selected=""{% endif %}>DESC</option>
+    </select>
+
+    <button class="btn btn-default" type="submit">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+    </button>
+    </form>
+
+
 
     {% if queryset%}
 	{% for obj in queryset %}

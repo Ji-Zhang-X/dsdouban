@@ -31,7 +31,7 @@
             <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 10px;"></div>
             <div class="bs-example" data-example-id="thumbnails-with-custom-content">
                     <div class="row">
-                    {% for obj in row_object.values %}              
+                    {% for obj in row1_object.values %}              
                       <div class="col-sm-6 col-md-3">
                         <div class="thumbnail">
                           <img src="\static\img_book\{{obj.book_id}}.jpg" style="height: 300px;  display: block;">
@@ -46,6 +46,22 @@
                       </div>
                     {%endfor%}
                     </div>
+                    <div class="row">
+                        {% for obj in row2_object.values %}              
+                          <div class="col-sm-6 col-md-3">
+                            <div class="thumbnail">
+                              <img src="\static\img_book\{{obj.book_id}}.jpg" style="height: 300px;  display: block;">
+                              <div class="caption">
+                                <a href="/dsdouban/book/{{obj.book_id}}/details/" style="text-decoration: none;">
+                                    <h3>{{obj.title}}</h3>
+                                </a>
+                                <p>{{ extract|get_dictionary_item:obj.book_id |linebreaksbr }}</p>
+                                
+                              </div>
+                            </div>
+                          </div>
+                        {%endfor%}
+                        </div>
                   </div>
 
 
