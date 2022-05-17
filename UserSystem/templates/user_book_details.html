@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>豆丝豆瓣·搜索结果</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rate.css' %}">
     <style>
         .navbar {
             border-radius: 0;
@@ -17,6 +18,9 @@
 
 {% include "head_nav.html"%}    
 {% include "head_sub.html"%}   
+
+
+
 
 
 <div class="clearfix">
@@ -47,7 +51,6 @@
                     data-holder-rendered="true" style="width: 200px; margin-top: 15px; margin-bottom: 15px;" >
                 </div>
                 <div class="col-md-9 col-md-offset-1" style="font-size:15px; margin-top: 10px;">
-                    <div> 评分: {{ obj.score }} </div>
 
                     <script type="text/javascript">
                             var has_trans = 0;
@@ -172,6 +175,32 @@
 
             </div>
         </div>
+
+        <div class="col-md-2 col-md-offset-1" style="margin-bottom: 50px;">
+        <!-- side bar -->
+
+        <h3> 总评分: {{ obj.score }}</h3>
+        <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
+        <div> 你的评价:  <span id='your_score'>{{ rank_score}}</span> </div>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="rate">
+                <input type="radio" id="star5" name="marks" value="10" onclick=score10() {%if rank_score == 10 %}checked="true" {%endif%}/>
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="marks" value="8" onclick=score8() {%if rank_score == 8 %}checked="true" {%endif%}/>
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="marks" value="6" onclick=score6() {%if rank_score == 6 %}checked="true" {%endif%}/>
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="marks" value="4" onclick=score4() {%if rank_score == 4 %}checked="true" {%endif%}/>
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="marks" value="2" onclick=score2() {%if rank_score == 2 %}checked="true" {%endif%}/>
+                <label for="star1" title="text">1 star</label>
+                
+            </div>
+            <button type="submit" class="btn btn-default">提 交</button>
+        </form>
+        </div>
 </div>
 
 
@@ -187,6 +216,21 @@
         document.getElementById("comment_block").style.display='block';
         document.getElementById("comment_button").style.display='none';
         window.scrollTo(0, document.documentElement.scrollHeight-document.documentElement.clientHeight);
+    }
+    function score2(){
+        document.getElementById("your_score").innerHTML = '2';
+    }
+    function score4(){
+        document.getElementById("your_score").innerHTML = '4';
+    }
+    function score6(){
+        document.getElementById("your_score").innerHTML = '6';
+    }
+    function score8(){
+        document.getElementById("your_score").innerHTML = '8';
+    }
+    function score10(){
+        document.getElementById("your_score").innerHTML = '10';
     }
 </script>
 </body>

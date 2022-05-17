@@ -16,6 +16,7 @@ class Book(models.Model):
     price_standard = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="标准价格")      
     price_vip = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     score = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, verbose_name="评分")
+    score_current = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, verbose_name="评分")
     edition = models.CharField(max_length=45, blank=True, null=True)
     storage = models.IntegerField(blank=True, null=True)
     class_field = models.ForeignKey('BookClass', models.DO_NOTHING, db_column='class_id', blank=True, null=True)  # Field renamed because it was a Python reserved word.
@@ -142,6 +143,7 @@ class OrderList(models.Model):
         db_table = 'order_list'
         unique_together = (('order', 'book'),)
 
+
 class User(models.Model):
     user_id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=10)
@@ -161,6 +163,18 @@ class User(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Mark(models.Model):
+    mark_id = models.BigAutoField(primary_key=True)
+    book = models.ForeignKey(Book, models.DO_NOTHING)
+    user = models.ForeignKey(User, models.DO_NOTHING)
+    marks = models.DecimalField(max_digits=3, decimal_places=1)
+
+    class Meta:
+        managed = False
+        db_table = 'mark'
+        unique_together = (('book', 'user'),)
 
 # class AdminsystemAdmin(models.Model):
 #     id = models.BigAutoField(primary_key=True)

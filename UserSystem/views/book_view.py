@@ -77,7 +77,20 @@ class CommentModelForm(forms.ModelForm):
                 "placeholder": field.label
             }
 
-
+class RankModelForm(forms.ModelForm):
+    class Meta:
+        model = models.Mark
+        # fields = "__all__"
+        fields = ['marks']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 循环ModelForm中的所有字段，给每个字段的插件设置
+        for name, field in self.fields.items():
+            field.widget.attrs = {
+                "class": "form-control",
+                "placeholder": field.label
+            }
 
 def book_details(request, nid):
     '''显示书籍细节信息'''
@@ -88,20 +101,48 @@ def book_details(request, nid):
         user_obj = models.Admin.objects.filter(id=info_dict['id']).first()
     obj_comments = models.Comments.objects.filter(book_id=nid)
     title = "新建评论"
+
+    # 查看有没有已经评了分数的
+    rank_obj = models.Mark.objects.filter(user_id=user_obj.user_id,book_id=nid).first()
+    if rank_obj is not None:
+        rank_score = int(rank_obj.marks)
+    else:
+        rank_score = 0
+    
     if request.method == "GET":
         form = CommentModelForm()
-        return render(request, 'user_book_details.html', {'form': form, "title": title, "obj":book_obj,"comments":obj_comments, "user":user_obj})
-    ''' 添加评论'''
-    comment_data = request.POST.copy()
+        context = {'form': form, "title": title, "obj":book_obj,
+                    "comments":obj_comments, "user":user_obj, 'rank_score':rank_score}
+        return render(request, 'user_book_details.html', context)
+    
 
-    form = CommentModelForm(data=comment_data)
+    ''' 添加评论 与评分系统'''
+    post_data = request.POST.copy()
+    if post_data.get('marks') == None: # 进入评论系统
+        comment_data = post_data
+        form = CommentModelForm(data=comment_data)
+        if form.is_valid():
+            form.instance.book = book_obj
+            form.instance.user = user_obj
+            form.instance.submission_time = timezone.now()
+            form.save()
+            return redirect('/dsdouban/book/'+str(nid)+'/details/')
+        return render(request, 'user_book_details.html', {'form': form, "title": title, "obj":book_obj, "comments":obj_comments, "user":user_obj})
+    # 进入评分系统
+    if rank_obj is None:
+        form = RankModelForm(data=post_data)
+    else:
+        form = RankModelForm(instance=rank_obj, data=post_data)
+
     if form.is_valid():
         form.instance.book = book_obj
         form.instance.user = user_obj
-        form.instance.submission_time = timezone.now()
+        form.instance.ranks = str(post_data['marks'])
         form.save()
         return redirect('/dsdouban/book/'+str(nid)+'/details/')
-    return render(request, 'user_book_details.html', {'form': form, "title": title, "obj":book_obj, "comments":obj_comments, "user":user_obj})
+    return render(request, 'user_book_details.html', {"title": title, "obj":book_obj, "comments":obj_comments, "user":user_obj})
+    
+    
 
 def comment_delete(request, nid):
     row_obj = models.Comments.objects.filter(comment_id=nid).first()
