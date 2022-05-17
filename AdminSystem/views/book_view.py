@@ -7,12 +7,16 @@ def book_list(request):
     # 书籍列表
     # 搜索涵盖的字段范围
     search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains"]
+    search_class_field = ["class_field__contains", "class_field_parent_class__contains"]
     # 可供用来排序的选项
     sort_field = [models.Book._meta.get_field('score'), 
                   models.Book._meta.get_field('price_standard'), 
                   models.Book._meta.get_field('press_id')]
     
     search_data = request.GET.get('q', "")
+    search_class = request.GET.get('class_q', "")
+    search_parent_class = request.GET.get('parent_class_q', "")
+    
     sort_option = request.GET.get('orderby')
     sort_rule = request.GET.get('order')
     orders = []
@@ -23,21 +27,21 @@ def book_list(request):
             orders.append('-' + sort_option)
     if not orders:
         orders = ['press_id']
-        
-    data_dict = {}
+    data_dict = {"class_field__name__contains":search_class, "class_field__parent_class__contains":search_parent_class}
     queryset = None
     if search_data:
         for search_key in search_field:
-            data_dict = {}
             data_dict[search_key] = search_data
             if not queryset:
                 queryset = models.Book.objects.filter(**data_dict).order_by('press_id')
             else:
                 queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by('press_id'))
+            del data_dict[search_key]
         if sort_option and sort_rule:
             queryset = queryset.order_by(*orders)
     else:
         queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
+    
     page_object = Pagination(request, queryset)
 
     if sort_option:

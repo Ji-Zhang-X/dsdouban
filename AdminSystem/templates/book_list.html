@@ -13,14 +13,17 @@
                     <div class="input-group">
                         <div> 
                         <input type="text" name="q" class="form-control" placeholder="Search for..."
-                               value="{{ search_data }}" style="width: 400px;">
-
+                               value="{{ search_data }}" style="width: 140px;">
+                        <input type="text" name="class_q" class="form-control" placeholder="搜索类别"
+                        value="{{ search_class }}" style="width: 140px;">
+                        <input type="text" name="parent_class_q" class="form-control" placeholder="搜索父类"
+                        value="{{ search_parent_class }}" style="width: 140px;">
 
                                <button class="btn btn-default" type="submit">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                 </button>    
-                            </div>
-                            <div> 
+                        </div>
+                    <div> 
                         <label for="orderby" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">Order by</label>
                         <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:150px; line-height:28px; border:1px solid #9bc0dd; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
                             <option value="{{ sort_option.name }}" style="display: none;" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
@@ -66,6 +69,7 @@
                     {% comment %} <th>出版日期</th> {% endcomment %}
                     <th>普通价格</th>
                     <th>会员价格</th>
+                    <th>库存量</th>
                     <th>score</th>
                     {% comment %} <th>版本</th> {% endcomment %}
                     <th>出版社</th>
@@ -81,6 +85,7 @@
                         {% comment %} <td>{{ obj.publish_date|date:"Y-m-d" }}</td> {% endcomment %}
                         <td>{{ obj.price_standard }}</td>
                         <td>{{ obj.price_vip }}</td>
+                        <td>{{ obj.storage }}</td>
                         <td>{{ obj.score }}</td>
                         {% comment %} <td>{{ obj.edition }}</td> {% endcomment %}
                         <td>{{ obj.press }}</td>

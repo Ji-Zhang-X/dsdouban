@@ -115,6 +115,7 @@ class Order(models.Model):
     user = models.ForeignKey('User', models.DO_NOTHING)
     submission_time = models.DateTimeField(blank=True, null=True)
     status = models.CharField(max_length=20, default='未提交')
+    """status 其他可选值为已付款,已完成和已取消"""
     logistics = models.ForeignKey(Logistics, models.DO_NOTHING, blank=True, null=True)
     telephone = models.CharField(max_length=15, blank=True, null=True)
     address = models.CharField(max_length=45, blank=True, null=True)

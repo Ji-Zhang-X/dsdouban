@@ -50,6 +50,13 @@ def submit_unsubmitted_order(request):
             unsubmitted_order.status = "已付款"
             unsubmitted_order.is_vip = info_dict['vip']
             unsubmitted_order.save()
+            '''更新订单列表中的书籍的库存数量'''
+            for sub_book_order in unsubmitted_order_list:
+                '''子订单中预定书籍的数量'''
+                sub_book_order_num = sub_book_order.number
+                sub_book_order_book = sub_book_order.book
+                sub_book_order_book.storage = sub_book_order_book.storage - sub_book_order_num
+                sub_book_order_book.save()
             return redirect('/dsdouban/order/submitted_orders/')
         else:
             context["warning_info"] = "购物车还没有东西！"
@@ -235,9 +242,17 @@ def show_submitted_order_details(request, nid):
     return render(request, 'sub_order_details.html', context)
 
 def cancel_submitted_order(request, nid):
-    '''取消已提交的订单,改status为已取消,返回一个,即将退款的页面,可以直接用httpresponse'''
+    '''取消已提交的订单,改status为已取消,返回一个,即将退款的页面,可以直接用httpresponse,并且将库存数量加回去'''
     '''nid为order_id'''
     row_object = models.Order.objects.filter(order_id=nid).first()
+    cur_order_list = models.OrderList.objects.filter(order_id=nid)
+    '''更新订单列表中的书籍的库存数量'''
+    for sub_book_order in cur_order_list:
+        '''子订单中预定书籍的数量'''
+        sub_book_order_num = sub_book_order.number
+        sub_book_order_book = sub_book_order.book
+        sub_book_order_book.storage = sub_book_order_book.storage + sub_book_order_num
+        sub_book_order_book.save()
     row_object.status = "已取消"
     row_object.save()
     return redirect('/dsdouban/order/submitted_orders/')
