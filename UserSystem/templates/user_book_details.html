@@ -102,6 +102,26 @@
             {%if comments%}
             <h4>
             {% for cmt in comments %}
+                {% if cmt.user_id == user.user_id %}
+                <div>
+                    <span  style="font-size: 15px;">
+                            {{cmt.user.name}}
+                    </span>
+                    <span style="color:rgb(124, 124, 124); font-size: 10px;">
+                            {{cmt.submission_time }}
+                    </span>
+                    <a  href="/dsdouban/comments/{{cmt.comment_id}}/delete/">
+                        <button type="button" class="button cart_button_clear">删除评论</button>
+                    </a>
+                    <a  href="/dsdouban/comments/{{cmt.comment_id}}/update/">
+                        <button type="button" class="button cart_button_clear">修改评论</button>
+                    </a>
+                    
+                </div>
+                <div>
+                  {{ cmt.comment|linebreaksbr }}
+                </div>
+                {% else %}
                 <div>
                     <span  style="font-size: 15px;">
                             {{cmt.user.name}}
@@ -113,6 +133,7 @@
                 <div>
                   {{ cmt.comment|linebreaksbr }}
                 </div>
+                {%endif%}
             {%endfor%}
             </h4>
              

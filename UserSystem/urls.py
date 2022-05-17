@@ -34,4 +34,7 @@ urlpatterns = [
     path('order/<int:nid>/edit_unsubmitted_order_list/', user_order.edit_unsubmitted_order_list),
     path('order/<int:nid>/delete_unsubmitted_order_list/', user_order.delete_unsubmitted_order_list),
     
+    # Comments
+    path('comments/<int:nid>/delete/', book_view.comment_delete),
+    path('comments/<int:nid>/update/', book_view.comment_update),
 ]

@@ -81,19 +81,18 @@ class CommentModelForm(forms.ModelForm):
 
 def book_details(request, nid):
     '''显示书籍细节信息'''
-    row_object = models.Book.objects.filter(book_id=nid).first()
-    obj_comments = models.Comments.objects.filter(book_id=nid)
     info_dict = request.session.get("info")
-    title = "新建评论"
-    if request.method == "GET":
-        form = CommentModelForm()
-        return render(request, 'user_book_details.html', {'form': form, "title": title, "obj":row_object,"comments":obj_comments})
-    ''' 添加评论'''
-    comment_data = request.POST.copy()
     book_obj = models.Book.objects.filter(book_id=nid).first()
     user_obj = models.User.objects.filter(user_id=info_dict['id']).first()
     if user_obj is None:
         user_obj = models.Admin.objects.filter(id=info_dict['id']).first()
+    obj_comments = models.Comments.objects.filter(book_id=nid)
+    title = "新建评论"
+    if request.method == "GET":
+        form = CommentModelForm()
+        return render(request, 'user_book_details.html', {'form': form, "title": title, "obj":book_obj,"comments":obj_comments, "user":user_obj})
+    ''' 添加评论'''
+    comment_data = request.POST.copy()
 
     form = CommentModelForm(data=comment_data)
     if form.is_valid():
@@ -102,7 +101,43 @@ def book_details(request, nid):
         form.instance.submission_time = timezone.now()
         form.save()
         return redirect('/dsdouban/book/'+str(nid)+'/details/')
-    return render(request, 'user_book_details.html', {'form': form, "title": title, "obj":row_object})
+    return render(request, 'user_book_details.html', {'form': form, "title": title, "obj":book_obj, "comments":obj_comments, "user":user_obj})
 
+def comment_delete(request, nid):
+    row_obj = models.Comments.objects.filter(comment_id=nid).first()
+    book_id = row_obj.book_id
+    row_obj.delete()
+    # models.Comments.objects.filter(comment_id=nid).delete()
+    return redirect('/dsdouban/book/'+str(book_id)+'/details/')
 
     
+# class CommentUpdateModelForm(forms.ModelForm):
+#     class Meta:
+#         model = models.Comments
+#         # fields = "__all__"
+#         fields = ['comment']
+        
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         # 循环ModelForm中的所有字段，给每个字段的插件设置
+#         for name, field in self.fields.items():
+#             field.widget.attrs.update = {
+#                 "class": "form-control",
+#                 "placeholder": field.label
+#             }
+
+def comment_update(request, nid):
+    row_obj = models.Comments.objects.filter(comment_id=nid).first()
+    book_obj = models.Book.objects.filter(book_id=row_obj.book_id).first()
+    if request.method == "GET":
+        form = CommentModelForm(instance=row_obj)
+        return render(request, 'comment_update.html', {'form': form}) 
+    
+    comment_data = request.POST.copy()
+    form = CommentModelForm(instance=row_obj, data=comment_data)
+    if form.is_valid():
+        form.instance.submission_time = timezone.now() 
+        form.save()
+        return redirect('/dsdouban/book/'+str(book_obj.book_id)+'/details/')
+
+    return render(request, 'comment_update.html', {'form': form, 'title':"修改评论"}) 
