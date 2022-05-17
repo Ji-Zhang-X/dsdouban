@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', account.logout),
     path('user_details/', account.user_details),
     path('edit_user_details/', account.edit_user_details),
+    path('reset_user_pwd/', account.reset_user_password),
     
     # 图书的查看
     # 这里nid是book_id

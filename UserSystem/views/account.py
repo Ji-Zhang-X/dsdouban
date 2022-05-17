@@ -192,3 +192,56 @@ def edit_user_details(request):
         return redirect('/dsdouban/user_details/')
     
     return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title,'label2label':label2label})
+
+class UserResetModelForm(BootStrapModelForm):
+    confirm_password = forms.CharField(
+        label="确认密码",
+        widget=forms.PasswordInput(render_value=True)
+    )
+
+    class Meta:
+        model = models.User
+        fields = ['password', 'confirm_password']
+        widgets = {
+            "password": forms.PasswordInput(render_value=True)
+        }
+
+    def clean_password(self):
+        pwd = self.cleaned_data.get("password")
+        md5_pwd = md5(pwd)
+
+        # 去数据库校验当前密码和新输入的密码是否一致
+        exists = models.User.objects.filter(user_id=self.instance.pk, password=md5_pwd).exists()
+        if exists:
+            raise ValidationError("不能与以前的密码相同")
+
+        return md5_pwd
+
+    def clean_confirm_password(self):
+        pwd = self.cleaned_data.get("password")
+        confirm = md5(self.cleaned_data.get("confirm_password"))
+        if confirm != pwd:
+            raise ValidationError("密码不一致")
+        # 返回什么，此字段以后保存到数据库就是什么。
+        return confirm
+    
+def reset_user_password(request):
+    """"""
+    info_dict = request.session.get("info")
+    current_user = models.User.objects.filter(user_id=info_dict['id']).first()
+    title = "修改用户密码"
+    page_title = '豆丝豆瓣·修改用户密码'    
+    label2label = {'Password':'密码', '确认密码':'确认密码'}
+
+    if request.method == "GET":
+        form = UserResetModelForm()
+        return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title,'label2label':label2label})
+    
+    form = UserResetModelForm(data=request.POST, instance=current_user)
+    if form.is_valid():
+        form.save()
+        request.session["info"]["name"] = request.POST.get("name")
+        request.session.set_expiry(60 * 60 * 24 * 7)
+        return redirect('/dsdouban/user_details/')
+    
+    return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title,'label2label':label2label})

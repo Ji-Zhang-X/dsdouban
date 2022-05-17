@@ -4,8 +4,12 @@ from tokenize import Number
 from django import forms
 from django.utils import timezone
 from django.shortcuts import render, redirect, HttpResponse
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
+
 from AdminSystem.utils.pagination import Pagination
 from AdminSystem import models
+
 
 def get_context_for_unsub_order(info_dict, warning=None):
     nid = info_dict["id"]
@@ -90,12 +94,8 @@ def edit_unsubmitted_order(request, nid):
     return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title, 'label2label':label2label})
 
 class OrderListModelForm(forms.ModelForm):
-    class Meta:
-        model = models.OrderList
-        # fields = "__all__"
-        fields = ['number']
-        
-    def __init__(self, *args, **kwargs):
+
+    def __init__(self, book_storage=1, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # 循环ModelForm中的所有字段，给每个字段的插件设置
         for name, field in self.fields.items():
@@ -103,6 +103,21 @@ class OrderListModelForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": field.label
             }
+        self.book_storage = book_storage
+
+    class Meta:
+        model = models.OrderList
+        # fields = "__all__"
+        fields = ['number']
+        
+    def clean_number(self):
+        user_number = self.cleaned_data["number"]
+        if user_number > self.book_storage:
+            raise ValidationError("不能超过库存量{}".format(self.book_storage))
+        if user_number < 1:
+            raise ValidationError("数量至少为1")
+        return user_number
+        
             
 def edit_unsubmitted_order_list(request, nid):
     # nid 是order_list号
@@ -115,8 +130,9 @@ def edit_unsubmitted_order_list(request, nid):
     if request.method == "GET":
         form = OrderListModelForm()
         return render(request, 'unsub_order_list_change.html', {'form': form, "title": title, "order":row_object,"book":book_object,"is_vip":is_vip})
-    
-    form = OrderListModelForm(data=request.POST, instance=row_object)
+
+    book_storage = book_object.storage
+    form = OrderListModelForm(book_storage = book_storage, data=request.POST, instance=row_object)
     if form.is_valid():
         form.save()
         return redirect('/dsdouban/order/unsubmitted_order/')
@@ -228,6 +244,7 @@ def cancel_submitted_order(request, nid):
 
 def finish_submitted_order(request, nid):
     '''确认收货,完成订单,改status为已完成'''
+    '''TODO: 把orderlist中的书籍的storag减去订单中有的量'''
     '''nid为order_id'''
     row_object = models.Order.objects.filter(order_id=nid).first()
     row_object.status = "已完成"
