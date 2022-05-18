@@ -92,6 +92,7 @@ class RankModelForm(forms.ModelForm):
                 "placeholder": field.label
             }
 
+
 def book_details(request, nid):
     '''显示书籍细节信息'''
     info_dict = request.session.get("info")
@@ -139,10 +140,25 @@ def book_details(request, nid):
         form.instance.user = user_obj
         form.instance.ranks = str(post_data['marks'])
         form.save()
+        update_score(nid)
         return redirect('/dsdouban/book/'+str(nid)+'/details/')
     return render(request, 'user_book_details.html', {"title": title, "obj":book_obj, "comments":obj_comments, "user":user_obj})
     
-    
+
+
+def update_score(book_id):
+    book_obj = models.Book.objects.filter(book_id=book_id).first()
+    ranks = models.Mark.objects.filter(book_id=book_id)
+    size = len(ranks)
+    score_total = sum([rank.marks for rank in ranks])
+    score_initial = book_obj.score
+
+    weight_initial = 10
+
+    book_obj.score_current =  round(((score_initial * weight_initial + score_total) / (weight_initial + size)),1)
+    book_obj.save()
+    # for rank in ranks:
+
 
 def comment_delete(request, nid):
     row_obj = models.Comments.objects.filter(comment_id=nid).first()

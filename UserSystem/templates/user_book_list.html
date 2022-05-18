@@ -120,7 +120,11 @@ margin-bottom: 10px;">
 		<a href="/dsdouban/book/{{obj.book_id}}/details/">
 		<h3>{{ obj.title }}</h3>
 		</a>
-        <div> 评分: {{ obj.score }} </div>
+        <div> 评分: {%if obj.score_current == None %}
+                {{ obj.score }}
+                {%else%}
+                {{obj.score_current}}
+                {%endif%} </div>
 
         <script type="text/javascript">
             var has_trans = 0;

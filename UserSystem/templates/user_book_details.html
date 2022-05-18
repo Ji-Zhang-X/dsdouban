@@ -179,9 +179,18 @@
         <div class="col-md-2 col-md-offset-1" style="margin-bottom: 50px;">
         <!-- side bar -->
 
-        <h3> 总评分: {{ obj.score }}</h3>
+        <h3> 总评分: {%if obj.score_current == None %}
+            {{ obj.score }}
+            {%else%}
+            {{obj.score_current}}
+            {%endif%}
+        </h3>
         <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
-        <div> 你的评价:  <span id='your_score'>{{ rank_score}}</span> </div>
+        <div> 你的评价:  <span id='your_score'>
+        {%if rank_score != 0 %}    
+            {{ rank_score}}
+        {%endif%}
+        </span> </div>
 
         <form method="post" novalidate>
             {% csrf_token %}
