@@ -28,7 +28,7 @@ CREATE TABLE `author` (
   `name` varchar(40) NOT NULL,
   `intro` varchar(800) DEFAULT NULL,
   PRIMARY KEY (`author_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8mb3 COMMENT='Author and translator';
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8mb4 COMMENT='Author and translator';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +66,7 @@ CREATE TABLE `book` (
   KEY `press_id_idx` (`press_id`),
   CONSTRAINT `classification_id` FOREIGN KEY (`class_id`) REFERENCES `book_class` (`class_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `press_id` FOREIGN KEY (`press_id`) REFERENCES `press` (`press_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `book_author` (
   KEY `author_id_idx` (`author_id`),
   CONSTRAINT `author_id` FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`),
   CONSTRAINT `book_id` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ CREATE TABLE `book_class` (
   `name` varchar(45) NOT NULL,
   `parent_class` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`class_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,7 +149,7 @@ CREATE TABLE `comments` (
   KEY `user_i_idx` (`user_id`),
   CONSTRAINT `book_i` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`),
   CONSTRAINT `user_i` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,7 +174,7 @@ CREATE TABLE `logistics` (
   `logistics_tele` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`logistics_id`),
   UNIQUE KEY `logistics_name_UNIQUE` (`logistics_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,7 +204,7 @@ CREATE TABLE `mark` (
   KEY `book_mark_idx` (`book_id`),
   CONSTRAINT `book_mark` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`),
   CONSTRAINT `user_mark` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +238,7 @@ CREATE TABLE `order` (
   KEY `logistic_idx` (`logistics_id`),
   CONSTRAINT `logistic` FOREIGN KEY (`logistics_id`) REFERENCES `logistics` (`logistics_id`),
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -267,7 +267,7 @@ CREATE TABLE `order_list` (
   KEY `book_id_idx` (`book_id`),
   CONSTRAINT `book_id1` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`),
   CONSTRAINT `order_id` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -294,7 +294,7 @@ CREATE TABLE `press` (
   `tele` varchar(20) DEFAULT NULL,
   `email` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`press_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -323,7 +323,7 @@ CREATE TABLE `user` (
   `e_mail` varchar(45) DEFAULT NULL,
   `address` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
