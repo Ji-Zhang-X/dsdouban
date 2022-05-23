@@ -45,17 +45,6 @@ margin-bottom: 10px;">
                                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                             </button>
                             </span>
-                            <span>
-                            <label for="class" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">分类</label>
-                                <select name="class" id="class" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
-                                    <option value="{{ class_option }}"  style="display: none;" {% if not class %}selected=""{% endif %}>{{ class_option }}</option>
-                                    <option value=""  style="display: none;"></option>
-                                    {% for field in class_field %}
-                                    <option value="{{field.name}}" {% if field.name == class %}selected=""{% endif %}>{{field.name}}</option>
-                                    {% endfor %}
-                                </select>          
-                            </span>
-
                         </div>
                     
                 </div>
@@ -81,7 +70,8 @@ margin-bottom: 10px;">
 		<div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
 <ul class="search-results">
 
-    
+
+    <div>
     <label for="orderby" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">排序方式</label>
     <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
         <option value="{{ sort_option.name}}"  style="display: none;" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
@@ -111,11 +101,42 @@ margin-bottom: 10px;">
         <i class="fa fa-sort-desc" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
     </button>
 
-    </form>
+    
 
     <button class="btn btn-default" onclick=reset_sort() style="padding:4px 10px; border:1px solid #d6d076 ;">
             <i class="fa fa-trash" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
     </button>
+    </div>
+
+
+
+
+
+    <div>
+            <label for="class" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">分类</label>
+                <select name="class" id="class" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+                    <option value="{{ class_option }}"  style="display: none;" {% if not class %}selected=""{% endif %}>{{ class_option }}</option>
+                    <option value=""  style="display: none;"></option>
+                    {% for field in class_field %}
+                    <option value="{{field.name}}" {% if field.name == class %}selected=""{% endif %}>{{field.name}}</option>
+                    {% endfor %}
+                </select>       
+    
+
+    <button class="btn btn-default" type="submit" style="padding:4px 10px; border:1px solid #d6d076 ;">
+            <i class="fa fa-sort-desc" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
+        </button>
+    
+        
+    
+    <button class="btn btn-default" onclick=reset_class() style="padding:4px 10px; border:1px solid #d6d076 ;">
+                <i class="fa fa-trash" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
+    </button>
+    </div>
+
+
+</form>
+
 
 
     {% if queryset%}
@@ -205,6 +226,10 @@ margin-bottom: 10px;">
     {
         document.getElementById("orderby").options[1].selected=true;
         document.getElementById("order").options[1].selected=true;
+    }
+    function reset_class()
+    {
+        document.getElementById("class").options[1].selected=true;
     }
 </script>
 </body>

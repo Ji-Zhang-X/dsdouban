@@ -133,6 +133,14 @@ def home(request):
     search_data = request.GET.get('q', "")
     class_option = request.GET.get('class', "")
     class_field = models.BookClass.objects.filter()
+    class_field_dict = {}
+    for item in class_field:
+        if class_field_dict.get(item.parent_class) == None:
+            class_field_dict[item.parent_class] = [item.name]
+        else:
+            class_field_dict[item.parent_class].append(item.name)
+    #print(class_field_dict)
+
     if search_data == '' and class_option == '': 
         topBooks1 = ['9787541151200','9787544269155','9787540786038','9787544722803']
         topBooks2 = ['9787533962968', '9787220105135','9787567534575','9787220103728']
@@ -150,7 +158,7 @@ def home(request):
             "row1_object": row1_object,
             "row2_object": row2_object,
             "extract": extract,
-            "class_field": class_field
+            "class_field_dict": class_field_dict
         }
         return render(request, 'home.html',context)
     return book_view.book_list(request)
