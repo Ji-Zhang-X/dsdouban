@@ -127,10 +127,13 @@ def begin(request):
     """登录界面"""
     return render(request, 'begin.html')
 
+
 def home(request):
     """主界面"""
     search_data = request.GET.get('q', "")
-    if search_data == '':
+    class_option = request.GET.get('class', "")
+    class_field = models.BookClass.objects.filter()
+    if search_data == '' and class_option == '': 
         topBooks1 = ['9787541151200','9787544269155','9787540786038','9787544722803']
         topBooks2 = ['9787533962968', '9787220105135','9787567534575','9787220103728']
         # 以上是首页展示的两行图书的id
@@ -146,7 +149,8 @@ def home(request):
         context = {
             "row1_object": row1_object,
             "row2_object": row2_object,
-            "extract": extract
+            "extract": extract,
+            "class_field": class_field
         }
         return render(request, 'home.html',context)
     return book_view.book_list(request)

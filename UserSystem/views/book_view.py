@@ -11,6 +11,9 @@ def book_list(request):
     search_data = request.GET.get('q', "")
     sort_option = request.GET.get('orderby')
     sort_rule = request.GET.get('order')
+    class_option = request.GET.get('class', "")
+    class_field = models.BookClass.objects.filter()
+    
 
     search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains"]
     sort_field = [models.Book._meta.get_field('score'), 
@@ -25,12 +28,20 @@ def book_list(request):
             orders.append('-' + sort_option)
     if not orders:
         orders = ['press_id']
-   
-    data_dict = {}
+
+    if class_option != '': 
+        class_obj = models.BookClass.objects.filter(name=class_option).first()
+        data_dict = {"class_field": class_obj.class_id}
+    else:
+        data_dict = {}    
     queryset = None
-    if search_data:
+    if search_data or class_option:
         for search_key in search_field:
-            data_dict = {}
+            if class_option != '': 
+                class_obj = models.BookClass.objects.filter(name=class_option).first()
+                data_dict = {"class_field": class_obj.class_id}
+            else:
+                data_dict = {}    
             data_dict[search_key] = search_data
             if not queryset:
                 queryset = models.Book.objects.filter(**data_dict).order_by("press_id")
@@ -45,7 +56,10 @@ def book_list(request):
     # 此处是缩减简介长度
     extract = {}
     for book in queryset:
-        extract[book.book_id] = book.introduction[0:140] + '...'
+        if book.introduction:
+            extract[book.book_id] = book.introduction[0:140] + '...'
+        else:
+            extract[book.book_id] = '暂无简介'
 
     if sort_option:
         sort_option = models.Book._meta.get_field(sort_option)
@@ -56,7 +70,9 @@ def book_list(request):
         "sort_rule": sort_rule,
         "extract":extract,
         "queryset": page_object.page_queryset,  # 分完页的数据
-        "page_string": page_object.html()  # 页码
+        "page_string": page_object.html(),  # 页码
+        "class_field": class_field,
+        "class_option": class_option
     }
     return render(request, 'user_book_list.html', context)
 

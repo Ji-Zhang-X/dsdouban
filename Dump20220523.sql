@@ -58,7 +58,7 @@ CREATE TABLE `book` (
   `score_current` decimal(3,1) DEFAULT NULL,
   `edition` varchar(45) DEFAULT NULL,
   `storage` int DEFAULT NULL,
-  `class_id` int NOT NULL DEFAULT '0',
+  `class_id` int NOT NULL DEFAULT '8',
   `press_id` bigint DEFAULT NULL,
   `introduction` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`book_id`),

@@ -21,7 +21,17 @@ margin-bottom: 10px;">
                             <button class="btn btn-default" type="submit">
                                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                             </button>
-                          </span>
+                            </span>
+                            <span>
+                            <label for="class" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">分类</label>
+                                <select name="class" id="class" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+                                    <option value="{{ class_option }}"  style="display: none;" {% if not class %}selected=""{% endif %}>{{ class_option }}</option>
+                                    <option value=""  style="display: none;"></option>
+                                    {% for field in class_field %}
+                                    <option value="{{field.name}}" {% if field.name == class %}selected=""{% endif %}>{{field.name}}</option>
+                                    {% endfor %}
+                                </select>       
+                            </span>
                         </div>
                     </form>
                 </div>
