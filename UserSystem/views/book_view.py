@@ -11,9 +11,18 @@ def book_list(request):
     search_data = request.GET.get('q', "")
     sort_option = request.GET.get('orderby')
     sort_rule = request.GET.get('order')
+
     class_option = request.GET.get('class', "")
+    class_option_row = models.BookClass.objects.filter(name=class_option).first()
     class_field = models.BookClass.objects.filter()
     
+    class_field_dict = {}
+    for item in class_field:
+        if class_field_dict.get(item.parent_class) == None:
+            class_field_dict[item.parent_class] = [item.name]
+        else:
+            class_field_dict[item.parent_class].append(item.name)
+
 
     search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains"]
     sort_field = [models.Book._meta.get_field('score'), 
@@ -29,7 +38,7 @@ def book_list(request):
     if not orders:
         orders = ['press_id']
 
-    if class_option != '': 
+    if class_option != '' and class_option !='None': 
         class_obj = models.BookClass.objects.filter(name=class_option).first()
         data_dict = {"class_field": class_obj.class_id}
     else:
@@ -37,7 +46,7 @@ def book_list(request):
     queryset = None
     if search_data or class_option:
         for search_key in search_field:
-            if class_option != '': 
+            if class_option != '' and class_option !='None': 
                 class_obj = models.BookClass.objects.filter(name=class_option).first()
                 data_dict = {"class_field": class_obj.class_id}
             else:
@@ -71,8 +80,8 @@ def book_list(request):
         "extract":extract,
         "queryset": page_object.page_queryset,  # 分完页的数据
         "page_string": page_object.html(),  # 页码
-        "class_field": class_field,
-        "class_option": class_option
+        "class_field_dict": class_field_dict,
+        "class_option": class_option_row
     }
     return render(request, 'user_book_list.html', context)
 

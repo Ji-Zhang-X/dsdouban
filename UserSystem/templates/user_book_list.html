@@ -11,6 +11,16 @@
         .navbar {
             border-radius: 0;
         }
+        .select_bar{
+            background:#fafdfe;
+            height:28px;
+            width:180px;
+            line-height:28px;
+            border:1px solid #d6d076;
+            -moz-border-radius:2px;
+            -webkit-border-radius:2px;
+            border-radius:2px;
+        }
     </style>
 </head>
 <body>
@@ -73,7 +83,7 @@ margin-bottom: 10px;">
 
     <div>
     <label for="orderby" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">排序方式</label>
-    <select name="orderby" id="orderby" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+    <select name="orderby" id="orderby" class='select_bar'>
         <option value="{{ sort_option.name}}"  style="display: none;" {% if not orderby %}selected=""{% endif %}>{{ sort_option.verbose_name }}</option>
         <option value=""  style="display: none;"></option>
         {% for field in sort_field %}
@@ -82,7 +92,7 @@ margin-bottom: 10px;">
     </select>
 
     <label for="order" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">按照</label>
-    <select name="order" id="order" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+    <select name="order" id="order" class='select_bar'>
         <option value="{{ sort_rule }}"  style="display: none;"{% if not order %}selected=""{% endif %}>
             {%if sort_rule == 'asc'%}
             从低到高
@@ -112,16 +122,27 @@ margin-bottom: 10px;">
 
 
 
-    <div>
-            <label for="class" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">分类</label>
-                <select name="class" id="class" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
-                    <option value="{{ class_option }}"  style="display: none;" {% if not class %}selected=""{% endif %}>{{ class_option }}</option>
+    <div style="margin-top: 2px;">
+            <label for="class" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">分类查看</label>
+                <select name="parent_class" id="parent_class" class='select_bar' onchange=change_class(this.value)>
+                    <option value="{{ class_option.parent_class }}"  style="display: none;" selected="">{{ class_option.parent_class }}</option>
                     <option value=""  style="display: none;"></option>
-                    {% for field in class_field %}
-                    <option value="{{field.name}}" {% if field.name == class %}selected=""{% endif %}>{{field.name}}</option>
+                    {% for field in class_field_dict %}
+                    <option value="{{field}}" >{{field}}</option>
                     {% endfor %}
                 </select>       
     
+                <select name="class" id="class" class='select_bar' style="margin-left: 35px;">
+                    <option value="{{ class_option}}"  style="display: none;" selected="">{%if class_option != None%}{{ class_option }}{%endif%}</option>
+                    <option value=""  style="display: none;"></option>
+                    {% for field in class_field_dict.values %}
+                    {% for item in field %}
+                    <option value="{{item}}" style="display: none;" id ='subclass_{{item}}'>{{item}}</option>
+                    {% endfor %}
+                    {% endfor %}
+                </select>
+
+
 
     <button class="btn btn-default" type="submit" style="padding:4px 10px; border:1px solid #d6d076 ;">
             <i class="fa fa-sort-desc" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
@@ -218,6 +239,7 @@ margin-bottom: 10px;">
     {%endif%}
 
 
+<!-- <div id='123123'> 123</div> -->
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
 
@@ -229,7 +251,35 @@ margin-bottom: 10px;">
     }
     function reset_class()
     {
+        document.getElementById("parent_class").options[1].selected=true;
         document.getElementById("class").options[1].selected=true;
+    }
+
+
+    var class_map = {};
+    {% for parent_class, class_dict in class_field_dict.items %}
+    var mylist = '{{class_dict}}'.replace(/[\[\]]/g,'').replace(/&#x27;/g,'').replace(/\s/g,'').split(',');
+    class_map['{{parent_class}}'] = mylist;
+    {%endfor%}
+
+    var current_class = '{{class_option.parent_class}}';
+    for(seg_class in class_map[current_class])
+    {
+        document.getElementById("subclass_"+class_map[current_class][seg_class]).style.display='block';
+    }
+
+    function change_class(parent_class)
+    {
+        for(seg_class in class_map[current_class])
+        {
+            document.getElementById("subclass_"+class_map[current_class][seg_class]).style.display='none';
+        }
+        document.getElementById("class").options[1].selected=true;
+        for(seg_class in class_map[parent_class])
+        {
+            document.getElementById("subclass_"+class_map[parent_class][seg_class]).style.display='block';
+        }
+        current_class = parent_class;
     }
 </script>
 </body>

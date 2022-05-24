@@ -139,7 +139,6 @@ def home(request):
             class_field_dict[item.parent_class] = [item.name]
         else:
             class_field_dict[item.parent_class].append(item.name)
-    #print(class_field_dict)
 
     if search_data == '' and class_option == '': 
         topBooks1 = ['9787541151200','9787544269155','9787540786038','9787544722803']
