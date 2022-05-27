@@ -213,7 +213,7 @@ def comment_update(request, nid):
     book_obj = models.Book.objects.filter(book_id=row_obj.book_id).first()
     if request.method == "GET":
         form = CommentModelForm(instance=row_obj)
-        return render(request, 'comment_update.html', {'form': form}) 
+        return render(request, 'comment_update.html', {'form': form, 'comment_content':row_obj.comment}) 
     
     comment_data = request.POST.copy()
     form = CommentModelForm(instance=row_obj, data=comment_data)
@@ -222,4 +222,4 @@ def comment_update(request, nid):
         form.save()
         return redirect('/dsdouban/book/'+str(book_obj.book_id)+'/details/')
 
-    return render(request, 'comment_update.html', {'form': form, 'title':"修改评论"}) 
+    return render(request, 'comment_update.html', {'form': form, 'title':"修改评论",'comment_content':row_obj.comment}) 

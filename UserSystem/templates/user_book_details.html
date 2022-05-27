@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>豆丝豆瓣·搜索结果</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.css' %}">
     <link rel="stylesheet" href="{% static 'css/rate.css' %}">
     <style>
         .navbar {
@@ -114,11 +115,16 @@
                     <span style="color:rgb(124, 124, 124); font-size: 10px;">
                             {{cmt.submission_time }}
                     </span>
-                    <a  href="/dsdouban/comments/{{cmt.comment_id}}/delete/">
-                        <button type="button" class="button cart_button_clear">删除评论</button>
+                    <button class="btn btn-default" onclick=delete_alarm() style="padding:4px 10px; border:1px solid #d6d076 ;">
+                        <i class="fa fa-trash" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
+                    </button>
+                    <a  href="/dsdouban/comments/{{cmt.comment_id}}/delete/" style="display: none;">
+                        <button type="button" class="button cart_button_clear" id='delete_button'>删除评论</button>
                     </a>
                     <a  href="/dsdouban/comments/{{cmt.comment_id}}/update/">
-                        <button type="button" class="button cart_button_clear">修改评论</button>
+                        <button class="btn btn-default" style="padding:4px 8px; border:1px solid #d6d076 ;">
+                        <i class="fa fa-edit" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
+                        </button>
                     </a>
                     
                 </div>
@@ -240,6 +246,13 @@
     }
     function score10(){
         document.getElementById("your_score").innerHTML = '10';
+    }
+    function delete_alarm(){
+        var r=confirm("确认删除?");
+        if (r)
+        {
+            document.getElementById("delete_button").click();
+        }
     }
 </script>
 </body>
