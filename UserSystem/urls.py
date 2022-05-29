@@ -1,4 +1,4 @@
-from .views import account, book_view, user_order
+from .views import account, book_view, user_order, other_view
 from django.urls import path, include
 
 urlpatterns = [
@@ -38,4 +38,10 @@ urlpatterns = [
     # Comments
     path('comments/<int:nid>/delete/', book_view.comment_delete),
     path('comments/<int:nid>/update/', book_view.comment_update),
+
+    #这里nid是author_id
+    path('author/<int:nid>/',other_view.author_view),
+
+    #这里nid是press_id
+    path('press/<int:nid>/',other_view.press_view),
 ]

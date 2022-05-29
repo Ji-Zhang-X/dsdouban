@@ -58,7 +58,9 @@
                     </script>
                     <div> 作者: {% for author in obj.authors.all %}
                                 {%if author.is_translator == 0%}
-                                {{ author.name }};
+
+                                <a href='/dsdouban/author/{{author.author_id}}/'> {{ author.name }}</a>;
+                                
                                 {% else %}
                                 <script type="text/javascript">
                                     var has_trans = 1;
@@ -69,7 +71,7 @@
                         {%endfor%}
                         <div id='trans_{{obj.book_id}}' style="display: none;"> 译者: {% for author in obj.authors.all %}
                                 {%if author.is_translator == 1%}
-                                {{ author.name }};
+                                <a href='/dsdouban/author/{{author.author_id}}/'> {{ author.name }}</a>;
                                 {% endif %}
                             {%endfor%}</div>
                         <script type="text/javascript">
@@ -77,7 +79,7 @@
                                 document.getElementById("trans_{{obj.book_id}}").style.display='block';
                             }
                         </script>
-                        <div> 出版社: {{ obj.press }}</div>
+                        <div> 出版社: <a href='/dsdouban/press/{{obj.press.press_id}}/'> {{ obj.press }}</a>;</div>
                         <div> 出版日期: {{ obj.publish_date|date:"Y-m-d" }}</div>
                         <div> 分类: {{ obj.class_field }}</div>
                         <div> 标价: {{ obj.price_standard }}</div>

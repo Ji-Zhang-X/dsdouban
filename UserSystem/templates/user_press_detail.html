@@ -1,0 +1,108 @@
+{% load static %}
+{% load set_var %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>豆丝豆瓣·出版社信息</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rate.css' %}">
+    <style>
+        .navbar {
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
+
+
+
+{% include "head_nav.html"%}    
+{% include "head_sub.html"%}   
+
+
+
+
+
+<div class="clearfix">
+        <div class="col-md-8 col-md-offset-1" style="margin-bottom: 50px;">
+            <!-- main part starts here -->
+            <div class="clearfix">
+
+            <div>
+                <h2 style="margin-left: 15px; float: left;">
+                    {{obj.name}}
+                </h2>
+
+                
+
+                <div style="float: right;margin-top: 30px;">
+                        <a onclick="javascript:history.back(-1);" href="#">
+                            [返回]
+                        </a>
+                </div>
+
+            </div>
+
+
+            <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
+
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-9 col-md-offset" style="font-size:15px; margin-top: 10px;">
+
+                {%set hasval = 0%}   
+                    
+                {%if obj.contact != None%}
+                <div>联系人：{{obj.contact}}</div>
+                {%set hasval = 1%}
+                {%endif%}
+
+                {%if obj.address != None%}
+                <div>地址：{{obj.address}}</div>
+                {%set hasval = 1%}
+                {%endif%}
+
+                {%if obj.tele != None%}
+                <div> 联系方式：{{obj.tele}}</div>
+                {%set hasval = 1%}
+                {%endif%}
+
+                {%if obj.email != None%}
+                <div> 邮箱：{{obj.email}}</div>
+                {%set hasval = 1%}
+                {%endif%}
+
+                {%if hasval == 0%}
+                暂无信息
+                {%endif%}
+            </div>
+
+                
+            </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-2 col-md-offset-1" style="margin-bottom: 50px;">
+        <!-- side bar -->
+
+        
+        </div>
+</div>
+
+
+</div>
+
+
+
+    
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+</script>
+</body>
+</html>
