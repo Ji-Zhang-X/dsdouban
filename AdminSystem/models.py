@@ -8,6 +8,10 @@ class Admin(models.Model):
 
     def __str__(self):
         return self.username
+    class Meta():
+        verbose_name = '普通管理员' # 单数时显示内容
+        verbose_name_plural = '普通管理员' # 复数时显示内容
+    
 
 class Book(models.Model):
     book_id = models.BigIntegerField(primary_key=True)
@@ -19,7 +23,7 @@ class Book(models.Model):
     score_current = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, verbose_name="评分")
     edition = models.CharField(max_length=45, blank=True, null=True)
     storage = models.IntegerField(blank=True, null=True)
-    class_field = models.ForeignKey('BookClass', models.DO_NOTHING, db_column='class_id', blank=True, null=True)  # Field renamed because it was a Python reserved word.
+    class_field = models.ForeignKey('BookClass', models.DO_NOTHING, db_column='class_id', blank=True, null=False, default='8')  # Field renamed because it was a Python reserved word.
     press = models.ForeignKey('Press', models.DO_NOTHING, blank=True, null=True, verbose_name="出版社编号")
     introduction = models.CharField(max_length=2000, blank=True, null=True)
     authors = models.ManyToManyField('Author', through='BookAuthor')
@@ -27,6 +31,9 @@ class Book(models.Model):
     class Meta:
         managed = False
         db_table = 'book'
+        indexes = [models.Index(fields=['title']),
+                   models.Index(fields=['press']),
+                   models.Index(fields=['introduction'])]
 
 
 class BookClass(models.Model):
@@ -37,6 +44,7 @@ class BookClass(models.Model):
     class Meta:
         managed = False
         db_table = 'book_class'
+        indexes = [models.Index(fields=['name']),]
         
     def __str__(self):
         return self.name
@@ -53,6 +61,7 @@ class Press(models.Model):
     class Meta:
         managed = False
         db_table = 'press'
+        indexes = [models.Index(fields=['name']),]
     
     def __str__(self):
         return self.name
@@ -71,6 +80,7 @@ class Author(models.Model):
     class Meta:
         managed = False
         db_table = 'author'
+        indexes = [models.Index(fields=['name']),]
         
     def __str__(self):
         return self.name
@@ -83,6 +93,7 @@ class BookAuthor(models.Model):
         managed = False
         db_table = 'book_author'
         unique_together = (('book', 'author'),)
+        indexes = [models.Index(fields=['book','author']),]
 
 
 class Comments(models.Model):
@@ -96,6 +107,7 @@ class Comments(models.Model):
         managed = False
         db_table = 'comments'
         unique_together = (('book', 'user', 'submission_time'),)
+        indexes = [models.Index(fields=['book','user']),]
 
 
 class Logistics(models.Model):
@@ -130,6 +142,7 @@ class Order(models.Model):
     class Meta:
         managed = False
         db_table = 'order'
+        indexes = [models.Index(fields=['user','name']),]
 
 
 class OrderList(models.Model):
@@ -146,13 +159,13 @@ class OrderList(models.Model):
 
 class User(models.Model):
     user_id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=10, verbose_name='用户名')
     password = models.CharField(max_length=40)
     vip_choices = (
         (0, "普通用户"),
         (1, "VIP"),
     )
-    is_vip = models.IntegerField(default=0, choices=vip_choices)
+    is_vip = models.IntegerField(default=0, choices=vip_choices, verbose_name='会员信息')
     telephone = models.CharField(max_length=15, blank=True, null=True)
     e_mail = models.CharField(max_length=45, blank=True, null=True)
     address = models.CharField(max_length=45, blank=True, null=True)
@@ -160,6 +173,9 @@ class User(models.Model):
     class Meta:
         managed = False
         db_table = 'user'
+        verbose_name = '普通用户' # 单数时显示内容
+        verbose_name_plural = '普通用户' # 复数时显示内容
+        indexes = [models.Index(fields=['name']),]
 
     def __str__(self):
         return self.name

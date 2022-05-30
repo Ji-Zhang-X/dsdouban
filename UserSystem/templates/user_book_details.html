@@ -3,8 +3,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>豆丝豆瓣·搜索结果</title>
+    <title>豆丝豆瓣·图书信息</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.css' %}">
     <link rel="stylesheet" href="{% static 'css/rate.css' %}">
     <style>
         .navbar {
@@ -37,7 +38,7 @@
                             [返回]
                         </a>
 
-                        <a href="/dsdouban/book/{{obj.book_id}}/add_book_to_unsubmitted_order_list/">
+                        <a href="/dsdouban/book/{{obj.book_id}}/add_book_to_unsubmitted_order_list/" {% if is_admin == 1 %} style="display: none;" {%endif%}>
                                 [添加到购物车]
                         </a>
                 </div>
@@ -57,7 +58,9 @@
                     </script>
                     <div> 作者: {% for author in obj.authors.all %}
                                 {%if author.is_translator == 0%}
-                                {{ author.name }};
+
+                                <a href='/dsdouban/author/{{author.author_id}}/'> {{ author.name }}</a>;
+                                
                                 {% else %}
                                 <script type="text/javascript">
                                     var has_trans = 1;
@@ -68,7 +71,7 @@
                         {%endfor%}
                         <div id='trans_{{obj.book_id}}' style="display: none;"> 译者: {% for author in obj.authors.all %}
                                 {%if author.is_translator == 1%}
-                                {{ author.name }};
+                                <a href='/dsdouban/author/{{author.author_id}}/'> {{ author.name }}</a>;
                                 {% endif %}
                             {%endfor%}</div>
                         <script type="text/javascript">
@@ -76,7 +79,7 @@
                                 document.getElementById("trans_{{obj.book_id}}").style.display='block';
                             }
                         </script>
-                        <div> 出版社: {{ obj.press }}</div>
+                        <div> 出版社: <a href='/dsdouban/press/{{obj.press.press_id}}/'> {{ obj.press }}</a>;</div>
                         <div> 出版日期: {{ obj.publish_date|date:"Y-m-d" }}</div>
                         <div> 分类: {{ obj.class_field }}</div>
                         <div> 标价: {{ obj.price_standard }}</div>
@@ -114,11 +117,16 @@
                     <span style="color:rgb(124, 124, 124); font-size: 10px;">
                             {{cmt.submission_time }}
                     </span>
-                    <a  href="/dsdouban/comments/{{cmt.comment_id}}/delete/">
-                        <button type="button" class="button cart_button_clear">删除评论</button>
+                    <button class="btn btn-default" onclick=delete_alarm() style="padding:4px 10px; border:1px solid #d6d076 ;">
+                        <i class="fa fa-trash" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
+                    </button>
+                    <a  href="/dsdouban/comments/{{cmt.comment_id}}/delete/" style="display: none;">
+                        <button type="button" class="button cart_button_clear" id='delete_button'>删除评论</button>
                     </a>
                     <a  href="/dsdouban/comments/{{cmt.comment_id}}/update/">
-                        <button type="button" class="button cart_button_clear">修改评论</button>
+                        <button class="btn btn-default" style="padding:4px 8px; border:1px solid #d6d076 ;">
+                        <i class="fa fa-edit" aria-hidden="true" style="color:#d6d076;font-size: 18px"></i>
+                        </button>
                     </a>
                     
                 </div>
@@ -147,7 +155,7 @@
             </h4>
             {%endif%}
 
-            <button  class="btn btn-primary" onclick= "start_comment()" id='comment_button'>发表评论</button>
+            <button  class="btn btn-primary" onclick= "start_comment()" id='comment_button' {% if is_admin == 1 %} style="display: none;" {%endif%}>发表评论</button>
 
             <div style="display: none;" id='comment_block'>
             <h3 style="margin-top: 100px;"> 发表短评</h3>
@@ -186,6 +194,7 @@
             {%endif%}
         </h3>
         <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
+        <div {% if is_admin == 1 %} style="display: none;" {%endif%}>
         <div> 你的评价:  <span id='your_score'>
         {%if rank_score != 0 %}    
             {{ rank_score}}
@@ -209,6 +218,7 @@
             </div>
             <button type="submit" class="btn btn-default">提 交</button>
         </form>
+        </div>
         </div>
 </div>
 
@@ -240,6 +250,13 @@
     }
     function score10(){
         document.getElementById("your_score").innerHTML = '10';
+    }
+    function delete_alarm(){
+        var r=confirm("确认删除?");
+        if (r)
+        {
+            document.getElementById("delete_button").click();
+        }
     }
 </script>
 </body>

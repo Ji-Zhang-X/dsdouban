@@ -23,6 +23,7 @@
 {% include "head_sub.html"%}    
 
 
+
 <div class="container-fluid clearfix">
     <div class="col-sm-8 col-md-offset-1">
 
@@ -151,15 +152,36 @@
 
     </div>
     <div class="col-sm-2 col-md-offset--1">
-        <div class="panel panel-default">
+        <div class="panel panel-default" style="margin-top: 50px;">
             <div class="panel-heading">
                 <i class="fa fa-tags" aria-hidden="true" style="color:#f0ad4e;font-size: 18px"></i>
                 标签分类
             </div>
             <div class="panel-body">
-                Panel content
-                Panel content
-                Panel content
+                <span>                  
+                        <!-- <select name="class" id="class" style="background:#fafdfe; height:28px; width:180px; line-height:28px; border:1px solid #d6d076; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;">
+                            <option value="{{ class_option }}"  style="display: none;" {% if not class %}selected=""{% endif %}>{{ class_option }}</option>
+                            <option value=""  style="display: none;"></option>
+                            {% for field in class_field %}
+                            <option value="{{field.name}}" {% if field.name == class %}selected=""{% endif %}>{{field.name}}</option>
+                            {% endfor %}
+                        </select>        -->
+                        {%for parent_class in class_field_dict %}
+                        <div style="margin-bottom: 13px;">
+                            <label for="class" style="font-family: ABeeZee, sans-serif;color: var(--bs-white);font-size: 15px;">{{parent_class}}</label>
+                            <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 10px;"></div>
+                            <div>
+                            {%for class in class_field_dict|get_dictionary_item:parent_class %}
+                            <span style="margin-right:7px">
+                            <a href='/?q=&class={{class}}'>{{class}}</a>
+                            </span>
+                            {%endfor%}
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </span>
+                
+
             </div>
         </div>
 

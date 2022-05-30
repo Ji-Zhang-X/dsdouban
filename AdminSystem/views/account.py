@@ -92,4 +92,4 @@ def logout(request):
 
     request.session.clear()
 
-    return redirect('/dsdouban/')
+    return redirect('/dsdouban/login/')

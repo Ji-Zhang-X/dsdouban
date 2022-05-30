@@ -37,7 +37,7 @@
 
 {% include "head_nav.html"%}   
 
-    <div class="container" style="margin-top: 100px; width: 400px;">
+    <div class="container" style="margin-top: 100px; width: 500px;">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title"> {{ title }} </h3>
@@ -49,7 +49,7 @@
                     {% for field in form %}
                             <div class="form-group">
                                 <label>评论</label>                        
-                                <textarea type="text" name="comment" class="form-control" placeholder="发表你的感想吧" required="" id="id_comment"></textarea>
+                                <textarea type="text" name="comment" style="min-height: 200px;" class="form-control" placeholder="发表你的感想吧" required="" id="id_comment">{{comment_content}}</textarea>
                                 <span style="color: red;">{{ field.errors.0 }}</span>
                             </div>
                     {% endfor %}

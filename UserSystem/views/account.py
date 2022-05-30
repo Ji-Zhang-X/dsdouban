@@ -127,12 +127,22 @@ def begin(request):
     """登录界面"""
     return render(request, 'begin.html')
 
+
 def home(request):
     """主界面"""
     search_data = request.GET.get('q', "")
-    if search_data == '':
-        topBooks1 = [9787541151200,9787544269155,9787540786038,9787544722803]
-        topBooks2 = [9787533962968, 9787220105135,9787567534575,9787220103728]
+    class_option = request.GET.get('class', "")
+    class_field = models.BookClass.objects.filter()
+    class_field_dict = {}
+    for item in class_field:
+        if class_field_dict.get(item.parent_class) == None:
+            class_field_dict[item.parent_class] = [item.name]
+        else:
+            class_field_dict[item.parent_class].append(item.name)
+
+    if search_data == '' and class_option == '': 
+        topBooks1 = ['9787541151200','9787544269155','9787540786038','9787544722803']
+        topBooks2 = ['9787533962968', '9787220105135','9787567534575','9787220103728']
         # 以上是首页展示的两行图书的id
         row1_object = {}
         row2_object = {}
@@ -146,7 +156,8 @@ def home(request):
         context = {
             "row1_object": row1_object,
             "row2_object": row2_object,
-            "extract": extract
+            "extract": extract,
+            "class_field_dict": class_field_dict
         }
         return render(request, 'home.html',context)
     return book_view.book_list(request)
@@ -178,7 +189,7 @@ def edit_user_details(request):
     current_user = models.User.objects.filter(user_id=info_dict['id']).first()
     title = "修改个人信息"
     page_title = '豆丝豆瓣·修改个人信息'    
-    label2label = {'Name':'用户名', 'Telephone':'电话', 'E mail':'E-mail', 'Address':'地址'}
+    label2label = {'用户名':'用户名', 'Telephone':'电话', 'E mail':'E-mail', 'Address':'地址'}
 
     if request.method == "GET":
         form = UserDetailsModelForm()
