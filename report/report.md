@@ -1,3 +1,23 @@
+# <center>豆丝豆瓣</center>
+
+![cover](./pic/cover.png)
+
+<center>课程名称：数据库及实现</center>
+
+<center>课程教师：郑卫国</center>
+
+<center>学院：大数据学院</center>
+
+<center>小组成员：刘威毅 姚博远 张冀</center>
+
+
+
+# <center>目录</center>
+
+[toc]
+
+
+
 # 1. 需求分析
 
 ## 1.1 背景介绍
@@ -87,3 +107,34 @@
 # 6. 系统安装部署说明
 
 # 7. 系统使用说明
+
+# 8. 分布式系统
+
+我们基于OceanBase设计了该数据库的分布式版本，并在有限的条件下完成了一些实验。
+
+## 8.1 分布式特性
+
+分布式数据库有如下特性
+
+- 数据高可扩容行
+- 操作高并发性
+- 数据高可用性
+- 数据安全性
+
+为了体现上述特性，我们使用OceanBase的如下技术：
+
+- 分区技术
+- 物理备份与恢复技术
+
+由于今年无法使用官方服务器，实验仅基于单一zone单一server自行组建的oceanbase本地服务器开展。
+
+## 8.2 OceanBase服务器搭建
+
+### 8.2.1 Docker容器部署
+
+以下OceanBase服务器搭建基于MacOS Monterey 12.3.1以及Docker Desktop 4.5.0(74594)
+
+由于基于M1 Mac的docker官方镜像尚未上线，故使用DIY镜像完成docker容器的搭建，具体可见[OceanBase社区问答](https://open.oceanbase.com/ask/detail?id=31400008&pageNo=1#常见FAQ)。注意该问答中并没有安装obd供用户进行集群的部署与创建，因此可以通过该[镜像](https://mirrors.aliyun.com/oceanbase/community/stable/el/7/aarch64/ob-deploy-1.3.3-11.el7.aarch64.rpm)下载相关rpm包（windows用户只需跟随官方教程即可）。
+
+### 8.2.2 集群设置
+
