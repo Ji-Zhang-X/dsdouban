@@ -123,13 +123,20 @@ def book_details(request, nid):
     info_dict = request.session.get("info")
     book_obj = models.Book.objects.filter(book_id=nid).first()
     user_obj = models.User.objects.filter(user_id=info_dict['id']).first()
+    is_admin = 0
     if user_obj is None:
         user_obj = models.Admin.objects.filter(id=info_dict['id']).first()
+        is_admin = 1
     obj_comments = models.Comments.objects.filter(book_id=nid)
     title = "新建评论"
 
     # 查看有没有已经评了分数的
-    rank_obj = models.Mark.objects.filter(user_id=user_obj.user_id,book_id=nid).first()
+
+    if is_admin:
+        rank_obj = models.Mark.objects.filter(user_id=user_obj.id,book_id=nid).first()
+    else:
+        rank_obj = models.Mark.objects.filter(user_id=user_obj.user_id,book_id=nid).first()
+
     if rank_obj is not None:
         rank_score = int(rank_obj.marks)
     else:
@@ -138,7 +145,7 @@ def book_details(request, nid):
     if request.method == "GET":
         form = CommentModelForm()
         context = {'form': form, "title": title, "obj":book_obj,
-                    "comments":obj_comments, "user":user_obj, 'rank_score':rank_score}
+                    "comments":obj_comments, "user":user_obj, 'rank_score':rank_score, 'is_admin':is_admin}
         return render(request, 'user_book_details.html', context)
     
 
@@ -153,7 +160,7 @@ def book_details(request, nid):
             form.instance.submission_time = timezone.now()
             form.save()
             return redirect('/dsdouban/book/'+str(nid)+'/details/')
-        return render(request, 'user_book_details.html', {'form': form, "title": title, "obj":book_obj, "comments":obj_comments, "user":user_obj})
+        return render(request, 'user_book_details.html', {'form': form, "title": title, "obj":book_obj, "comments":obj_comments, "user":user_obj, 'is_admin':is_admin})
     # 进入评分系统
     if rank_obj is None:
         form = RankModelForm(data=post_data)
@@ -167,7 +174,7 @@ def book_details(request, nid):
         form.save()
         update_score(nid)
         return redirect('/dsdouban/book/'+str(nid)+'/details/')
-    return render(request, 'user_book_details.html', {"title": title, "obj":book_obj, "comments":obj_comments, "user":user_obj})
+    return render(request, 'user_book_details.html', {"title": title, "obj":book_obj, "comments":obj_comments, "user":user_obj, 'is_admin':is_admin})
     
 
 

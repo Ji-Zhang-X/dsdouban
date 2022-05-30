@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>豆丝豆瓣·搜索结果</title>
+    <title>豆丝豆瓣·图书信息</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.css' %}">
     <link rel="stylesheet" href="{% static 'css/rate.css' %}">
@@ -38,7 +38,7 @@
                             [返回]
                         </a>
 
-                        <a href="/dsdouban/book/{{obj.book_id}}/add_book_to_unsubmitted_order_list/">
+                        <a href="/dsdouban/book/{{obj.book_id}}/add_book_to_unsubmitted_order_list/" {% if is_admin == 1 %} style="display: none;" {%endif%}>
                                 [添加到购物车]
                         </a>
                 </div>
@@ -155,7 +155,7 @@
             </h4>
             {%endif%}
 
-            <button  class="btn btn-primary" onclick= "start_comment()" id='comment_button'>发表评论</button>
+            <button  class="btn btn-primary" onclick= "start_comment()" id='comment_button' {% if is_admin == 1 %} style="display: none;" {%endif%}>发表评论</button>
 
             <div style="display: none;" id='comment_block'>
             <h3 style="margin-top: 100px;"> 发表短评</h3>
@@ -194,6 +194,7 @@
             {%endif%}
         </h3>
         <div style="height:1px; width:100%; background:rgb(194, 194, 193); overflow:hidden; margin-bottom: 30px;"></div>
+        <div {% if is_admin == 1 %} style="display: none;" {%endif%}>
         <div> 你的评价:  <span id='your_score'>
         {%if rank_score != 0 %}    
             {{ rank_score}}
@@ -217,6 +218,7 @@
             </div>
             <button type="submit" class="btn btn-default">提 交</button>
         </form>
+        </div>
         </div>
 </div>
 

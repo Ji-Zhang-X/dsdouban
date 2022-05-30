@@ -164,8 +164,8 @@ class User(models.Model):
     class Meta:
         managed = False
         db_table = 'user'
-        verbose_name = '用户' # 单数时显示内容
-        verbose_name_plural = '用户' # 复数时显示内容
+        verbose_name = '普通用户' # 单数时显示内容
+        verbose_name_plural = '普通用户' # 复数时显示内容
 
     def __str__(self):
         return self.name
