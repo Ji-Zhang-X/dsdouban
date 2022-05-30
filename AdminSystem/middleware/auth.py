@@ -6,8 +6,18 @@ from django.shortcuts import HttpResponse, redirect, render
 class AuthMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
-        # 0.排除那些不需要登录就能访问的页面        
-        if request.path_info in ["/manager/login/", 
+        # 0.排除那些不需要登录就能访问的页面    
+
+        white_url = ['/admin/*']
+
+        for reg in white_url:
+            ret = re.search(reg, request.path_info)
+            if ret:
+                return
+
+        if request.path_info in ["/admin/",
+                                 "/admin/login/",
+                                 "/manager/login/", 
                                  "/manager/logout/",
                                  "/dsdouban/register/", 
                                  "/dsdouban/",
