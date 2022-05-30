@@ -189,7 +189,7 @@ def edit_user_details(request):
     current_user = models.User.objects.filter(user_id=info_dict['id']).first()
     title = "修改个人信息"
     page_title = '豆丝豆瓣·修改个人信息'    
-    label2label = {'Name':'用户名', 'Telephone':'电话', 'E mail':'E-mail', 'Address':'地址'}
+    label2label = {'用户名':'用户名', 'Telephone':'电话', 'E mail':'E-mail', 'Address':'地址'}
 
     if request.method == "GET":
         form = UserDetailsModelForm()

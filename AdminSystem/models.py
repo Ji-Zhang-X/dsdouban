@@ -8,6 +8,10 @@ class Admin(models.Model):
 
     def __str__(self):
         return self.username
+    class Meta():
+        verbose_name = '普通管理员' # 单数时显示内容
+        verbose_name_plural = '普通管理员' # 复数时显示内容
+    
 
 class Book(models.Model):
     book_id = models.BigIntegerField(primary_key=True)
@@ -146,13 +150,13 @@ class OrderList(models.Model):
 
 class User(models.Model):
     user_id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=10, verbose_name='用户名')
     password = models.CharField(max_length=40)
     vip_choices = (
         (0, "普通用户"),
         (1, "VIP"),
     )
-    is_vip = models.IntegerField(default=0, choices=vip_choices)
+    is_vip = models.IntegerField(default=0, choices=vip_choices, verbose_name='会员信息')
     telephone = models.CharField(max_length=15, blank=True, null=True)
     e_mail = models.CharField(max_length=45, blank=True, null=True)
     address = models.CharField(max_length=45, blank=True, null=True)
@@ -160,6 +164,8 @@ class User(models.Model):
     class Meta:
         managed = False
         db_table = 'user'
+        verbose_name = '用户' # 单数时显示内容
+        verbose_name_plural = '用户' # 复数时显示内容
 
     def __str__(self):
         return self.name
