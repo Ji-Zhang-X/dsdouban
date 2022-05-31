@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+
+{% load get_key%}
+
     <div class="container">
         <div style="margin-bottom: 10px" class="clearfix">
             <a class="btn btn-success" href="/manager/book/add/">
@@ -47,13 +50,14 @@
                       
                     </div>
                     
-                </form>
+                
                 
             </div>
 
 
 
         </div>
+        {%if queryset%}
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">
@@ -73,9 +77,10 @@
                     <th>score</th>
                     {% comment %} <th>版本</th> {% endcomment %}
                     <th>出版社</th>
-                    <th>类别</th>
-                    <th>简介</th>
+                    <th style="width: 60px;">类别</th>
+                    <th style="width: 500px;">简介</th>
                     <th>作者</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -90,7 +95,7 @@
                         {% comment %} <td>{{ obj.edition }}</td> {% endcomment %}
                         <td>{{ obj.press }}</td>
                         <td>{{ obj.class_field }}</td>
-                        <td>{{ obj.introduction }}</td>
+                        <td>{{ extract|get_dictionary_item:obj.book_id}}</td>
                         <td>
                             {% for author in obj.authors.all %}
                                 {{ author.name }};
@@ -114,8 +119,12 @@
 
         </div>
 
+        {%else%}
+            <h2>没有找到</h2>
+        {%endif%}
     </div>
 
+</form>
     <script type="text/javascript">
         function reset_sort()
         {

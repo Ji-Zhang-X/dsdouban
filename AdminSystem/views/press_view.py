@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .. import models
 from django import forms
 from AdminSystem.utils.pagination import Pagination
+from django.shortcuts import HttpResponse
 
 def press_list(request):
     # 出版社列表
@@ -103,5 +104,9 @@ def press_edit(request, nid):
 
 def press_delete(request, nid):
     """ 删除出版社 """
-    models.Press.objects.filter(press_id=nid).delete()
+    try:
+        models.Press.objects.filter(press_id=nid).delete()
+    except:
+        return HttpResponse('<h1>Error</h1><h3>无法删除</h3><br>可能是因为有该出版社仍有编著的书籍<br>若一定要删除该栏目请先删除对应图书<br>先请返回')
+
     return redirect('/manager/press/list/')

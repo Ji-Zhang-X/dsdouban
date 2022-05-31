@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .. import models
 from django import forms
 from AdminSystem.utils.pagination import Pagination
+from django.shortcuts import HttpResponse
 
 def logistics_list(request):
     # 物流列表
@@ -102,5 +103,9 @@ def logistics_edit(request, nid):
 
 def logistics_delete(request, nid):
     """ 删除物流 """
-    models.Logistics.objects.filter(logistics_id=nid).delete()
+    try:
+        models.Logistics.objects.filter(logistics_id=nid).delete()
+    except:
+        return HttpResponse('<h1>Error</h1><h3>无法删除</h3><br>可能是因为有该物流公司仍有物流记录<br>若一定要删除该栏目请先删除对应记录<br>先请返回')
+
     return redirect('/manager/logistics/list/')

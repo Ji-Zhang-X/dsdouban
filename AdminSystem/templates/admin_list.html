@@ -3,10 +3,6 @@
 {% block content %}
     <div class="container">
         <div style="margin-bottom: 10px">
-            <a class="btn btn-success" href="/manager/admin/add/">
-                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                新建管理员
-            </a>
 
         </div>
         <div class="panel panel-default">
@@ -30,14 +26,7 @@
                     <tr>
                         <th>{{ obj.id }}</th>
                         <th>{{ obj.username }}</th>
-                        <td>{{ obj.password  }}</td>
-                        <td>
-                            <a href="/manager/admin/{{ obj.id }}/reset/">重置密码</a>
-                        </td>
-                        <td>
-                            <a class="btn btn-primary btn-xs" href="/manager/admin/{{obj.id}}/edit/">编辑</a>
-                            <a class="btn btn-danger btn-xs" href="/manager/admin/{{obj.id}}/delete/">删除</a>
-                        </td>
+                        <td>****************</td>
                     </tr>
                 {% endfor %}
 

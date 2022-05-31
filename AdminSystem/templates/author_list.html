@@ -26,6 +26,8 @@
 
 
         </div>
+
+        {%if queryset%}
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">
@@ -40,7 +42,7 @@
                     <th>id</th>
                     <th>姓名</th>
                     <th>译者/作者</th>
-                    <th>简介</th>
+                    <th style="width: 750px;">简介</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -61,6 +63,9 @@
                 </tbody>
             </table>
         </div>
+
+
+
         <div class="clearfix">
             <ul class="pagination">
                 {{ page_string }}
@@ -68,5 +73,9 @@
 
         </div>
 
+
+        {%else%}
+            <h2>没有找到</h2>
+        {%endif%}
     </div>
 {% endblock %}

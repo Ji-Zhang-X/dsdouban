@@ -65,6 +65,7 @@
                     <th>作者</th> -->
                 </tr>
                 </thead>
+                {%if queryset%}
                 <tbody>
                 {% for obj in queryset %}
                     <tr>
@@ -95,5 +96,10 @@
 
         </div>
 
+        {%else%}
+    </table>
+</div>
+        <h2>没有信息</h2>
+    {%endif%}
     </div>
 {% endblock %}

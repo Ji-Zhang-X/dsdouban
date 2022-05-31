@@ -20,6 +20,11 @@ def book_list(request):
     sort_option = request.GET.get('orderby')
     sort_rule = request.GET.get('order')
     orders = []
+
+    # 此处是缩减简介长度
+
+
+
     if sort_option and sort_rule:
         if sort_rule == "asc":
             orders.append(sort_option)
@@ -44,6 +49,14 @@ def book_list(request):
     
     page_object = Pagination(request, queryset)
 
+    extract = {}
+    for book in queryset:
+        if book.introduction:
+            extract[book.book_id] = book.introduction[0:140] + '...'
+        else:
+            extract[book.book_id] = '暂无简介'
+
+
     if sort_option:
         sort_option = models.Book._meta.get_field(sort_option)
     context = {
@@ -51,6 +64,7 @@ def book_list(request):
         "sort_field": sort_field,
         "sort_option": sort_option,
         "sort_rule": sort_rule,
+        "extract":extract,
 
         "queryset": page_object.page_queryset,  # 分完页的数据
         "page_string": page_object.html()  # 页码
@@ -135,7 +149,10 @@ def book_edit(request, nid):
 
 def book_delete(request, nid):
     """ 删除书籍 """
+
+    models.BookAuthor.objects.filter(book_id=nid).delete()
     models.Book.objects.filter(book_id=nid).delete()
+
     return redirect('/manager/book/list/')
 
 def book_details(request, nid):

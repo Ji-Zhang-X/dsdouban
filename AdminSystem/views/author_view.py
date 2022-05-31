@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from .. import models
 from django import forms
 from AdminSystem.utils.pagination import Pagination
+from django.shortcuts import HttpResponse
 
 def author_list(request):
     # 作者列表
     # 搜索涵盖的字段范围
-    search_field = ["name__contains", "introduction__contains", "author_id"]
+    search_field = ["name__contains", "intro__contains", "author_id"]
     search_data = request.GET.get('q', "")
 
     orders = []
@@ -17,12 +18,16 @@ def author_list(request):
     queryset = None
     if search_data:
         for search_key in search_field:
-            data_dict = {}
-            data_dict[search_key] = search_data
-            if not queryset:
-                queryset = models.Author.objects.filter(**data_dict).order_by(*orders)
+            if search_key == "author_id" and not search_data.isdigit() and search_data:
+                data_dict = {}
+                data_dict[search_key] = 0
             else:
-                queryset = queryset.union(models.Author.objects.filter(**data_dict).order_by(*orders))
+                data_dict = {}
+                data_dict[search_key] = search_data
+            if not queryset:
+                queryset = models.Author.objects.filter(**data_dict).order_by('author_id')
+            else:
+                queryset = queryset.union(models.Author.objects.filter(**data_dict).order_by('author_id'))
     else:
         queryset = models.Author.objects.filter(**data_dict).order_by(*orders)
     page_object = Pagination(request, queryset)
@@ -63,11 +68,17 @@ class AuthorEditModelForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # 循环ModelForm中的所有字段，给每个字段的插件设置
         for name, field in self.fields.items():
-            field.widget.attrs = {
+            if name == 'intro':
+                # field =forms.Textarea()
+                field.widget.attrs = {
                 "class": "form-control",
-                "placeholder": field.label
+                "placeholder": 123
             }
-            
+            else:
+                field.widget.attrs = {
+                    "class": "form-control",
+                    "placeholder": field.label
+                }
             
 def author_add(request):
     ''' 添加作者'''
@@ -104,5 +115,8 @@ def author_edit(request, nid):
 
 def author_delete(request, nid):
     """ 删除作者 """
-    models.Author.objects.filter(author_id=nid).delete()
+    try:
+        models.Author.objects.filter(author_id=nid).delete()
+    except:
+        return HttpResponse('<h1>Error</h1><h3>无法删除</h3><br>可能是因为有该作（译）者 所编著的书籍<br>若一定要删除该栏目请先删除对应图书<br>先请返回')
     return redirect('/manager/author/list/')

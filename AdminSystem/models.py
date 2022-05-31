@@ -19,8 +19,8 @@ class Book(models.Model):
     publish_date = models.DateTimeField(blank=True, null=True)
     price_standard = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="标准价格")      
     price_vip = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    score = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, verbose_name="评分")
-    score_current = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, verbose_name="评分")
+    score = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, verbose_name="基础评分")
+    score_current = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, verbose_name="现行评分")
     edition = models.CharField(max_length=45, blank=True, null=True)
     storage = models.IntegerField(blank=True, null=True)
     class_field = models.ForeignKey('BookClass', models.DO_NOTHING, db_column='class_id', blank=True, null=False, default='8')  # Field renamed because it was a Python reserved word.
