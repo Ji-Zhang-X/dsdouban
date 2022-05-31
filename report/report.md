@@ -123,10 +123,56 @@
 ## 5.1.2 索引设计
 # 5.2 安全性设计
 # 5.2.1 数据完整性
-介绍如果删除了外键会怎么样
-# 5.2.1 防止SQL注入
-# 5.2.2 防止CSRF攻击
+# 5.2.2 防止SQL注入
+我们采用了多种方法来防止SQL注入，分别是：1、在用户需要提交信息时，我们会对其提交的表单进行校验；2、我们使用django的ORM来进行SQL语句的预编译以及字符串的参数化转化。
+
+对于第一个方法，我们每次在保存用户提交的表单之前都会检验，比如在用户注册时，我们用正则表达式来检验用户的手机号是否符合规则，如不符合规则，用户无法提交：
+<div align="center">
+<img src='pic/sql注入.png' width=175 height=275 />
+</div>
+对于第二个方法，我介绍一下其原理：
+
+```python
+#不使用字符串而使用字符串参数来拼接查询条件
+query = """SELECT * FROM Book WHERE name = %s """
+#参数化查询
+books = Book.objects.raw(query,[book_title])
+```
+
+这样就可以在查询条件上自动加上引号，从而防止SQL注入，而我们使用的所有函数比如filter(),update()方法中均已经使用了这种方法。
+
+# 5.2.3 防止CSRF攻击
+CSRF是跨站点请求伪造(Cross—Site Request Forgery)，存在巨大的危害性。
+简单来说：攻击者盗用了网站的身份，以网站的名义发送恶意请求，对服务器来说这个请求是完全合法的，但是却完成了攻击者所期望的一个操作，比如发送邮件、发消息，盗取账号，添加系统管理员，甚至于购买商品、虚拟货币转账等。django自带了一个防止csrf攻击的功能，我们也采用了这个功能，但是为了正常使用，我们还需要在用户提交的表单中加入{% csrf_token %}以供网站进行验证。
+
 # 5.2.3 页面访问权限管理
+我们通过django的中间件来进行页面的访问权限管理，具体而言，未注册的游客不得访问用户页面，用户不得访问管理员页面，普通管理员不得访问超级管理员页面。比如，当我们作为用户登录时，尝试访问管理员页面，会有如下结果：
+<div align="center">
+<img src='pic/权限管理.png' width=400 height=100 />
+</div>
+我们在用户或者管理员登陆时，会将他是用户或者是管理员的信息存入session的info中，而我们又用了中间件，在每次访问页面之前，django会先运行中间件的代码，来检查session中的信息，以判断用户是否有权限访问某些页面。部分代码如下：
+
+```python
+# 1.读取当前访问的用户的session信息，如果登录过，按照用户是user还是admin分类讨论。
+info_dict = request.session.get("info")
+if info_dict:
+    if info_dict['auth'] == "admin":
+        return
+    else:
+        if re.match('/dsdouban/*', request.path_info):
+            return
+        else:
+            title = "您无管理员权限。"
+            skiplink = "/"
+            print(skiplink)
+            return render(request, 'warning.html', {"title": title, "skiplink": skiplink})
+
+# 2.没有登录过，重新回到登录页面
+title = "您未登录。"
+skiplink = "/dsdouban/login/"
+return render(request, 'warning.html', {"title": title, "skiplink": skiplink})
+```
+通过这样的权限管理，我们就保证了我们的表不会被随意篡改。
 
 # 6. 开发平台及框架
 

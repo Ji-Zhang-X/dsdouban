@@ -1,5 +1,5 @@
 from io import BytesIO
-
+import re
 from django import forms
 from django.shortcuts import render, redirect, HttpResponse
 from django.core.exceptions import ValidationError
@@ -108,7 +108,12 @@ class UserModelForm(BootStrapModelForm):
             raise ValidationError("用户名已经有人取过了！")
         return urname
 
-
+    def clean_telephone(self):
+        tele = self.cleaned_data.get("telephone")
+        if not  re.match('^1[3-9]\d{9}$', tele):
+            raise ValidationError("手机号格式错误")
+        return tele
+    
     def clean_confirm_password(self):
         pwd = self.cleaned_data.get("password")
         confirm = md5(self.cleaned_data.get("confirm_password"))
