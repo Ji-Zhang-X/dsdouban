@@ -25,7 +25,7 @@ def book_list(request):
 
 
     search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains"]
-    sort_field = [models.Book._meta.get_field('score'), 
+    sort_field = [models.Book._meta.get_field('score_current'), 
                   models.Book._meta.get_field('price_standard'), 
                   models.Book._meta.get_field('press_id')]
 

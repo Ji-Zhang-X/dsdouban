@@ -101,6 +101,14 @@ class UserModelForm(BootStrapModelForm):
         pwd = self.cleaned_data.get("password")
         return md5(pwd)
 
+    def clean_name(self):
+        urname = self.cleaned_data.get("name")
+        existing_name = models.User.objects.filter(name=urname).first()
+        if existing_name:
+            raise ValidationError("用户名已经有人取过了！")
+        return urname
+
+
     def clean_confirm_password(self):
         pwd = self.cleaned_data.get("password")
         confirm = md5(self.cleaned_data.get("confirm_password"))
@@ -112,15 +120,16 @@ class UserModelForm(BootStrapModelForm):
 def register(request):
     """ 用户注册 """
     title = "用户注册"
+    label2label = {'用户名':'用户名','确认密码':'确认密码','Password':'密码','Telephone':'联系方式','E mail':'电子邮箱', 'Address': '收货地址'}
     if request.method == "GET":
         form = UserModelForm()
-        return render(request, 'register.html', {'form': form, "title": title})
+        return render(request, 'register.html', {'form': form, "title": title, 'label2label':label2label})
     form = UserModelForm(data=request.POST)
     if form.is_valid():
         form.save()
         return render(request, 'register_success.html')
 
-    return render(request, 'register.html', {'form': form, "title": title})
+    return render(request, 'register.html', {'form': form, "title": title, 'label2label':label2label})
 
 
 def begin(request):
@@ -182,6 +191,13 @@ class UserDetailsModelForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": field.label
             }
+
+    def clean_name(self):
+        urname = self.cleaned_data.get("name")
+        existing_name = models.User.objects.filter(name=urname).first()
+        if existing_name:
+            raise ValidationError("用户名已经有人取过了！")
+        return urname
 
 def edit_user_details(request):
     """"""
