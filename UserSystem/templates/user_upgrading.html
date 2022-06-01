@@ -51,7 +51,12 @@
                                     <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between" style="width:calc(100%)">
                                         <div style="float: left;">
                                             <div style="margin-left: 7.53%;">
-                                                <div class="cart_item_text" style="width: 300px;font-size:40px;">{{ user.name }}</div>
+                                                <div class="cart_item_text" style="width: 300px;font-size:40px;">成为会员！</div>
+                                                <div class="cart_item_text" style="width: 300px;font-size:20px;">每单享受会员特价！</div>
+                                                <div class="cart_item_text" style="width: 300px;font-size:20px; margin-top: 20px;">88元/12月</div>
+                                                <div class="cart_item_text" style="width: 300px;font-size:20px;">188元/36月</div>
+
+                                                <div class="cart_item_text" style="width: 500px;font-size:20px; margin-top: 40px;">请联系管理员，进行线上支付；我们将于3个工作日之内回复。</div>
                                             </div>
 
 
@@ -60,44 +65,19 @@
 
                                         <div style="float: right; margin-right: 0;">
                                             <div class="cart_item_number cart_info_col">
-                                                <div class="cart_item_title">vip信息</div>
-                                                {% if user.is_vip %}
-                                                <div class="cart_item_text">会员</div>
-                                                {% else %}
-                                                <div class="cart_item_text">非会员</div>
-                                                {%endif%}
+                                                <div class="cart_item_title">管理员 1</div>
+                                                <div class="cart_item_text">  微信: despunkzhang</div>
+                                               
                                             </div>
                                             <div class="cart_item_number cart_info_col">
-                                                <div class="cart_item_title">电话</div>
-                                                <div class="cart_item_text">{{ user.telephone }}</div>
+                                                <div class="cart_item_title">管理员 2</div>
+                                                <div class="cart_item_text">  微信: cypherwyr4life</div>
                                             </div>
                                             <div class="cart_item_number cart_info_col">
-                                                <div class="cart_item_title">e-mail</div>
-                                                <div class="cart_item_text">{{ user.e_mail }}</div>
+                                                <div class="cart_item_title">管理员 3</div>
+                                                <div class="cart_item_text"> 微信: leapeto</div>
                                             </div>
-                                            <div class="cart_item_number cart_info_col">
-                                                    <div class="cart_item_title">地址</div>
-                                                    <div class="cart_item_text">{{ user.address }}</div>
-                                            </div>
-                                                
                                             
-                                            
-                                            
-                                            <div class="cart_item_number cart_info_col">
-                                                    <a href = '/dsdouban/edit_user_details/'>
-                                                        <div class="cart_item_title">
-                                                            <div class="cart_item_title" style="margin-left: 7.53%;min-width:80px;">[修改信息]</div>
-                                                        </div>
-                                                    </a>
-                                            </div>
-                                            <div class="cart_item_number cart_info_col">
-                                                <a href = '/dsdouban/reset_user_pwd/'>
-                                                    <div class="cart_item_title">
-                                                        <div class="cart_item_title" style="margin-left: 7.53%;min-width:80px;">[修改密码]</div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                                
 
                                             {% if user.is_vip %}
                                             {% else %}
@@ -105,8 +85,9 @@
 
                                             <div class="cart_item_number cart_info_col">
                                                 <div class="cart_item_text" style="width: 200px;font-size:40px;">
-                                                    <a  href="/dsdouban/upgrade/">
-                                                        <button type="button" class="button cart_button_clear" style="margin-right: 0px;">升级会员</button> 
+
+                                                    <a onclick="javascript:history.back(-1);" href="#">
+                                                        <button type="button" class="button cart_button_clear" style="margin-right: 0px;">返回</button> 
                                                      </a>
                                                     </div>
                                             </div>
