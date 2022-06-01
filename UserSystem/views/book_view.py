@@ -24,7 +24,7 @@ def book_list(request):
             class_field_dict[item.parent_class].append(item.name)
 
 
-    search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains"]
+    search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains", "authors__name__contains"]
     sort_field = [models.Book._meta.get_field('score_current'), 
                   models.Book._meta.get_field('price_standard'), 
                   models.Book._meta.get_field('press_id')]
