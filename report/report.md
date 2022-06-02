@@ -220,15 +220,13 @@ return render(request, 'warning.html', {"title": title, "skiplink": skiplink})
 
 分布式数据库有如下特性
 
-- 数据高可扩容行
+- 数据高可扩容性
 - 操作高并发性
 - 数据高可用性
-- 数据安全性
 
 为了体现上述特性，我们使用OceanBase的如下技术：
 
 - 分区技术
-- 物理备份与恢复技术
 
 由于今年无法使用官方服务器，实验仅基于单一zone单一server自行组建的oceanbase本地服务器开展。
 
@@ -238,7 +236,182 @@ return render(request, 'warning.html', {"title": title, "skiplink": skiplink})
 
 以下OceanBase服务器搭建基于MacOS Monterey 12.3.1以及Docker Desktop 4.5.0(74594)
 
-由于基于M1 Mac的docker官方镜像尚未上线，故使用DIY镜像完成docker容器的搭建，具体可见[OceanBase社区问答](https://open.oceanbase.com/ask/detail?id=31400008&pageNo=1#常见FAQ)。注意该问答中并没有安装obd供用户进行集群的部署与创建，因此可以通过该[镜像](https://mirrors.aliyun.com/oceanbase/community/stable/el/7/aarch64/ob-deploy-1.3.3-11.el7.aarch64.rpm)下载相关rpm包（windows用户只需跟随官方教程即可）。
+由于基于M1 Mac的docker官方镜像尚未上线，故使用DIY镜像完成docker容器的搭建，具体可见[OceanBase社区问答](https://open.oceanbase.com/ask/detail?id=31400008&pageNo=1#常见FAQ)。注意该问答中并没有安装obd供用户进行集群的部署与创建，可以通过该[镜像](https://mirrors.aliyun.com/oceanbase/community/stable/el/7/aarch64/ob-deploy-1.3.3-11.el7.aarch64.rpm)下载相关rpm包（windows用户只需跟随官方教程即可）。
 
 ### 8.2.2 集群设置
 
+由于机器性能有限，参照官方的[single-example.yaml](https://github.com/oceanbase/obdeploy/blob/master/example/single-example.yaml)进行配置，注意修改IP、内存等信息
+
+使用以下指令部署集群
+
+```bash
+obd cluster deploy dsdouban -c single.yaml
+obd cluster start dsdouban
+obd cluster list
++----------------------------------------------------------+
+|                       Cluster List                       |
++----------+-----------------------------+-----------------+
+| Name     | Configuration Path          | Status (Cached) |
++----------+-----------------------------+-----------------+
+| dsdouban | /root/.obd/cluster/dsdouban | running         |
++----------+-----------------------------+-----------------+
+
+```
+
+可见此时集群已经部署，使用obclient进行登陆
+
+```bash
+obclient -h127.0.0.1 -P2881 -uroot -p
+```
+
+即可登录集群的root账号
+
+### 8.2.3 创建租户
+
+首先创建资源单元格
+
+```mysql
+USE oceanbase;
+CREATE RESOURCE UNIT unit_name 
+    MAX_CPU [=] cpu_num, 
+    MAX_MEMORY [=] mem_size, 
+    MAX_IOPS [=] iops_num, 
+    MAX_DISK_SIZE [=] disk_size, 
+    MAX_SESSION_NUM [=] session_num, 
+    [MIN_CPU [=] cpu_num,]
+    [MIN_MEMORY [=] mem_size,] 
+    [MIN_IOPS [=] iops_num] ;
+    
+-- 可以使用select * from __all_unit_config 查看已创建的单元格
+```
+
+接下来创建资源池
+
+```mysql
+CREATE RESOURCE POOL poolname 
+  UNIT [=] unitname, 
+  UNIT_NUM [=] unitnum, 
+  ZONE_LIST [=] ('zone' [, 'zone' …]);
+
+-- 可以使用 select * from __all_resource_pool 查看已创建的资源池
+```
+
+最后创建租户
+
+```mysql
+CREATE TENANT IF NOT EXISTS ds_tenant
+charset='utf8mb4',
+replica_num = 1,
+zone_list = ('zone1'),
+primary_zone = 'zone1',
+resource_pool_list = ('dsdouban');
+
+SELECT * FROM gv$tenant
++-----------+-------------+-----------+--------------+----------------+---------------+-----------+---------------+
+| tenant_id | tenant_name | zone_list | primary_zone | collation_type | info          | read_only | locality      |
++-----------+-------------+-----------+--------------+----------------+---------------+-----------+---------------+
+|         1 | sys         | zone1     | zone1        |              0 | system tenant |         0 | FULL{1}@zone1 |
+|      1001 | ds_tenant   | zone1     | zone1        |              0 |               |         0 | FULL{1}@zone1 |
++-----------+-------------+-----------+--------------+----------------+---------------+-----------+---------------+
+2 rows in set (0.002 sec)
+```
+
+## 8.3 分布式系统使用
+
+### 8.3.1 分区技术
+
+分区技术是OceanBase的一大技术亮点，其思想在于将大表进行拆分，形成结构相同但更为小巧的独立对象，分别存储在多个服务器节点之内，并通过OBProxy或OBServer将用户SQL路由到相应节点内，这样就可以解决大表的容量问题和高并发查询需求。同时，OceanBase还使用表组对分区表进行管理，来提高跨表查询的效率。OceanBase将表组作为表的属性，对同一个表组中的表的同好分区会管理为一个分区组，对于同一个分区组中的分区，OceanBase会尽量将其调度至一个节点之内，以避免跨节点的请求。
+
+对于我们的数据库而言，可以对图书的分类进行分区，这样可以大大的提高用户分类搜索的性能，也可以改善书城由于图书数量日益增多带来的数据存储压力。
+
+### 8.3.2 分区技术体验
+
+我们在自己搭建的OceanBase服务器上进行了以下体验
+
+```bash
+# 登陆已经创建好的资源池
+obclient -h127.0.0.1 -P2881 -uroot@ds_tenant -p
+```
+
+```mysql
+CREATE DATABASE dsdouban;
+USE dsdouban;
+-- 导入准备好的.sql文件
+SOURCE /home/admin/oceanbase.sql
+
+-- 我们对book和book_class表的class_id属性进行了分区
+SHOW CREATE TABLE book;
+| book  | CREATE TABLE `book` (
+  `book_id` bigint(20) NOT NULL,
+  `title` varchar(45) NOT NULL,
+  `publish_date` datetime DEFAULT NULL,
+  `price_standard` decimal(10,2) DEFAULT NULL,
+  `price_vip` decimal(10,2) DEFAULT NULL,
+  `score` decimal(3,1) DEFAULT NULL,
+  `score_current` decimal(3,1) DEFAULT NULL,
+  `edition` varchar(45) DEFAULT NULL,
+  `storage` int(11) DEFAULT NULL,
+  `class_id` int(11) NOT NULL DEFAULT '0',
+  `press_id` bigint(20) DEFAULT NULL,
+  `introduction` varchar(2000) DEFAULT NULL,
+  PRIMARY KEY (`book_id`, `class_id`),
+  CONSTRAINT `press_id` FOREIGN KEY (`press_id`) REFERENCES `dsdouban`.`press`(`press_id`) ON UPDATE RESTRICT ON DELETE RESTRICT ,
+  CONSTRAINT `classification_id` FOREIGN KEY (`class_id`) REFERENCES `dsdouban`.`book_class`(`class_id`) ON UPDATE CASCADE ON DELETE RESTRICT ,
+  KEY `classification_id_idx` (`class_id`) BLOCK_SIZE 16384 LOCAL,
+  KEY `press_id_idx` (`press_id`) BLOCK_SIZE 16384 LOCAL
+) DEFAULT CHARSET = utf8mb4 ROW_FORMAT = COMPACT COMPRESSION = 'zstd_1.3.8' REPLICA_NUM = 1 BLOCK_SIZE = 16384 USE_BLOOM_FILTER = FALSE TABLET_SIZE = 134217728 PCTFREE = 0
+ partition by list(class_id)
+(partition defaultclass values in (0),
+partition math values in (1),
+partition scifi values in (2),
+partition romance values in (3),
+partition poetry values in (4),
+partition shortnovel values in (5),
+partition hisnovel values in (6),
+partition suspense values in (7)) |
+
+SHOW CREATE TABLE book_class;
+| book_class | CREATE TABLE `book_class` (
+  `class_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `parent_class` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`class_id`)
+) AUTO_INCREMENT = 1000009 DEFAULT CHARSET = utf8mb4 ROW_FORMAT = COMPACT COMPRESSION = 'zstd_1.3.8' REPLICA_NUM = 1 BLOCK_SIZE = 16384 USE_BLOOM_FILTER = FALSE TABLET_SIZE = 134217728 PCTFREE = 0
+ partition by list(class_id)
+(partition defaultclass values in (0),
+partition math values in (1),
+partition scifi values in (2),
+partition romance values in (3),
+partition poetry values in (4),
+partition shortnovel values in (5),
+partition hisnovel values in (6),
+partition suspense values in (7)) |
+
+-- 创建对应的表组
+CREATE TABLEGROUP grp_by_list
+PARTITION BY LIST
+(
+  partition defaultclass values in (0),
+	partition math values in (1),
+	partition scifi values in (2),
+	partition romance values in (3),
+	partition poetry values in (4),
+	partition shortnovel values in (5),
+	partition hisnovel values in (6),
+	partition suspense values in (7));
+	
+-- 将表添加到表组
+ALTER tablegroup grp_by_list add book;
+ALTER tablegroup grp_by_list add book_class;
+show tablegroups;
++-----------------+------------+---------------+
+| Tablegroup_name | Table_name | Database_name |
++-----------------+------------+---------------+
+| grp_by_list     | book       | dsdouban      |
+| grp_by_list     | book_class | dsdouban      |
+| oceanbase       | NULL       | NULL          |
++-----------------+------------+---------------+
+3 rows in set (0.006 sec)
+```
+
+这样就完成了分区表以及表组的创建，由于条件有限，只能在单zone单server上进行实验，故无法展现OceanBase分区技术的全部威力。在分布式的情况下，OBClient或OBProxy会保证统一表组内的表尽可能的出现在同一节点上，可以大大的加速多表连接等操作的性能，避免跨节点通信带来的额外开销。
