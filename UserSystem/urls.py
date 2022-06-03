@@ -44,4 +44,6 @@ urlpatterns = [
 
     #这里nid是press_id
     path('press/<int:nid>/',other_view.press_view),
+
+    path('upgrade/',account.upgrade),
 ]

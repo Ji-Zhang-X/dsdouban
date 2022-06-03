@@ -115,6 +115,10 @@ def user_edit(request, nid):
 
 def user_delete(request, nid):
     """ 删除用户 """
+    orders = models.Order.objects.filter(user_id=nid)
+    for oneorder in orders:
+        models.OrderList.objects.filter(order_id=oneorder.order_id).delete()
+    orders.delete()
     models.User.objects.filter(user_id=nid).delete()
     return redirect('/manager/user/list/')
 

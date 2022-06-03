@@ -277,3 +277,6 @@ def reset_user_password(request):
         return redirect('/dsdouban/user_details/')
     
     return render(request, 'user_change.html', {'form': form, "title": title, "page_title": page_title,'label2label':label2label})
+
+def upgrade(request):
+    return render(request, 'user_upgrading.html')
