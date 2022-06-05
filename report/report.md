@@ -43,7 +43,7 @@ table
 
 ​	在实际项目中需求调研往往会用到各种调查方法以及统计方法，由于本课程侧重于数据库及实现，在需求调研方面我们从简：询问好友，关于网上书店的看法。
 
-​<div align="center">
+<div align="center">
     <img src='pic/p1/1.2.png' width=400 height=330 />
 </div>
 
@@ -87,11 +87,11 @@ table
 
 ​	经过以上分析，我们的系统主要分为两大板块：面向用户和面向管理员。而用户系统和管理员系统有不同的功能，我们在这里做出简要划分：
 
-​<div align="center">
+<div align="center">
     <img src='pic/p2/2.1.png' width=460 height=320 />
 </div>
 
-​<div align="center">
+<div align="center">
     <img src='pic/p2/2.2.png' width=460 height=320 />
 </div>
 
@@ -99,7 +99,7 @@ table
 
 ​	经过分析，我们将系统功能与数据库的交互，总结为了一张数据流图。其中，淡蓝椭圆形，表示事务、操作。双下划线，表示实体数据库。箭头表示交互。
 
-​<div align="center">
+<div align="center">
     <img src='pic/p2/2.3.png' width=480 height=320 />
 </div>
 
@@ -116,7 +116,7 @@ table
 ​	其代码可见 [https://github.com/LE-WH/Crawler_for_Database](https://github.com/LE-WH/Crawler_for_Database)
 
 ## 3.2 物理模型-ER图
-​<div align="center">
+<div align="center">
     <img src='pic/物理ER图.png' width=660 height=540 />
 </div>
 
@@ -188,7 +188,7 @@ python manage.py createsuperuser
 ```
 在超级管理员系统中，额外的功能是可以对普通和超级管理员进行增删查改。此外，超级管理员还可以用来设置不同权限的超级管理员。
 
-​<div align="center">
+<div align="center">
     <img src='pic/管理员系统图书修改.png' width=500 height=300 />
 </div>
 
@@ -337,7 +337,7 @@ return render(request, 'warning.html', {"title": title, "skiplink": skiplink})
 
 # 7. 系统安装部署说明
 ## 7.1 创建数据库导入数据文件
-注意先登录mysql控制台，再使用source指令，同时source指令需要没有空格和中文的绝对地址
+注意先登录mysql控制台，再使用source指令，同时source指令需要没有空格和中文的绝对地址，且不加分号。
 ```
 mysql -u root -p
 create schema DSDouBan;
@@ -345,6 +345,9 @@ use DSDouBan;
 source your/path/to/Dump20220523.sql
 ```
 ## 7.2 配置django中的数据库
+
+将这里的password改为本机mysql的root的密码。
+
 ```
 于文件 DSDouBan\settings.py 第81行数据库配置：
 DATABASES = {
@@ -369,6 +372,13 @@ python manage.py migrate
 python manage.py runserver
 ```
 打开浏览器并访问 http://127.0.0.1:8000/ 即可进入数据库系统。
+
+## 7.5 注意事项
+
+由于我们主要在Windows平台，以Chrome作为浏览器开发，因此使用其他浏览器或者在其他操作系统如OSX的情形下，仍然是可以运行的，但显示界面会略微有所差别，可能会出现一些意料之外的显示问题。因此建议使用Windows平台且使用Chrome浏览器打开。
+
+此外，理论上作为管理员是无法进入用户系统的，没有任何界面或者按钮可以进入。如果通过改变url栏是可以进入的，但可能产生bug。考虑到管理员应该是公司自己人，不存在管理员恶意触发bug，因此请不要在使用管理员身份的情况下进入用户界面。如果进入了也可以随时注销，重新登录一个用户账号。
+
 # 8. 分布式系统
 
 我们基于OceanBase设计了该数据库的分布式版本，并在有限的条件下完成了一些实验。
