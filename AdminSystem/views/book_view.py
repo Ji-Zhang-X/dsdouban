@@ -6,7 +6,7 @@ from AdminSystem.utils.pagination import Pagination
 def book_list(request):
     # 书籍列表
     # 搜索涵盖的字段范围
-    search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains"]
+    search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains","authors__name__contains"]
     search_class_field = ["class_field__contains", "class_field_parent_class__contains"]
     # 可供用来排序的选项
     sort_field = [models.Book._meta.get_field('score'), 
@@ -65,6 +65,9 @@ def book_list(request):
         "sort_option": sort_option,
         "sort_rule": sort_rule,
         "extract":extract,
+
+        "search_class":search_class,
+        "search_parent_class":search_parent_class,
 
         "queryset": page_object.page_queryset,  # 分完页的数据
         "page_string": page_object.html()  # 页码

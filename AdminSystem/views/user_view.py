@@ -130,7 +130,7 @@ def user_reset(request, nid):
     if not row_object:
         return redirect('/manager/user/list/')
 
-    title = "重置密码 - {}".format(row_object.username)
+    title = "重置密码 - {}".format(row_object.name)
 
     if request.method == "GET":
         form = UserResetModelForm()

@@ -72,7 +72,6 @@ class AuthorEditModelForm(forms.ModelForm):
                 # field =forms.Textarea()
                 field.widget.attrs = {
                 "class": "form-control",
-                "placeholder": 123
             }
             else:
                 field.widget.attrs = {
