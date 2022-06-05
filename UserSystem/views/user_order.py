@@ -3,6 +3,7 @@ from pyexpat import model
 from tokenize import Number
 from django import forms
 from django.utils import timezone
+from django.db import transaction
 from django.shortcuts import render, redirect, HttpResponse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
@@ -44,26 +45,34 @@ def submit_unsubmitted_order(request):
     context = get_context_for_unsub_order(info_dict)
     unsubmitted_order = context["order"]
     unsubmitted_order_list = context["order_list"]
-    if  (unsubmitted_order.telephone is not None) and (unsubmitted_order.address is not None) and (unsubmitted_order.name is not None):
-        if  len(unsubmitted_order_list) != 0 :
-            unsubmitted_order.submission_time = timezone.now()
-            unsubmitted_order.status = "已付款"
-            unsubmitted_order.is_vip = info_dict['vip']
-            unsubmitted_order.save()
-            '''更新订单列表中的书籍的库存数量'''
-            for sub_book_order in unsubmitted_order_list:
-                '''子订单中预定书籍的数量'''
-                sub_book_order_num = sub_book_order.number
-                sub_book_order_book = sub_book_order.book
-                sub_book_order_book.storage = sub_book_order_book.storage - sub_book_order_num
-                sub_book_order_book.save()
-            return redirect('/dsdouban/order/submitted_orders/')
-        else:
-            context["warning_info"] = "购物车还没有东西！"
+    with transaction.atomic():
+        save_id = transaction.savepoint()
+        try:
+            if  (unsubmitted_order.telephone is not None) and (unsubmitted_order.address is not None) and (unsubmitted_order.name is not None):
+                if  len(unsubmitted_order_list) != 0 :
+                    unsubmitted_order.submission_time = timezone.now()
+                    unsubmitted_order.status = "已付款"
+                    unsubmitted_order.is_vip = info_dict['vip']
+                    unsubmitted_order.save()
+                    '''更新订单列表中的书籍的库存数量'''
+                    for sub_book_order in unsubmitted_order_list:
+                        '''子订单中预定书籍的数量'''
+                        sub_book_order_num = sub_book_order.number
+                        sub_book_order_book = sub_book_order.book
+                        sub_book_order_book.storage = sub_book_order_book.storage - sub_book_order_num
+                        sub_book_order_book.save()
+                    return redirect('/dsdouban/order/submitted_orders/')
+                else:
+                    context["warning_info"] = "购物车还没有东西！"
+                    return render(request, 'unsub_order.html', context)
+            else:
+                context["warning_info"] = "订单信息不完整，请确保收件人信息完整！"
+                return render(request, 'unsub_order.html', context)
+        except:
+            transaction.savepoint_rollback(save_id)
+            context["warning_info"] = "系统异常"
             return render(request, 'unsub_order.html', context)
-    else:
-        context["warning_info"] = "订单信息不完整，请确保收件人信息完整！"
-        return render(request, 'unsub_order.html', context)
+        transaction.savepoint_commit(save_id)
 
 class OrderModelForm(forms.ModelForm):
     class Meta:

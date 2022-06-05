@@ -2,11 +2,35 @@ from django.shortcuts import render, redirect
 from .. import models
 from django import forms
 from AdminSystem.utils.pagination import Pagination
+import datetime
+import random
+
+def Unicode():
+    val = random.randint(0x4e00, 0x9fbf)
+    return chr(val)
+
+def gen_random_book():
+    author_tmp = models.Author.objects.all().first()
+    for i in range(10000, 20000):
+        title_num = random.randint(4,8)
+        title_tmp = ""
+        for j in range(title_num):
+            title_tmp = title_tmp + Unicode()
+        
+        book=models.Book(book_id=i+100,title = title_tmp)
+        book.save()
 
 def book_list(request):
     # 书籍列表
     # 搜索涵盖的字段范围
-    search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains","authors__name__contains"]
+    test_time = False
+    if test_time:
+        #插入随机数据
+        # gen_random_book()
+        search_field = ["title__contains"]
+    else:
+        search_field = ["book_id__contains", "title__contains", "press__name__contains", "introduction__contains","author__name__contains"]
+
     search_class_field = ["class_field__contains", "class_field_parent_class__contains"]
     # 可供用来排序的选项
     sort_field = [models.Book._meta.get_field('score'), 
@@ -21,34 +45,61 @@ def book_list(request):
     sort_rule = request.GET.get('order')
     orders = []
 
-    # 此处是缩减简介长度
-
-
-
-    if sort_option and sort_rule:
-        if sort_rule == "asc":
-            orders.append(sort_option)
-        if sort_rule == "desc":
-            orders.append('-' + sort_option)
-    if not orders:
-        orders = ['press_id']
-    data_dict = {"class_field__name__contains":search_class, "class_field__parent_class__contains":search_parent_class}
-    queryset = None
-    if search_data:
-        for search_key in search_field:
-            data_dict[search_key] = search_data
-            if not queryset:
-                queryset = models.Book.objects.filter(**data_dict).order_by('press_id')
+    if test_time:
+        # 测试时间
+        starttime = datetime.datetime.now()
+        for i in range(10000):
+            if sort_option and sort_rule:
+                if sort_rule == "asc":
+                    orders.append(sort_option)
+                if sort_rule == "desc":
+                    orders.append('-' + sort_option)
+            if not orders:
+                orders = ['press_id']
+            data_dict = {"class_field__name__contains":search_class, "class_field__parent_class__contains":search_parent_class}
+            queryset = None
+            if search_data:
+                for search_key in search_field:
+                    data_dict[search_key] = search_data
+                    if not queryset:
+                        queryset = models.Book.objects.filter(**data_dict).order_by('press_id')
+                    else:
+                        queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by('press_id'))
+                    del data_dict[search_key]
+                if sort_option and sort_rule:
+                    queryset = queryset.order_by(*orders)
             else:
-                queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by('press_id'))
-            del data_dict[search_key]
-        if sort_option and sort_rule:
-            queryset = queryset.order_by(*orders)
-    else:
-        queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
+                queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
     
+        endtime = datetime.datetime.now()
+        print("搜索时间！！！")
+        print( (endtime - starttime).seconds )
+    else:
+        if sort_option and sort_rule:
+            if sort_rule == "asc":
+                orders.append(sort_option)
+            if sort_rule == "desc":
+                orders.append('-' + sort_option)
+        if not orders:
+            orders = ['press_id']
+        data_dict = {"class_field__name__contains":search_class, "class_field__parent_class__contains":search_parent_class}
+        queryset = None
+        if search_data:
+            for search_key in search_field:
+                data_dict[search_key] = search_data
+                if not queryset:
+                    queryset = models.Book.objects.filter(**data_dict).order_by('press_id')
+                else:
+                    queryset = queryset.union(models.Book.objects.filter(**data_dict).order_by('press_id'))
+                del data_dict[search_key]
+            if sort_option and sort_rule:
+                queryset = queryset.order_by(*orders)
+        else:
+            queryset = models.Book.objects.filter(**data_dict).order_by(*orders)
+
     page_object = Pagination(request, queryset)
 
+    # 此处是缩减简介长度
     extract = {}
     for book in queryset:
         if book.introduction:
