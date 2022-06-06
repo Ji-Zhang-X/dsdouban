@@ -4,14 +4,18 @@ table
     margin: auto;
 }
 </style>
-
 <div align="center">
-  <h1> 豆丝豆瓣 </h1>
+  <h1> 豆丝豆瓣 报告 </h1>
 </div>
+
 
 <div align="center">
   <img src='pic/cover.png' width=300 height=100 />
 </div>
+<div align="center">
+  <img src='pic/cover2.png' width=300  />
+</div>
+
 
 ## <center>课程名称：数据库及实现</center>
 
@@ -94,20 +98,22 @@ table
 ​	经过以上分析，我们的系统主要分为两大板块：面向用户和面向管理员。而用户系统和管理员系统有不同的功能，我们在这里做出简要划分：
 
 <div align="center">
-    <img src='pic/p2/2.1.png' width=460 height=320 />
+    <img src='pic/p2/2.1.png' width=660/>
 </div>
 
 <div align="center">
-    <img src='pic/p2/2.2.png' width=460 height=320 />
+    <img src='pic/p2/2.2.png' width=660 />
 </div>
+
 
 ### 2.2 数据流图
 
 ​	经过分析，我们将系统功能与数据库的交互，总结为了一张数据流图。其中，淡蓝椭圆形，表示事务、操作。双下划线，表示实体数据库。箭头表示交互。
 
 <div align="center">
-    <img src='pic/p2/2.3.png' width=480 height=320 />
+    <img src='pic/p2/2.3.png' width=660 />
 </div>
+
 
 <div style="page-break-after:always;"></div>
 
@@ -181,7 +187,7 @@ Book表的主键为书籍的ISBN号，如此设置是为了保证数据库中书
 
 <div style="page-break-after:always;"></div>
 
-# 4. 系统功能介绍
+# 4. 系统功能及使用介绍
 
 我们的系统主要分为用户系统、管理员系统、超级管理员系统。
 
@@ -393,10 +399,6 @@ vip用户看到的价格为：
 <div align="center">
     <img src='pic/管理员系统图书修改.png' width=800/>
 </div>
-
-- 订单管理中，对于不同状态的订单，管理员能做的操作不同。对于已付款未完成的订单，管理员有权修改所有内容，对于已完成的订单，管理员只能修改订单系统中与书籍无关的内容，如用户信息和物流信息。
-- 对于有外键约束的数据，我们设置的是不可删除。
-
 #### 4.2.2 订单管理系统
 
 订单管理系统如下：
@@ -405,13 +407,13 @@ vip用户看到的价格为：
     <img src='pic/p4.2/订单管理系统overall.png' width=800/>
 </div>
 
-对于已付款的订单，管理员可以在查看详情中进行所有信息的编辑
+对于已付款的订单，管理员可以在查看详情中进行所有信息的编辑。
 
 <div align="center">
     <img src='pic/p4.2/订单编辑.png' width=800/>
 </div>
 
-对于已完成的订单，只能查看详情，不能修改
+对于已完成的订单，管理员只能修改订单系统中与书籍无关的内容，如用户信息和物流信息。
 
 <div align="center">
     <img src='pic/p4.2/已完成订单.png' width=800/>
@@ -575,7 +577,7 @@ def gen_random_book():
 | :------: | :------: | 
 | 4s | 6s |
 
-可见在数据量较小（即使已经达到了两万）的情况下，加了索引的效果更好。
+可见在数据量较小（即使已经达到了两万）的情况下，加了索引的效果更好，但是好的不多。
 #### 5.1.2 搜索分页
 在搜索的时候，我们采用了分页功能，每次只从搜索结果中提取一部分数据来显示。
 
@@ -1018,6 +1020,6 @@ ALTER SYSTEM RESTORE <dest_tenant_name> FROM <source_tenan_tname> at 'uri' UNTIL
 
 刘威毅：数据库结构建立，爬虫编写，用户系统设计，超级管理员系统设计，期中期末ppt+视频+剪辑。
 
-姚博远：OceanBase实现与数据库实验，期中视频录制。
+姚博远：OceanBase实现与数据库实验，期中视频录制，期末视频录制，后端开发。
 
-张冀：系统框架建立，管理员系统设计，搜索、数据验证等功能的实现，索引实验，
+张冀：系统框架建立，管理员系统设计，搜索、数据验证等功能的实现，索引实验，高性能与安全性设计。
